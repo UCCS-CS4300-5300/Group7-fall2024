@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-5^!rnvn_%w7bkw)p%^!0_qj!s&lim+!3$f)e-xslw#g4m&%1zv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["app-jflinn2-5.devedu.io"]
 
 
 # Application definition
