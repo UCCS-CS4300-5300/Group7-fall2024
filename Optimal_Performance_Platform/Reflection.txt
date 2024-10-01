@@ -4,3 +4,11 @@ was great review and will definitly help me going forward.
 The one thing I did learn was how to start working with a 
 group using github. I've never had to merge someone elses 
 work with mine so it was good practice. 
+
+Neako Hallisey: As far as hands-on (coding) stuff goes, 
+I didn't learn a whole lot for this sprint. This was 
+a nice refresher on how to collaborate with others in 
+github though, I've done it before but with an extension
+tool called gitkraken, some things are the same, some are
+different. I suppose the hardest step for this sprint 
+was getting everything running on github and DevEdu. 
