@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +26,7 @@ SECRET_KEY = 'django-insecure-5^!rnvn_%w7bkw)p%^!0_qj!s&lim+!3$f)e-xslw#g4m&%1zv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Will need to add everyone here or figure out a solution
 ALLOWED_HOSTS = ["app-jzlotoff-5.devedu.io"]
 
 
@@ -117,6 +119,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+STATICFILES_DIRS = [
+BASE_DIR / 'home' / 'static',
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
