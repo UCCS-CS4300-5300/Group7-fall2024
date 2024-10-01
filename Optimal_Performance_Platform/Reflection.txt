@@ -20,3 +20,9 @@ folder, so I put all of our css classes in their respectice html
 files. While trouble shooting this issue, I learned that the
 STATICFILES_DIRS variable is used to help django find the location
 of the static files.
+
+Jessie Meredeth: For this sprint I learned mostly about git commands
+and what its like to work with others to push changes on one repo. This
+is very similar to intro to software engineering except we're not all doing the project
+serperateley. I still need to learn more about git commands and how to safely push and pull from main 
+without messing everything up.
