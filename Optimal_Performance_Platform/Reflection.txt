@@ -12,3 +12,11 @@ github though, I've done it before but with an extension
 tool called gitkraken, some things are the same, some are
 different. I suppose the hardest step for this sprint 
 was getting everything running on github and DevEdu. 
+
+Joel Flinn: For this sprint, I learned a little about how
+to use css to make help style a sheet for front end development.
+I ran into some trouble with drawing css classes from the static
+folder, so I put all of our css classes in their respectice html
+files. While trouble shooting this issue, I learned that the
+STATICFILES_DIRS variable is used to help django find the location
+of the static files.
