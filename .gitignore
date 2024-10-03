@@ -2,8 +2,9 @@
 *.log
 *.pot
 *.pyc
-*__pycache__
-.Optimal_Performance_Platform/__pycache__/*
+__pycache__/
+Optimal_Performance_Platform/__pycache__/*
+Optimal_Performance_Platform/__pycache__/
 db.sqlite3
 media
 
