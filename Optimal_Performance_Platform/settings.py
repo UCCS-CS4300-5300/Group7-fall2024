@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-5^!rnvn_%w7bkw)p%^!0_qj!s&lim+!3$f)e-xslw#g4m&%1zv
 DEBUG = True
 
 # Will need to add everyone here or figure out a solution
-ALLOWED_HOSTS = ["app-jzlotoff-5.devedu.io"]
+ALLOWED_HOSTS = ["app-jzlotoff-5.devedu.io", "app-jflinn2-5.devedu.io", ]
 
 
 # Application definition
