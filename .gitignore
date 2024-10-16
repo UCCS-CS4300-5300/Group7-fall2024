@@ -3,10 +3,12 @@
 *.pot
 *.pyc
 __pycache__/
+/pycache/*
 Optimal_Performance_Platform/__pycache__/*
 Optimal_Performance_Platform/__pycache__/
 db.sqlite3
 media
+
 
 # Backup files # 
 *.bak 
