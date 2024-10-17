@@ -1,12 +1,13 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+    
     .button {
-        background-color: rgb(81, 234, 239);
+        background-color: rgba(65, 169, 172, 0);
         border: 2px solid #e7e7e7;
-        color: black;
+        color: rgb(255, 255, 255);
         padding: 4px 16px;
         text-align: center;
         text-decoration: none;
@@ -26,7 +27,7 @@
         width: 100px;
         height: 100px;
         padding: 10px;
-        border: 5px solid gray;
+        border: 5px solid rgba(61, 249, 255, 0.5);
         margin: 0;
     }
     .flex-box-2 {
@@ -36,7 +37,19 @@
 
     .dropdown-menu {
         z-index: 1000;  /* Adjust the value as needed */
-        background-color: rgba(255, 255, 255, 0.9);  /* Background color for visibility */
+        background-color: rgba(65, 169, 172, 0);  /* Background color for visibility */
+    }
+    
+    /*This is where you customize the settings for the title*/
+    h1 {
+    font-family: 'Anton', sans-serif;
+    text-align: left;
+    font-weight: bold;
+    }
+
+    .custom-navbar {
+    background-color: #320b0b; /* Dark blue or any color you prefer */
+    border-bottom: 2px solid #e7e7e7; /* Optional: Add a border at the bottom */
     }
 
     </style>
@@ -53,12 +66,12 @@
     
 
     <body>
-
-    <h1>Optimal Performance</h1>
+    
+    <h1 style="font-size: 80px; color: #ffffff;">Optimal Performance</h1> <!-- This is where the title reference is located-->
     <div class="container-fluid">
 
     <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg custom-navbar">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
