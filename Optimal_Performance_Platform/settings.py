@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-5^!rnvn_%w7bkw)p%^!0_qj!s&lim+!3$f)e-xslw#g4m&%1zv
 DEBUG = True
 
 # Will need to add everyone here or figure out a solution
-ALLOWED_HOSTS = ["app-jzlotoff-5.devedu.io", "app-jflinn2-5.devedu.io", ]
+ALLOWED_HOSTS = ["app-jzlotoff-5.devedu.io", "app-jflinn2-5.devedu.io", "app-jmeredet-5.devedu.io" ]
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,5 @@ BASE_DIR / 'home' / 'static',
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = ['https://app-jmeredet-5.devedu.io']
