@@ -70,14 +70,19 @@ celerybeat-schedule.*
 # SageMath
 *.sage.py
 
-# Environments
-.env
+# Environments 
+ 
+.venv
 .venv/
+venv/ 
+.env
+.env/ 
 env/
-ENV/
-env.bak/
-venv.bak/
+ENV/ 
+env.bak/ 
+venv.bak/ 
 myenv/
+optimal/
 
 # mkdocs documentation
 /site
