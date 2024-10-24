@@ -122,8 +122,11 @@ class Motherboard(models.Model):
         return ram.ram_speed in self.supported_ram_speeds.all()
 
     def is_ram_capacity_compatible(self, ram):
-        total_capacity = int(ram.ram_capacity.capacity.split()[0]) * ram.ram_number_of_modules.number_of_modules
-        return total_capacity <= self.max_memory_capacity
+        try:
+           total_capacity = int(''.join(filter(str.isdigit, ram.ram_capacity.capacity))) * ram.ram_number_of_modules.number_of_modules
+           return total_capacity <= self.max_memory_capacity
+        except ValueError:
+            return False
 
     def is_ram_modules_compatible(self, ram):
         return ram.ram_number_of_modules.number_of_modules <= self.memory_slots
