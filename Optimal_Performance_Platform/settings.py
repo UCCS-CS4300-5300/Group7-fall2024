@@ -108,6 +108,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://app-jzlotoff-5.devedu.io',
     'https://app-jflinn2-5.devedu.io',
     'https://app-dbuck3-5.devedu.io',
+    'https://app-jmeredet-5.devedu.io',
 ]
 
 
@@ -138,5 +139,3 @@ BASE_DIR / 'home' / 'static',
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CSRF_TRUSTED_ORIGINS = ['https://app-jmeredet-5.devedu.io']
