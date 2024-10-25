@@ -28,12 +28,14 @@ class Shopping_Cart(models.Model):
 
 # Container model for the parts of the PC build
 class Build(models.Model):
+    build_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100, default='Default Build Name')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     is_complete = models.BooleanField(default=False)
 
     motherboard = models.ForeignKey('MotherBoard', on_delete=models.CASCADE, null=True)
     cpu = models.ForeignKey('CPU', on_delete=models.CASCADE, null=True)
-    ram = models.ForeignKey('RAM', on_delete=models.CASCADE, null=True)
+    ram = models.ManyToManyField('RAM', through='BuildRAM', blank=True)
     storage = models.ForeignKey('Storage', on_delete=models.CASCADE, null=True)
 
     # Override save method to check compatibility
@@ -41,10 +43,17 @@ class Build(models.Model):
         if self.motherboard and self.cpu:
             if not self.motherboard.is_cpu_compatible(self.cpu):
                 raise ValueError("The selected CPU is not compatible with the motherboard.")
-        if self.motherboard and self.ram:
-            if not self.motherboard.is_ram_compatible(self.ram):
-                raise ValueError("The selected RAM is not compatible with the motherboard.")
         super(Build, self).save(*args, **kwargs)
+        if self.motherboard and self.ram.exists:
+            for ram_module in self.ram.all():
+                if not self.motherboard.is_ram_compatible(ram_module):
+                    raise ValueError("The selected RAM is not compatible with the motherboard.")
+        super(Build, self).save(*args, **kwargs)
+
+# Through model for Build and RAM relationship
+class BuildRAM(models.Model):
+    build = models.ForeignKey(Build, on_delete=models.CASCADE)  
+    ram = models.ForeignKey('RAM', on_delete=models.CASCADE)
 
 # Memory models
 class RAMType(models.Model):
