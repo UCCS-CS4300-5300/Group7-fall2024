@@ -2,6 +2,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
+from rest_framework import viewsets
+from .models import Build
+from .serializers import BuildSerializer
+
+class BuildViewSet(viewsets.ModelViewSet):
+    queryset = Build.objects.all()
+    serializer_class = BuildSerializer
 
 def index(request):
     return render(request, 'index.html')
