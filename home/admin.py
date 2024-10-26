@@ -8,6 +8,7 @@ class RAMInline(admin.TabularInline):
     model = BuildRAM
     extra = 4
 
+
 class MotherboardAdmin(admin.ModelAdmin):
     list_display = ('name', 'motherboard_manufacturer', 'cpu_socket_type')
     search_fields = ('name',)
