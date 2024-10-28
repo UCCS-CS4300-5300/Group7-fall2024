@@ -137,7 +137,7 @@ class Motherboard(models.Model):
             return total_capacity <= self.max_memory_capacity
         except (ValueError, AttributeError):
             return False
-
+    
     def is_ram_modules_compatible(self, ram):
         return ram.ram_number_of_modules.number_of_modules <= self.memory_slots
     
