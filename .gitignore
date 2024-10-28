@@ -1,5 +1,6 @@
 # Database
 db.sqlite3
+sample_data.json
 
 # Ignore __pycache__ at all levels
 **/__pycache__/
