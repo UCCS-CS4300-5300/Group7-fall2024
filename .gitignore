@@ -1,8 +1,13 @@
-# Django specific
+# Ignore __pycache__ at all levels
+**/__pycache__/
+
+# Python specific
 *.log  # Log files
 *.pot  # Translation files
 *.pyc  # Compiled Python files
-__pycache__/  # Python cache directory
+**/.pyc
+**/*.py[cod]
+**/*$py.class
 
 # Environment variables
 .env  # Environment variable definitions
