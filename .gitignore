@@ -1,5 +1,5 @@
 # Database
-db.sqlite3  # SQLite database
+db.sqlite3
 
 # Ignore __pycache__ at all levels
 **/__pycache__/
