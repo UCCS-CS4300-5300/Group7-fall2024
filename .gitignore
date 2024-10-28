@@ -5,7 +5,7 @@
 *.log  # Log files
 *.pot  # Translation files
 *.pyc  # Compiled Python files
-**/.pyc
+**/*.pyc
 **/*.py[cod]
 **/*$py.class
 
