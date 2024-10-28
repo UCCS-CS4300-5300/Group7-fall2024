@@ -1,3 +1,6 @@
+# Database
+db.sqlite3  # SQLite database
+
 # Ignore __pycache__ at all levels
 **/__pycache__/
 
@@ -9,9 +12,6 @@
 **/*.py[cod]
 **/*$py.class
 
-# Environment variables
-.env  # Environment variable definitions
-
 # Virtual environments
 venv/  # Virtual environment directory
 ENV/
@@ -19,12 +19,12 @@ env.bak/
 venv.bak/
 optimal/
 
-# Database
-db.sqlite3  # SQLite database
-
 # Static and media files
 /media  # Media files
 /staticfiles  # Static files
+
+# Environment variables
+.env  # Environment variable definitions
 
 # Backup files
 *.bak  # Backup files
