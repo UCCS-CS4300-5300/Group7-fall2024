@@ -4,3 +4,25 @@ was great review and will definitly help me going forward.
 The one thing I did learn was how to start working with a 
 group using github. I've never had to merge someone elses 
 work with mine so it was good practice. 
+
+Neako Hallisey: As far as hands-on (coding) stuff goes, 
+I didn't learn a whole lot for this sprint. This was 
+a nice refresher on how to collaborate with others in 
+github though, I've done it before but with an extension
+tool called gitkraken, some things are the same, some are
+different. I suppose the hardest step for this sprint 
+was getting everything running on github and DevEdu. 
+
+Joel Flinn: For this sprint, I learned a little about how
+to use css to make help style a sheet for front end development.
+I ran into some trouble with drawing css classes from the static
+folder, so I put all of our css classes in their respectice html
+files. While trouble shooting this issue, I learned that the
+STATICFILES_DIRS variable is used to help django find the location
+of the static files.
+
+Jessie Meredeth: For this sprint I learned mostly about git commands
+and what its like to work with others to push changes on one repo. This
+is very similar to intro to software engineering except we're not all doing the project
+serperateley. I still need to learn more about git commands and how to safely push and pull from main 
+without messing everything up.
