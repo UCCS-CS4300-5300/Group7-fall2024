@@ -43,6 +43,20 @@ def login_or_register(request):
             messages.error(request, "Invalid login credentials.")
     
     # Display the login form
+        # Handle user login
+        login_form = AuthenticationForm(request, data=request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data.get('username')
+            password = login_form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, "Login successful.")
+                return redirect('index')  # Redirect to your home page or desired page
+        else:
+            messages.error(request, "Invalid login credentials.")
+    
+    # Display the login form
     login_form = AuthenticationForm()
     register_form = UserCreationForm()
     return render(request, 'auth/login_or_register.html', {
