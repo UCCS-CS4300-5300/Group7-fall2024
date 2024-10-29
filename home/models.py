@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+import re
 
 # Profile model to extend the User model
 class Profile(models.Model):
@@ -122,8 +123,12 @@ class Motherboard(models.Model):
         return ram.ram_speed in self.supported_ram_speeds.all()
 
     def is_ram_capacity_compatible(self, ram):
-        total_capacity = int(ram.ram_capacity.capacity.split()[0]) * ram.ram_number_of_modules.number_of_modules
-        return total_capacity <= self.max_memory_capacity
+        try:
+            # Extract numeric part from the capacity string
+            total_capacity = int(re.match(r'\d+', ram.ram_capacity.capacity).group()) * ram.ram_number_of_modules.number_of_modules
+            return total_capacity <= self.max_memory_capacity
+        except (ValueError, AttributeError):
+            return False
 
     def is_ram_modules_compatible(self, ram):
         return ram.ram_number_of_modules.number_of_modules <= self.memory_slots
