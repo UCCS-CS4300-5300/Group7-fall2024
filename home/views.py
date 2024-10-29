@@ -4,9 +4,17 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from .models import RAM, CPU, Motherboard, Storage
 from django.db.models import Q
+from rest_framework import viewsets
+from .models import Build
+from .serializers import BuildSerializer
+
+class BuildViewSet(viewsets.ModelViewSet):
+    queryset = Build.objects.all()
+    serializer_class = BuildSerializer
 
 def index(request):
     return render(request, 'index.html')
+
 # Create your views here.
 def build(request):
     return render(request, 'build.html')
@@ -102,4 +110,3 @@ def search_pc_parts(request):
                 ).distinct())
 
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
-
