@@ -20,8 +20,6 @@
 - PostgreSQL (or another database system)
 - Virtual environment tool (like `venv`)
 
-## Notice on AI
-#### NOTE: AI was used for tasks such as formatting text, searching for documentation, error resolution, comment skeletons, etc.
 
 ## License Information
 ### NOTE: At this time we have not finalized our decision on what license to use. Below are our considerations.
@@ -70,7 +68,6 @@ Examples:
 ## Setting Up the Optimal_Performance_Platform Project
 
 ### Steps to Create a Fresh Project
-
 
 #### 1. Clone the Repository:
 - `git clone https://github.com/UCCS-CS4300-5300/Group7-fall2024.git`
@@ -138,6 +135,23 @@ Examples:
 3. **Load Data from JSON**:
    - Import the data into your database:
      - `python manage.py loaddata sample_data.json`
+
+### Applying Changes to Models:
+- python manage.py makemigrations
+- python manage.py migrate
+
+
+### Refreshing Git’s Index to Apply .gitignore(THIS IS IMPORTANT):
+
+#### a.  Remove all cached entries:
+- git rm -r --cached .
+
+#### b.  Re-add files:
+- git add .
+
+#### c.  Commit changes:
+- git commit -m "Refresh Git index to apply .gitignore"
+
 
 ### Applying Changes to Models:
 - python manage.py makemigrations
