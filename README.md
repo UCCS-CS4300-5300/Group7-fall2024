@@ -89,8 +89,8 @@ This project allows users to select and build computer parts from a database, en
 ## Testing
 
 ### 1. Run Tests
-python manage.py test
-
+coverage run --source='.' manage.py test home.tests
+coverage report
 ## Key Commands
 - Create Migrations: python manage.py makemigrations
 - Apply Migrations: python manage.py migrate
