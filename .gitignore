@@ -2,40 +2,41 @@
 **/__pycache__/
 
 # Python specific
-*.log  # Log files
-*.pot  # Translation files
-*.pyc  # Compiled Python files
+*.log
+*.pot
+*.pyc
 **/*.pyc
 **/*.py[cod]
 **/*$py.class
 
 # Environment variables
-.env  # Environment variable definitions
+.env
 
 # Virtual environments
-venv/  # Virtual environment directory
+venv/
 ENV/
 env.bak/
 venv.bak/
 optimal/
 
 # Database
-db.sqlite3  # SQLite database
+db.sqlite3
+sample_data.json
 
 # Static and media files
-/media  # Media files
-/staticfiles  # Static files
+/media
+/staticfiles
 
 # Backup files
-*.bak  # Backup files
+*.bak
 
 # IDE-specific files
-.idea/**  # JetBrains IDE project files
+.idea/**
 
 # Python package files
-*.egg-info/  # Package metadata
+*.egg-info/
 .installed.cfg
-pip-log.txt  # Installer logs
+pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
@@ -57,13 +58,25 @@ celerybeat-schedule.*
 # SageMath
 *.sage.py
 
-# Mkdocs documentation
+# Environments
+.env
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+myenv/
+
+# mkdocs documentation
 /site
 
 # mypy
 .mypy_cache/
 
 # Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
 *.sublime-workspace
 *.sublime-project
 
