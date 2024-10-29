@@ -121,7 +121,6 @@ class CPUTestCase(TestCase):
         expected_CPU_info=f"{testObject.socket_type.name}"
         self.assertEqual("AM5", expected_CPU_info)
 
-
 class RAMTestCase(TestCase):
     # Set up non-modified objects used by all test methods
     @classmethod
@@ -177,3 +176,99 @@ class RAMTestCase(TestCase):
         expected_storage_info=f"{testObject.ram_type} {testObject.ram_speed} - {testObject.ram_number_of_modules} x {testObject.ram_capacity}"
         self.assertEqual(str(testObject), expected_storage_info)
 
+class MotherboardTestCase(TestCase):
+    # Set up non-modified objects used by all test methods
+    @classmethod
+    def setUpTestData(cls):
+        # create objects necesary to create a ram object
+        Manufacturer.objects.create(name="Intel")
+        CPUSocketType.objects.create(name="AM5")
+        StorageFormFactor.objects.create(name="ATX")
+        RAMNumberOfModules.objects.create(number_of_modules=2)
+        # two ramTypes to test many to many
+        RAMType.objects.create(type="SDRAM")
+        RAMType.objects.create(type="EDO")
+
+        # two ram speeds to test many to many
+        RAMSpeed.objects.create(speed="4400 MHz")
+        RAMSpeed.objects.create(speed="6400 MHz")
+
+        # create ram object and establish relationships
+        Motherboard.objects.create(motherboard_id=1,
+        name="testMotherboardObject",
+        motherboard_manufacturer=Manufacturer.objects.get(id=1),
+        cpu_socket_type=CPUSocketType.objects.get(id=1),
+        memory_slots=2,
+        storage_form_factor=StorageFormFactor.objects.get(id=1),
+        max_memory_capacity=64)
+
+        # add many to many relationships
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        testObject.supported_ram_types.add(1,2)
+        testObject.supported_ram_speeds.add(1,2)
+
+        ### create ram objects to test compatibility with motherboard ###
+        # create objects necesary to create a ram object
+        RAMType.objects.create(type="DDR4")
+        RAMSpeed.objects.create(speed="3200MHz")
+        RAMCapacity.objects.create(capacity="16GB")
+        RAMNumberOfModules.objects.create(number_of_modules=2)
+
+        # create ram object and establish relationships
+        RAM.objects.create(ram_id=1,
+        ram_type=RAMType.objects.get(id=3),
+        ram_speed=RAMSpeed.objects.get(id=3),
+        ram_capacity=RAMCapacity.objects.get(id=1),
+        ram_number_of_modules=RAMNumberOfModules.objects.get(id=1))
+
+        ### create cpu object to test compatibililty with motherboard ###
+        
+
+
+        ### create storage object to test compatibility with motherboard ###
+
+    # testing the labels of the fields
+    def test_Motherboard_mb_id_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("motherboard_id").verbose_name
+        self.assertEqual(field_label, "motherboard id")
+
+    def test_Motherboard_name_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("name").verbose_name
+        self.assertEqual(field_label, "name")
+
+    def test_Motherboard_manufacturer_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("motherboard_manufacturer").verbose_name
+        self.assertEqual(field_label, "motherboard manufacturer")
+
+    def test_Motherboard_cpusocket_type_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("cpu_socket_type").verbose_name
+        self.assertEqual(field_label, "cpu socket type")
+
+    def test_Motherboard_memory_slots_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("memory_slots").verbose_name
+        self.assertEqual(field_label, "memory slots")
+
+    def test_Motherboard_storage_form_factor_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("storage_form_factor").verbose_name
+        self.assertEqual(field_label, "storage form factor")
+
+    def test_Motherboard_max_memory_capacity_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("max_memory_capacity").verbose_name
+        self.assertEqual(field_label, "max memory capacity")
+
+    def test_Motherboard_supported_ram_types_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("supported_ram_types").verbose_name
+        self.assertEqual(field_label, "supported ram types")
+
+    def test_Motherboard_supported_ram_speeds_field_label(self):
+        testObject = Motherboard.objects.get(motherboard_id=1)
+        field_label = testObject._meta.get_field("supported_ram_speeds").verbose_name
+        self.assertEqual(field_label, "supported ram speeds")
