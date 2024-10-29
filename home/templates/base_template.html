@@ -4,6 +4,20 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
+<<<<<<< HEAD
+=======
+    .custom-header {
+            font-family: 'Anton', sans-serif;
+            text-align: left;
+            font-weight: bold;
+            background-color: #320b0b;
+            padding: 20px; /* Optional */
+            color: white; /* Optional: Change this based on your preference */
+        }
+
+
+
+>>>>>>> origin/FrontEnd_dev
     .button {
         background-color: rgba(65, 169, 172, 0);
         border: 2px solid #e7e7e7;
@@ -19,7 +33,7 @@
     }
 
     .button:hover {
-    background-color: darkblue;
+    background-color: rgba(81, 234, 239, 0.767);
     color: white;
     }
     
@@ -38,6 +52,7 @@
     .dropdown-menu {
         z-index: 1000;  /* Adjust the value as needed */
         background-color: rgba(65, 169, 172, 0);  /* Background color for visibility */
+<<<<<<< HEAD
     }
     
     /*This is where you customize the settings for the title*/
@@ -50,7 +65,39 @@
     .custom-navbar {
     background-color: #320b0b; /* Dark blue or any color you prefer */
     border-bottom: 2px solid #e7e7e7; /* Optional: Add a border at the bottom */
+=======
+>>>>>>> origin/FrontEnd_dev
     }
+    
+    /*This is where you customize the settings for the title
+    h1 {
+    font-family: 'Anton', sans-serif;
+    text-align: left;
+    font-weight: bold;
+    }*/
+
+    .custom-navbar {
+        background-color: #320b0b; /* Dark blue or any color you prefer */
+        border-bottom: 2px solid #e7e7e7; /* Optional: Add a border at the bottom */
+    }
+
+    .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.5); /* Optional: Change the border color of the button to white */
+    }
+
+    .navbar-toggler-icon {
+        background-image: none; /* Remove the default icon */
+    }
+
+    .navbar-toggler-icon::before {
+        content: '\2630'; /* Unicode for hamburger menu icon */
+        color: white; /* Set the color to white */
+        font-size: 1.5em; /* Adjust the size as needed */
+        display: inline-block;
+    }
+
+
+
 
     </style>
      
@@ -67,10 +114,19 @@
 
     <body>
     
+<<<<<<< HEAD
     <h1 style="font-size: 80px; color: #ffffff;">Optimal Performance</h1> <!-- This is where the title reference is located-->
     <div class="container-fluid">
 
     <!-- Navbar-->
+=======
+        <header class="custom-header">
+            <h1>Optimal Performance</h1>
+        </header>
+    
+
+        <!-- Navbar-->
+>>>>>>> origin/FrontEnd_dev
     <nav class="navbar navbar-expand-lg custom-navbar">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,8 +147,8 @@
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <li><a class="dropdown-item" href="https://www.amazon.com/s?k=CPU&crid=39RNZ0ZIX6FT8&sprefix=cpu%2Caps%2C104&ref=nb_sb_noss_1">CPU</a></li>
-                            <li><a class="dropdown-item" href="#">Action 2</a></li>
-                            <li><a class="dropdown-item" href="#">Action 3</a></li>
+                            <li><a class="dropdown-item" href="https://www.amazon.com/s?k=motherboard&crid=2H0Q2QYHAQLAN&sprefix=Mother%2Caps%2C156&ref=nb_sb_ss_ts-doa-p_2_6">Motherboard</a></li>
+                            <li><a class="dropdown-item" href="https://www.amazon.com/s?k=ram&crid=1ZN7I97VKH7A6&sprefix=ram%2Caps%2C171&ref=nb_sb_noss_1">Ram</a></li>
                         </ul>
                     </div>
                 </div>
@@ -107,21 +163,25 @@
             </div>
         </div>
     </nav>
+
+
+
     
     
     
 
-    <div class="col-sm-10">
+    <div class="container-sm-12">
         <!-- add block content from html template -->
         {% block content %}
         {% endblock %}
       </div>
 
     </div>
-</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
 </body>
 </html>
+
