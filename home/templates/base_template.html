@@ -60,9 +60,27 @@
     }*/
 
     .custom-navbar {
-    background-color: #320b0b; /* Dark blue or any color you prefer */
-    border-bottom: 2px solid #e7e7e7; /* Optional: Add a border at the bottom */
+        background-color: #320b0b; /* Dark blue or any color you prefer */
+        border-bottom: 2px solid #e7e7e7; /* Optional: Add a border at the bottom */
     }
+
+    .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.5); /* Optional: Change the border color of the button to white */
+    }
+
+    .navbar-toggler-icon {
+        background-image: none; /* Remove the default icon */
+    }
+
+    .navbar-toggler-icon::before {
+        content: '\2630'; /* Unicode for hamburger menu icon */
+        color: white; /* Set the color to white */
+        font-size: 1.5em; /* Adjust the size as needed */
+        display: inline-block;
+    }
+
+
+
 
     </style>
      
@@ -141,7 +159,7 @@
     
     
 
-    <div class="col-sm-10">
+    <div class="container-sm-12">
         <!-- add block content from html template -->
         {% block content %}
         {% endblock %}
