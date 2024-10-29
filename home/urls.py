@@ -1,4 +1,4 @@
-from django.urls import path,include
+from django.urls import path, include
 from . import views
 from .models import *
 from .views import login_or_register
@@ -17,6 +17,7 @@ path('builds/', views.build, name ='build'),
 path('pre_build/', views.pre_built, name ='pre_build'),
 path('login/', login_or_register, name='login_or_register'),
 path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
+path('search/', views.search_pc_parts, name='search_pc_parts'),
 
 
 ]

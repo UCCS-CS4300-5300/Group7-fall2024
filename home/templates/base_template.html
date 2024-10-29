@@ -110,7 +110,20 @@
                         </ul>
                     </div>
                 </div>
-    
+                
+                <!-- Search form -->
+                <form method="get" action="{% url 'search_pc_parts' %}" class="d-flex">
+                    <input type="text" name="q" class="form-control me-2" placeholder="Search for parts..." value="{{ query|default:'' }}">
+                    <select name="category" class="form-select me-2">
+                        <option value="">All Categories</option>
+                        <option value="RAM">RAM</option>
+                        <option value="CPU">CPU</option>
+                        <option value="Motherboard">Motherboard</option>
+                        <option value="Storage">Storage</option>
+                    </select>
+                    <button type="submit" class="button">Search</button>
+                </form>
+
                 <div class="navbar-nav">  <!-- This class allows items to be aligned to the right -->
                     {% if user.is_authenticated %}
                         <a class="button" href="{% url 'logout' %}">Logout</a>
