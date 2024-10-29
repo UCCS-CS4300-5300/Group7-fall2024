@@ -11,6 +11,8 @@ from .serializers import BuildSerializer
 class BuildViewSet(viewsets.ModelViewSet):
     queryset = Build.objects.all()
     serializer_class = BuildSerializer
+from .models import RAM, CPU, Motherboard, Storage
+from django.db.models import Q
 
 def index(request):
     return render(request, 'index.html')
@@ -42,7 +44,11 @@ def login_or_register(request):
     
     # Display the login form
     login_form = AuthenticationForm()
-    return render(request, 'auth/login.html', {'login_form': login_form})
+    register_form = UserCreationForm()
+    return render(request, 'auth/login_or_register.html', {
+        'login_form': login_form,
+        'register_form': register_form
+    })
 
 def search_pc_parts(request):
     query = request.GET.get('q', '').strip()
@@ -97,3 +103,4 @@ def search_pc_parts(request):
                 ).distinct())
 
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
+
