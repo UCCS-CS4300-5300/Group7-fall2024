@@ -14,11 +14,12 @@ sample_data.json
 **/*$py.class
 
 # Virtual environments
-venv/  # Virtual environment directory
+venv/ 
 ENV/
 env.bak/
 venv.bak/
 optimal/
+myenv/
 
 # Static and media files
 /media  # Media files
