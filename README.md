@@ -20,6 +20,8 @@
 - PostgreSQL (or another database system)
 - Virtual environment tool (like `venv`)
 
+## Notice on AI
+#### NOTE: AI was used for tasks such as formatting text, searching for documentation, error resolution, comment skeletons, etc.
 
 ## License Information
 ### NOTE: At this time we have not finalized our decision on what license to use. Below are our considerations.
