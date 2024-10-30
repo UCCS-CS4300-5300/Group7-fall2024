@@ -42,11 +42,7 @@ def login_or_register(request):
     
     # Display the login form
     login_form = AuthenticationForm()
-    register_form = UserCreationForm()
-    return render(request, 'auth/login_or_register.html', {
-        'login_form': login_form,
-        'register_form': register_form
-    })
+    return render(request, 'auth/login.html', {'login_form': login_form})
 
 def search_pc_parts(request):
     query = request.GET.get('q', '').strip()

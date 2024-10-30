@@ -16,7 +16,7 @@ router.register(r'builds', BuildViewSet)
 
 # add path functions here
 urlpatterns = [
-path('', include(router.urls)),
+
 path('', views.index, name='index'),
 path('builds/', views.build, name ='build'),
 path('pre_build/', views.pre_built, name ='pre_build'),
@@ -26,5 +26,6 @@ path('search/', views.search_pc_parts, name='search_pc_parts'),
 path('register/', views.register_view, name='register'),
 
 
-
+# Include the router URLs for the API
+    path('api/', include(router.urls)),  # Prefix API routes with /api/
 ]
