@@ -170,7 +170,8 @@ DEBUG = True
 
 # Will need to add everyone here or figure out a solution
 
-ALLOWED_HOSTS = ["app-jzlotoff-5.devedu.io", "app-jflinn2-5.devedu.io", "app-jmeredet-5.devedu.io", "app-dbuck3-5.devedu.io",]
+ALLOWED_HOSTS = ["app-jzlotoff-5.devedu.io", "app-jflinn2-5.devedu.io", "app-jmeredet-5.devedu.io", "app-dbuck3-5.devedu.io",
+"app-nhallise-5.devedu.io"]
 
 
 # Application definition
@@ -252,6 +253,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://app-jflinn2-5.devedu.io',
     'https://app-dbuck3-5.devedu.io',
     'https://app-jmeredet-5.devedu.io',
+    'https://app-nhallise-5.devedu.io'
 ]
 
 
