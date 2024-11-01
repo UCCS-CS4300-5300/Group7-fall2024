@@ -2,7 +2,7 @@
 
 ### **For:** CS4300 at UCCS
 ### **When:** Fall 2024
-### **By:** Daniel Buck | Joel Flinn | Jagger Z | Neako Hallisey | Jesse Merideth
+### **By:** Daniel Buck | Joel Flinn | Jagger Z | Neako Hallisey | Jesse Meredeth
 
 ## Project Overview
 ### This project allows users to select and build computer parts from a database, ensuring compatibility and optimal performance. It leverages Django and Django REST Framework to provide a robust API and web interface.

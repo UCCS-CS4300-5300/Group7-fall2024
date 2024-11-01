@@ -27,5 +27,5 @@ path('register/', views.register_view, name='register'),
 
 
 # Include the router URLs for the API
-    path('api/', include(router.urls)),  # Prefix API routes with /api/
+path('api/', include(router.urls)),  # Prefix API routes with /api/
 ]

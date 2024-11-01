@@ -20,6 +20,5 @@ from home import views  # Import the entire views module from home
 
 urlpatterns = [
     path('admin/', admin.site.urls),         # Admin site
-    path('api/', include('home.urls')),      # Include home app URLs
-    path('', views.index, name='index'),     # Home page
+    path('', include('home.urls')),     # Home page
 ]
