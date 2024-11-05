@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Build
+from .models import Build, Motherboard
 
 class BuildSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,3 +21,11 @@ class BuildSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError("The selected RAM is not compatible with the motherboard.")
 
         return data
+
+class MotherBoardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Motherboard
+        fields = '__all__'
+
+# once all of the serializers are created, we can nest them so that the
+# pk's arent shown and the actual records/objects are shown in output.

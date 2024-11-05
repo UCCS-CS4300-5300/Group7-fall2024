@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from .models import *
-from .views import login_or_register, BuildViewSet
+from .views import *
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
 
@@ -25,7 +25,9 @@ path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout')
 path('search/', views.search_pc_parts, name='search_pc_parts'),
 path('register/', views.register_view, name='register'),
 
-
 # Include the router URLs for the API
 path('api/', include(router.urls)),  # Prefix API routes with /api/
+path('api/get_builds/', get_builds, name='get_builds'),
+path('api/get_mobos/', get_mobos, name='get_mobos'),
+
 ]
