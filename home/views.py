@@ -6,7 +6,7 @@ from .models import RAM, CPU, Motherboard, Storage
 from django.db.models import Q
 from rest_framework import viewsets
 from .models import Build
-from .serializers import BuildSerializer, MotherBoardSerializer
+from .serializers import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -15,16 +15,35 @@ class BuildViewSet(viewsets.ModelViewSet):
     serializer_class = BuildSerializer
 
 @api_view(['GET'])
+def get_mobos(request):
+    queryset = Motherboard.objects.all()
+    serializer = MotherBoardSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_cpus(request):
+    queryset = CPU.objects.all()
+    serializer = CPUSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
 def get_builds(request):
     queryset = Build.objects.all()
     serializer = BuildSerializer(queryset, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
-def get_mobos(request):
-    queryset = Motherboard.objects.all()
-    serializer = MotherBoardSerializer(queryset, many=True)
+def get_rams(request):
+    queryset = RAM.objects.all()
+    serializer = RAMSerializer(queryset, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def get_storages(request):
+    queryset = Storage.objects.all()
+    serializer = StorageSerializer(queryset, many=True)
+    return Response(serializer.data)
+
 
 def index(request):
     return render(request, 'index.html')
