@@ -24,6 +24,7 @@ path('login/', login_or_register, name='login_or_register'),
 path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
 path('search/', views.search_pc_parts, name='search_pc_parts'),
 path('register/', views.register_view, name='register'),
+path('account_page/', views.account_page, name = 'account_page'),
 
 
 # Include the router URLs for the API

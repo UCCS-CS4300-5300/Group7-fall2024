@@ -111,3 +111,6 @@ def register_view(request):
         register_form = UserCreationForm()
 
     return render(request, 'auth/register.html', {'register_form': register_form})
+
+def account_page(request):
+    return render(request, 'account_page.html')
