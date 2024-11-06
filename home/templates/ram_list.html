@@ -1,0 +1,38 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RAM List</title>
+</head>
+<body>
+    <h1>RAM List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Speed</th>
+                <th>Capacity</th>
+                <th>Number of Modules</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ram in data %}
+                <tr>
+                    <td>{{ ram.ram_id }}</td>
+                    <td>{{ ram.ram_type.type }}</td>
+                    <td>{{ ram.ram_speed.speed }}</td>
+                    <td>{{ ram.ram_capacity.capacity }}</td>
+                    <td>{{ ram.ram_number_of_modules.number_of_modules }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+{% endblock %}

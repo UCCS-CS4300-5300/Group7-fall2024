@@ -14,11 +14,47 @@ import requests
 from django.http import HttpResponse
 
 
-def call_motherboard_view(request):
+def call_motherboards_view(request):
     url = "https://app-jflinn2-5.devedu.io/api/get_mobos/"
     
     result = requests.get(url)
     if result.status_code == 200:
-        print(result.json())
-        return HttpResponse(result.json())
+        context = {'data': result.json()}
+        return render(request, 'motherboard_list.html', context)
+    return HttpResponse('Something went wrong')
+
+def call_cpus_view(request):
+    url = "https://app-jflinn2-5.devedu.io/api/get_cpus/"
+    
+    result = requests.get(url)
+    if result.status_code == 200:
+        context = {'data': result.json()}
+        return render(request, 'cpus_list.html', context)
+    return HttpResponse('Something went wrong')
+
+def call_builds_view(request):
+    url = "https://app-jflinn2-5.devedu.io/api/get_builds/"
+    
+    result = requests.get(url)
+    if result.status_code == 200:
+        context = {'data': result.json()}
+        return render(request, 'build_list.html', context)
+    return HttpResponse('Something went wrong')
+
+def call_rams_view(request):
+    url = "https://app-jflinn2-5.devedu.io/api/get_rams/"
+    
+    result = requests.get(url)
+    if result.status_code == 200:
+        context = {'data': result.json()}
+        return render(request, 'ram_list.html', context)
+    return HttpResponse('Something went wrong')
+
+def call_storages_view(request):
+    url = "https://app-jflinn2-5.devedu.io/api/get_storages/"
+    
+    result = requests.get(url)
+    if result.status_code == 200:
+        context = {'data': result.json()}
+        return render(request, 'storage_list.html', context)
     return HttpResponse('Something went wrong')

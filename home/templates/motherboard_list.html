@@ -1,0 +1,53 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Motherboard List</title>
+</head>
+<body>
+    <h1>Motherboard List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>CPU Socket Type</th>
+                <th>Memory Slots</th>
+                <th>Form Factor</th>
+                <th>Max Memory Capacity</th>
+                <th>Supported RAM Types</th>
+                <th>Supported RAM Speeds</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for motherboard in data %}
+                <tr>
+                    <td>{{ motherboard.motherboard_id }}</td>
+                    <td>{{ motherboard.name }}</td>
+                    <td>{{ motherboard.motherboard_manufacturer.name }}</td>
+                    <td>{{ motherboard.cpu_socket_type.name }}</td>
+                    <td>{{ motherboard.memory_slots }}</td>
+                    <td>{{ motherboard.storage_form_factor.name }}</td>
+                    <td>{{ motherboard.max_memory_capacity }} GB</td>
+                    <td>
+                        {% for ram_type in motherboard.supported_ram_types %}
+                            {{ ram_type.type }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for ram_speed in motherboard.supported_ram_speeds %}
+                            {{ ram_speed.speed }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+{% endblock %}
