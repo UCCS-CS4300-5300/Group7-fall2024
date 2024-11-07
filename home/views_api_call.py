@@ -38,6 +38,7 @@ class BuildListView(LoginRequiredMixin, generic.ListView):
 # 4th: the called view in views.py will return serialized information
 # 5th: the returned serialized information is sent to a html template for rendering
 
+# show information about all motherboards in our database
 # see views.py function "get_mobos" for more information
 def call_motherboards_view(request):
     url = "https://app-jflinn2-5.devedu.io/api/get_mobos/"
@@ -47,6 +48,7 @@ def call_motherboards_view(request):
         return render(request, 'motherboard_list.html', context)
     return HttpResponse('Something went wrong')
 
+# show information about all cpus in our database
 # see views.py function "get_cpus" for more information about data returned
 def call_cpus_view(request):
     url = "https://app-jflinn2-5.devedu.io/api/get_cpus/"
@@ -56,6 +58,7 @@ def call_cpus_view(request):
         return render(request, 'cpus_list.html', context)
     return HttpResponse('Something went wrong')
 
+# show information about all builds in our database
 # see views.py function "get_builds" for more information about data returned
 def call_builds_view(request):
     url = "https://app-jflinn2-5.devedu.io/api/get_builds/"
@@ -65,9 +68,9 @@ def call_builds_view(request):
         return render(request, 'build_list.html', context)
     return HttpResponse('Something went wrong')
 
+# show information about all builds in our database belonging to the logged in user
 # see views.py function get_builds_user for more information related to the result of the api call
-# see
-@login_required(login_url='login/')
+@login_required(login_url='login/') # if user is not logged in, redirect to login page
 def call_user_builds_view(request):
     current_user = request.user
     current_user_id = current_user.id
@@ -78,6 +81,7 @@ def call_user_builds_view(request):
         return render(request, 'build_list.html', context)
     return HttpResponse('Something went wrong')
 
+# show information about all rams in our database
 # see views.py function "get_rams" for more information about data returned
 def call_rams_view(request):
     url = "https://app-jflinn2-5.devedu.io/api/get_rams/"
@@ -87,6 +91,7 @@ def call_rams_view(request):
         return render(request, 'ram_list.html', context)
     return HttpResponse('Something went wrong')
 
+# show information about all storages in our database
 # see views.py function "get_storages" for more information about data returned
 def call_storages_view(request):
     url = "https://app-jflinn2-5.devedu.io/api/get_storages/"
