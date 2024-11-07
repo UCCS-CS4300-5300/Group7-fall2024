@@ -14,36 +14,61 @@ class BuildViewSet(viewsets.ModelViewSet):
     queryset = Build.objects.all()
     serializer_class = BuildSerializer
 
+############################
+# start api endpoint views # 
+############################
+
+# these views are the enpoints for our compatilibilty checker api
+# they get data from our database and then return the database object's
+# information in a human readable string by using serializers
+
+# return serialized data about all motherboards in our database
 @api_view(['GET'])
 def get_mobos(request):
     queryset = Motherboard.objects.all()
     serializer = MotherBoardSerializer(queryset, many=True)
     return Response(serializer.data)
 
+# return serialized data about all cpus in our database
 @api_view(['GET'])
 def get_cpus(request):
     queryset = CPU.objects.all()
     serializer = CPUSerializer(queryset, many=True)
     return Response(serializer.data)
 
+# return serialized data about all builds in our database
 @api_view(['GET'])
 def get_builds(request):
     queryset = Build.objects.all()
     serializer = BuildSerializer(queryset, many=True)
     return Response(serializer.data)
 
+# return serialized data about builds belonging to the logged in user
+# logged in user is associated with the user_id parameter
+@api_view(['GET'])
+def get_builds_user(request, user_id):
+    queryset = Build.objects.all().filter(profile__user__id=user_id)
+    print(queryset)
+    serializer = BuildSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+# return serialized data about all ram objects in our database
 @api_view(['GET'])
 def get_rams(request):
     queryset = RAM.objects.all()
     serializer = RAMSerializer(queryset, many=True)
     return Response(serializer.data)
 
+# return serialized data about all storage objects in our database
 @api_view(['GET'])
 def get_storages(request):
     queryset = Storage.objects.all()
     serializer = StorageSerializer(queryset, many=True)
     return Response(serializer.data)
 
+##########################
+# end api endpoint views #
+##########################
 
 def index(request):
     return render(request, 'index.html')
