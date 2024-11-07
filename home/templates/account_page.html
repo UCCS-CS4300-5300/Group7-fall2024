@@ -1,0 +1,205 @@
+{% extends "base_template.html" %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - PC Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+       
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+        .tab button:hover {
+            background-color: #ddd;
+        }
+        .tab button.active {
+            background-color: #ccc;
+        }
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+        input[type="text"], input[type="email"], input[type="tel"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 20px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: auto;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>My Account</h1>
+        
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'Profile')" id="defaultOpen">Profile</button>
+            <button class="tablinks" onclick="openTab(event, 'Builds')">Saved Builds</button>
+            <button class="tablinks" onclick="openTab(event, 'Orders')">Order History</button>
+            <button class="tablinks" onclick="openTab(event, 'Billing')">Billing</button>
+            <button class="tablinks" onclick="openTab(event, 'Preferences')">Preferences</button>
+        </div>
+
+        <div id="Profile" class="tabcontent">
+            <h2>Profile Information</h2>
+            <form>
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="john@example.com" required>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+
+        <div id="Builds" class="tabcontent">
+            <h2>Saved PC Builds</h2>
+            <ul>
+                <li>
+                    Gaming Beast 3000
+                    <button onclick="editBuild('Gaming Beast 3000')">Edit</button>
+                    <button onclick="deleteBuild('Gaming Beast 3000')">Delete</button>
+                </li>
+                <li>
+                    Budget Workstation
+                    <button onclick="editBuild('Budget Workstation')">Edit</button>
+                    <button onclick="deleteBuild('Budget Workstation')">Delete</button>
+                </li>
+            </ul>
+            <button onclick="createNewBuild()">Create New Build</button>
+        </div>
+
+        <div id="Orders" class="tabcontent">
+            <h2>Order History</h2>
+            <ul>
+                <li>
+                    Order #12345 - Gaming PC
+                    <button onclick="viewOrderDetails('12345')">View Details</button>
+                </li>
+                <li>
+                    Order #12346 - Cooling System
+                    <button onclick="viewOrderDetails('12346')">View Details</button>
+                </li>
+            </ul>
+        </div>
+
+        <div id="Billing" class="tabcontent">
+            <h2>Billing Information</h2>
+            <form>
+                <label for="card">Credit Card:</label>
+                <input type="text" id="card" name="card" placeholder="**** **** **** 1234" required>
+
+                <label for="address">Billing Address:</label>
+                <input type="text" id="address" name="address" placeholder="123 PC Street, Tech City, 12345" required>
+
+                <button type="submit">Update Billing Info</button>
+            </form>
+        </div>
+
+        <div id="Preferences" class="tabcontent">
+            <h2>Account Preferences</h2>
+            <form>
+                <input type="checkbox" id="newsletter" name="newsletter">
+                <label for="newsletter">Receive newsletter</label><br>
+
+                <input type="checkbox" id="deals" name="deals">
+                <label for="deals">Receive special offers and deals</label><br>
+
+                <button type="submit">Save Preferences</button>
+            </form>
+        </div>
+
+        <button onclick="logout()">Log Out</button>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Open the default tab
+        document.getElementById("defaultOpen").click();
+
+        function editBuild(buildName) {
+            alert("Editing build: " + buildName);
+            // Add your edit logic here
+        }
+
+        function deleteBuild(buildName) {
+            alert("Deleting build: " + buildName);
+            // Add your delete logic here
+        }
+
+        function createNewBuild() {
+            alert("Creating new build");
+            // Add your create new build logic here
+        }
+
+        function viewOrderDetails(orderNumber) {
+            alert("Viewing details for order: " + orderNumber);
+            // Add your view order details logic here
+        }
+
+        function logout() {
+            alert("Logging out");
+            // Add your logout logic here
+        }
+    </script>
+</body>
+
+{% endblock %}

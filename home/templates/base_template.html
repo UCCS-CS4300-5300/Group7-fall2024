@@ -1,10 +1,11 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
+<<<<<<< HEAD
+=======
     .custom-header {
             font-family: 'Anton', sans-serif;
             text-align: left;
@@ -16,6 +17,7 @@
 
 
 
+>>>>>>> origin/FrontEnd_dev
     .button {
         background-color: rgba(65, 169, 172, 0);
         border: 2px solid #e7e7e7;
@@ -50,6 +52,21 @@
     .dropdown-menu {
         z-index: 1000;  /* Adjust the value as needed */
         background-color: rgba(65, 169, 172, 0);  /* Background color for visibility */
+<<<<<<< HEAD
+    }
+    
+    /*This is where you customize the settings for the title*/
+    h1 {
+    font-family: 'Anton', sans-serif;
+    text-align: left;
+    font-weight: bold;
+    }
+
+    .custom-navbar {
+    background-color: #320b0b; /* Dark blue or any color you prefer */
+    border-bottom: 2px solid #e7e7e7; /* Optional: Add a border at the bottom */
+=======
+>>>>>>> origin/FrontEnd_dev
     }
     
     /*This is where you customize the settings for the title
@@ -79,9 +96,6 @@
         display: inline-block;
     }
 
-
-
-
     </style>
      
 <body>
@@ -97,12 +111,19 @@
 
     <body>
     
+<<<<<<< HEAD
+    <h1 style="font-size: 80px; color: #ffffff;">Optimal Performance</h1> <!-- This is where the title reference is located-->
+    <div class="container-fluid">
+
+    <!-- Navbar-->
+=======
         <header class="custom-header">
             <h1>Optimal Performance</h1>
         </header>
     
 
         <!-- Navbar-->
+>>>>>>> origin/FrontEnd_dev
     <nav class="navbar navbar-expand-lg custom-navbar">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,7 +149,20 @@
                         </ul>
                     </div>
                 </div>
-    
+                
+                <!-- Search form -->
+                <form method="get" action="{% url 'search_pc_parts' %}" class="d-flex">
+                    <input type="text" name="q" class="form-control me-2" placeholder="Search for parts..." value="{{ query|default:'' }}">
+                    <select name="category" class="form-select me-2">
+                        <option value="">All Categories</option>
+                        <option value="RAM">RAM</option>
+                        <option value="CPU">CPU</option>
+                        <option value="Motherboard">Motherboard</option>
+                        <option value="Storage">Storage</option>
+                    </select>
+                    <button type="submit" class="button">Search</button>
+                </form>
+
                 <div class="navbar-nav">  <!-- This class allows items to be aligned to the right -->
                     {% if user.is_authenticated %}
                         <a class="button" href="{% url 'logout' %}">Logout</a>
@@ -139,12 +173,6 @@
             </div>
         </div>
     </nav>
-
-
-
-    
-    
-    
 
     <div class="container-sm-12">
         <!-- add block content from html template -->

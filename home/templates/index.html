@@ -3,6 +3,38 @@
 {% block content %}
 
 <style>
+<<<<<<< HEAD
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background-color: #320b0b; 
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: hidden; /* Prevent vertical scrolling */
+}
+
+.background-zoom {
+    width: auto; /* Set the desired width */
+    height: auto; /* Set the desired height */
+    background-image: url('https://wallpapers.com/images/featured/computer-science-cmoeeb2alwqi3awp.jpg');
+    background-size: cover; /* Cover the div */
+    background-position: center; /* Center the image */
+    transition: background-size 0.5s ease; /* Smooth transition */
+}
+
+.overlay-text {
+  position: fixed; /* Keep it fixed */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(81, 234, 239, 0.767);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 20px;
+  text-align: center; /* Centered text */
+  border-radius: 25px;
+  z-index: 10; /* Ensure it stays on top of other elements */
+=======
  html, body {
   width: 100%;
   height: 100%;
@@ -32,25 +64,70 @@
   text-align: center;
   border-radius: 25px;
   z-index: 10; /* Keep on top of background */
+>>>>>>> origin/FrontEnd_dev
 }
 
 .big-Text {
   font-size: 35px;
   text-align: center;
+<<<<<<< HEAD
+  margin: 0; /* Reset margin */
+=======
   margin: 0;
+>>>>>>> origin/FrontEnd_dev
 }
 
 .big-button {
   background-color: rgba(81, 234, 239, 0.767);
+<<<<<<< HEAD
+  color: rgb(255, 255, 255);
+  padding: 4px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 8px 4px;
+=======
   color: #fff;
   padding: 10px 20px;
   font-size: 18px;
   margin: 10px;
+>>>>>>> origin/FrontEnd_dev
   cursor: pointer;
   border-radius: 20px;
 }
 
 .horizontal-list {
+<<<<<<< HEAD
+    display: flex;
+    list-style: none;
+    position: absolute;
+    top: 425px; /* Adjust as needed */
+    left: 50%; /* Move to the center horizontally */
+    transform: translateX(-50%); /* Offset by half its width to truly center */
+}
+
+
+label {
+  white-space: pre;
+}
+
+.line-break::before {
+  content: "\A";
+  display: block;
+}
+
+header {
+  text-align: center;
+  width: 100%;
+  height: 100px;
+  background-size: cover;
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 85% 85% / 30%;
+}
+=======
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -72,6 +149,7 @@
   }
 }
 
+>>>>>>> origin/FrontEnd_dev
 </style>
 
 
@@ -85,6 +163,26 @@
 
   <body>
     
+<<<<<<< HEAD
+    <div class="CPU Background Image">
+      <img src="https://wallpapers.com/images/featured/computer-science-cmoeeb2alwqi3awp.jpg" alt=""/>
+    </div>
+    
+    <div class = "overlay-text">
+      <div class = "big-Text">
+        <span class="line-break"> Build your PC with ease! </span>
+      </div>
+      <br>
+      <span class="line-break"> Start a build now or specify PC requirements to receive tailored recommendations</span>
+    </div>
+
+    <div class="horizontal-list">
+      <div class="big-button">Start a build</div>
+      <label></label>
+      <div class="big-button">Specify Parts</div>
+    </div>
+  
+=======
     <div class="background-zoom">
       <div class="overlay-text">
           <div class="big-Text">
@@ -100,7 +198,7 @@
       </div>
   </div>
 
+>>>>>>> origin/FrontEnd_dev
   </body>
   </html>
 {% endblock %}
-
