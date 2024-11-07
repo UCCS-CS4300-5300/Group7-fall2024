@@ -122,9 +122,10 @@
                             Browse PC Parts
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="https://www.amazon.com/s?k=CPU&crid=39RNZ0ZIX6FT8&sprefix=cpu%2Caps%2C104&ref=nb_sb_noss_1">CPU</a></li>
-                            <li><a class="dropdown-item" href="https://www.amazon.com/s?k=motherboard&crid=2H0Q2QYHAQLAN&sprefix=Mother%2Caps%2C156&ref=nb_sb_ss_ts-doa-p_2_6">Motherboard</a></li>
-                            <li><a class="dropdown-item" href="https://www.amazon.com/s?k=ram&crid=1ZN7I97VKH7A6&sprefix=ram%2Caps%2C171&ref=nb_sb_noss_1">Ram</a></li>
+                            <li><a class="dropdown-item" href="{% url 'call_cpus_view' %}">CPU</a></li>
+                            <li><a class="dropdown-item" href="{% url 'call_motherboards_view' %}">Motherboard</a></li>
+                            <li><a class="dropdown-item" href="{% url 'call_rams_view' %}">Ram</a></li>
+                            <li><a class="dropdown-item" href="{% url 'call_storages_view' %}">Storage</a></li>
                         </ul>
                     </div>
                 </div>

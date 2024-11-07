@@ -1,0 +1,37 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Storage List</title>
+</head>
+<body>
+    <h1>Storage List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Form Factor</th>
+                <th>Capacity</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for storage in data %}
+                <tr>
+                    <td>{{ storage.storage_id }}</td>
+                    <td>{{ storage.name }}</td>
+                    <td>{{ storage.storage_form_factor.name }}</td>
+                    <td>{{ storage.storage_capacity.capacity }}</td>
+                    <td>{{ storage.storage_type.type }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}

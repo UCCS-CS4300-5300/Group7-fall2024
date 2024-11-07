@@ -1,13 +1,16 @@
-# Django and related packages
-asgiref>=3.8.1,<4  # Django asynchronous support
-Django==5.1.2  # Main Django package
-django-bootstrap5==24.3  # Bootstrap 5 support for Django
-djangorestframework==3.15.2  # Django REST framework
-
-# Utility packages
-pytz==2024.1  # Time zone support for Python
-setuptools==68.1.2  # Setuptools for Python packaging
-six==1.16.0  # Python 2 and 3 compatibility utilities
-sqlparse==0.4.4  # SQL parsing library
-supervisor==4.2.5  # Process control system
-wheel==0.42.0  # Built package format for Python
+asgiref==3.8.1
+certifi==2024.8.30
+charset-normalizer==3.4.0
+Django==5.1.2
+django-bootstrap5==24.3
+djangorestframework==3.15.2
+gyp==0.1
+idna==3.10
+pytz==2024.1
+requests==2.32.3
+setuptools==68.1.2
+six==1.16.0
+sqlparse==0.4.4
+supervisor==4.2.5
+urllib3==2.2.3
+wheel==0.42.0

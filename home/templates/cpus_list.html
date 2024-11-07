@@ -1,0 +1,36 @@
+{% extends "base_template.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CPU List</title>
+</head>
+<body>
+    <h1>CPU List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>CPU Name</th>
+                <th>Manufacturer</th>
+                <th>Microarchitecture</th>
+                <th>Socket Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cpu in data %}
+                <tr>
+                    <td>{{ cpu.cpu_id }}</td>
+                    <td>{{ cpu.cpu_name }}</td>
+                    <td>{{ cpu.cpu_manufacturer.name }}</td>
+                    <td>{{ cpu.cpu_microarchitecture.name }}</td>
+                    <td>{{ cpu.socket_type.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+
+{% endblock %}

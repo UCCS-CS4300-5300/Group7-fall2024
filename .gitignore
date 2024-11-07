@@ -20,6 +20,7 @@ ENV/
 env.bak/
 venv.bak/
 optimal/
+joelvenv/
 
 # Database
 db.sqlite3

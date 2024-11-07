@@ -6,11 +6,44 @@ from .models import RAM, CPU, Motherboard, Storage
 from django.db.models import Q
 from rest_framework import viewsets
 from .models import Build
-from .serializers import BuildSerializer
+from .serializers import *
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 class BuildViewSet(viewsets.ModelViewSet):
     queryset = Build.objects.all()
     serializer_class = BuildSerializer
+
+@api_view(['GET'])
+def get_mobos(request):
+    queryset = Motherboard.objects.all()
+    serializer = MotherBoardSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_cpus(request):
+    queryset = CPU.objects.all()
+    serializer = CPUSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_builds(request):
+    queryset = Build.objects.all()
+    serializer = BuildSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_rams(request):
+    queryset = RAM.objects.all()
+    serializer = RAMSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def get_storages(request):
+    queryset = Storage.objects.all()
+    serializer = StorageSerializer(queryset, many=True)
+    return Response(serializer.data)
+
 
 def index(request):
     return render(request, 'index.html')
@@ -97,7 +130,7 @@ def search_pc_parts(request):
                 ).distinct())
 
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
-    return render(request, 'auth/login.html', {'login_form': login_form})
+    # return render(request, 'auth/login.html', {'login_form': login_form})
 
 def register_view(request):
     if request.method == 'POST':
@@ -111,3 +144,4 @@ def register_view(request):
         register_form = UserCreationForm()
 
     return render(request, 'auth/register.html', {'register_form': register_form})
+
