@@ -27,16 +27,18 @@ path('search/', views.search_pc_parts, name='search_pc_parts'),
 path('register/', views.register_view, name='register'),
 
 # paths for api endpoints
-# Include the router URLs for the API
 path('api/', include(router.urls)),  # Prefix API routes with /api/
 path('api/get_builds/', get_builds, name='get_builds'),
+path('api/get_builds/user<int:user_id>/', get_builds_user, name='get_builds'), # get builds belonging to logged in user
 path('api/get_mobos/', get_mobos, name='get_mobos'),
 path('api/get_cpus/', get_cpus, name='get_cpus'),
 path('api/get_rams/', get_rams, name='get_rams'),
 path('api/get_storages/', get_storages, name='get_storages'),
 
-# these urls call a view that reference the api endpoints above. see views_api_call.py to see views
+# see views_api_call.py to see the views that are related to these urls.
+# the views referenced by these urls will call the api endpoints
 path('builds_list/', call_builds_view, name='call_builds_view'),
+path('builds_list/user/', call_user_builds_view, name='call_user_builds_view'),
 path('motherboards/', call_motherboards_view, name='call_motherboards_view'),
 path('cpus/', call_cpus_view, name='call_cpus_view'),
 path('rams/', call_rams_view, name='call_rams_view'),
