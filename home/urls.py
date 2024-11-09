@@ -1,7 +1,8 @@
 from django.urls import path, include
 from . import views
 from .models import *
-from .views import login_or_register, BuildViewSet
+from .views_api import BuildViewSet
+from .views import login_or_register
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
 
