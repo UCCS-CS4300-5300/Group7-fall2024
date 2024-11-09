@@ -30,6 +30,12 @@ def pre_built(request):
     """
     return render(request, 'pre_built.html')
 
+def account_page(request):
+    """
+    Render the pre-built page.
+    """
+    return render(request, 'account_page.html')
+
 def login_or_register(request):
     """
     Handle user login and registration.
