@@ -6,7 +6,7 @@ class BuildSerializer(serializers.ModelSerializer):
         model = Build
         fields = '__all__'
 
-class MotherBoardSerializer(serializers.ModelSerializer):
+class MotherboardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Motherboard
         fields = '__all__'
