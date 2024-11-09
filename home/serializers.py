@@ -1,5 +1,7 @@
+'''
 from rest_framework import serializers
 from .models import Build, Motherboard, CPU, RAM, Storage
+
 
 class BuildSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,7 +86,7 @@ class StorageTypeSerializer(serializers.ModelSerializer):
         model = StorageType
         exclude = ['id']
 
-class MotherBoardSerializer(serializers.ModelSerializer):
+class MotherboardSerializer(serializers.ModelSerializer):
     motherboard_manufacturer = Manufacturerserializer()
     cpu_socket_type = CPUSocketTypeSerializer()
     storage_form_factor = StorageFormFactorSerializer()
@@ -125,7 +127,7 @@ class StorageSerializer(serializers.ModelSerializer):
 
 # build model serializer
 class BuildSerializer(serializers.ModelSerializer):
-    motherboard = MotherBoardSerializer()
+    motherboard = MotherboardSerializer()
     cpu = CPUSerializer()
     ram = RAMSerializer(many=True, read_only=True)
     storage = StorageSerializer()
@@ -150,4 +152,3 @@ class BuildSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError("The selected RAM is not compatible with the motherboard.")
 
         return data
-'''
