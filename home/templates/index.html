@@ -1,0 +1,106 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+
+<style>
+ html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background-color: #320b0b;
+  overflow-x: hidden;
+}
+
+.background-zoom {
+  background-image: url('https://wallpapers.com/images/featured/computer-science-cmoeeb2alwqi3awp.jpg');
+  background-size: cover; /* Ensure the image covers the entire container */
+  background-position: center; /* Center the image */
+  width: 100%;
+  height: 100vh; /* Ensure it covers the full viewport height */
+  min-height: 100vh; /* Ensure a minimum height to cover the viewport */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.overlay-text {
+  background-color: rgba(81, 234, 239, 0.767);
+  color: #fff;
+  padding: 20px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 25px;
+  z-index: 10; /* Keep on top of background */
+}
+
+.big-Text {
+  font-size: 35px;
+  text-align: center;
+  margin: 0;
+}
+
+.big-button {
+  background-color: rgba(81, 234, 239, 0.767);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 18px;
+  margin: 10px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.horizontal-list {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .big-Text {
+    font-size: 24px;
+  }
+
+  .big-button {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+
+  .overlay-text {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+}
+
+</style>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Optimal Performance</title>
+</head>
+
+  <body>
+    
+    <div class="background-zoom">
+      <div class="overlay-text">
+          <div class="big-Text">
+              <span class="line-break">Build your PC with ease!</span>
+          </div>
+          <br>
+          <span class="line-break">Start a build now or specify PC requirements to receive tailored recommendations</span>
+
+          <div class="horizontal-list">
+              <a class="big-button btn btn-secondary" href="{% url 'build' %}">Start a build</a>
+              
+          </div>
+      </div>
+  </div>
+
+  </body>
+  </html>
+{% endblock %}
+
