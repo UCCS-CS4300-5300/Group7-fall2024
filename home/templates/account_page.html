@@ -1,3 +1,4 @@
+
 {% extends "base_template.html" %}
 {% block content %}
 <head>
@@ -22,8 +23,8 @@
         }
         .tab {
             overflow: hidden;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
+            border: 1px solid #555;
+            background-color: #333;
         }
         .tab button {
             background-color: inherit;
@@ -33,12 +34,14 @@
             cursor: pointer;
             padding: 14px 16px;
             transition: 0.3s;
+            color: #fff;
+            font-weight: bold;
         }
         .tab button:hover {
-            background-color: #ddd;
+            background-color: #555;
         }
         .tab button.active {
-            background-color: #ccc;
+            background-color: #4a4a4a;
         }
         .tabcontent {
             display: none;
