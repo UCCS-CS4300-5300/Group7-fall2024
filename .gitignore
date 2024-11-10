@@ -32,7 +32,8 @@ joelvenv/
 /media
 # Static files  
 /staticfiles  
-staticfiles/
+/staticfiles/
+/static/
 
 # Environment variables
 .env

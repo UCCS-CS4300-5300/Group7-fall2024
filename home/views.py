@@ -39,6 +39,7 @@ def account_page(request):
 def login_or_register(request):
     """
     Handle user login and registration.
+    !!!!!!!!Needs to be updated.!!!!!!!!!!!
     """
     if request.method == 'POST':
         login_form = AuthenticationForm(request, data=request.POST)
