@@ -29,3 +29,17 @@
      - `git add sample_data.json`
      - `git commit -m "Update database dump"`
      - `git push origin main`
+
+# Remove the existing database
+rm db.sqlite3
+
+# Remove existing migration files
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+find . -path "*/migrations/*.pyc" -delete
+
+# Create new migrations and apply them
+python manage.py makemigrations
+python manage.py migrate
+
+# Load data from a JSON file (optional)
+python manage.py loaddata path/to/your/file.json
