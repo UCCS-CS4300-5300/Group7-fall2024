@@ -1,6 +1,9 @@
 
 {% extends "base_template.html" %}
 {% block content %}
+
+{% if user.is_authenticated %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,16 +91,9 @@
         <div id="Profile" class="tabcontent">
             <h2>Profile Information</h2>
             <form>
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" placeholder="John Doe" required>
+                <label for="name">Username:</label>
+                <p>{{ user.username }} </p>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="john@example.com" required>
-
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
-
-                <button type="submit">Save Changes</button>
             </form>
         </div>
 
@@ -205,4 +201,11 @@
         }
     </script>
 </body>
+
+{% else %}
+
+<p>Login to view your details</p>
+
+{% endif %}
+
 {% endblock %}
