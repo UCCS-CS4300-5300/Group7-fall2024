@@ -6,8 +6,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # One-to-one relationship with the User model
-    profile_name = models.CharField(max_length=20, blank=True)  # Optional profile name
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_name = models.CharField(max_length=20, blank=True)
     
     def __str__(self):
         return self.user.username
@@ -22,15 +22,12 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-post_save.connect(create_profile, sender=User)  # Automatically create a profile when a user signs up
-
-# Shopping cart model linked to a Profile
-class Shopping_Cart(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)  # One-to-one relationship with the Profile model
-    total_price = models.FloatField(default=0.0)  # Default total price for the shopping cart
+class ShoppingCart(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    total_price = models.FloatField(default=0.0)
     
     def __str__(self):
-        return self.profile.profile_name  # String representation of the Shopping_Cart model
+        return f"Shopping Cart for {self.profile.user.username}"
 
 # Build Models
 class Build(models.Model):
@@ -206,92 +203,144 @@ class RAMSpeed(models.Model):
         ]
 
 class RAMCapacity(models.Model):
+    """
+    Model to define RAM capacity (e.g., 16GB).
+    """
     capacity = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.capacity
+        return self.capacity  # String representation of the RAMCapacity model
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['capacity'])  # Index the capacity field for faster search
+        ]
 
 class RAMNumberOfModules(models.Model):
-    number_of_modules = models.IntegerField()
+    """
+    Model to define the number of RAM modules.
+    """
+    number_of_modules = models.IntegerField(validators=[MinValueValidator(1)])  # Ensure at least 1 module
 
     def __str__(self):
-        return str(self.number_of_modules)
+        return str(self.number_of_modules)  # String representation of the RAMNumberOfModules model
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['number_of_modules'])  # Index the number_of_modules field for faster search
+        ]
+
+class RAMManager(models.Manager):
+    def by_type(self, ram_type):
+        return self.filter(ram_type__type=ram_type)
+
+    def by_speed_range(self, min_speed, max_speed):
+        return self.filter(ram_speed__speed__gte=min_speed, ram_speed__speed__lte=max_speed)
 
 class RAM(models.Model):
-    ram_id = models.AutoField(primary_key=True)
-    ram_type = models.ForeignKey(RAMType, on_delete=models.CASCADE)
-    ram_speed = models.ForeignKey(RAMSpeed, on_delete=models.CASCADE)
-    ram_capacity = models.ForeignKey(RAMCapacity, on_delete=models.CASCADE)
-    ram_number_of_modules = models.ForeignKey(RAMNumberOfModules, on_delete=models.CASCADE)
+    """
+    Model to define a RAM component with its characteristics.
+    """
+    ram_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for RAM model
+    name = models.CharField(max_length=100)  # Name of the RAM component
+    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)  # Foreign key to Manufacturer model
+    ram_type = models.ForeignKey('RAMType', on_delete=models.CASCADE)  # Foreign key to RAMType model
+    ram_speed = models.ForeignKey('RAMSpeed', on_delete=models.CASCADE)  # Foreign key to RAMSpeed model
+    ram_capacity = models.ForeignKey('RAMCapacity', on_delete=models.CASCADE)  # Foreign key to RAMCapacity model
+    ram_number_of_modules = models.ForeignKey('RAMNumberOfModules', on_delete=models.CASCADE)  # Foreign key to RAMNumberOfModules model
+
+    def clean(self):
+        # Custom validation logic
+        if self.ram_speed.speed not in range(800, 8001):
+            raise ValidationError(f"RAM speed {self.ram_speed.speed} is out of the valid range.")
 
     def __str__(self):
-        return f"{self.ram_type} {self.ram_speed} - {self.ram_number_of_modules} x {self.ram_capacity}"
+        return f"{self.name} {self.ram_type.type} {self.ram_speed.speed} MHz - {self.ram_number_of_modules.number_of_modules} x {self.ram_capacity.capacity}"  # Improved string representation
 
-# Motherboard models
-class Manufacturer(models.Model):
-    name = models.CharField(max_length=100)
+    class Meta:
+        indexes = [
+            models.Index(fields=['name']),  # Index the name field for faster search
+            models.Index(fields=['manufacturer']),  # Index the manufacturer field for faster search
+        ]
 
-    def __str__(self):
-        return self.name
-
-class CPUSocketType(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-class StorageFormFactor(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-class Motherboard(models.Model):
-    motherboard_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    motherboard_manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
-    cpu_socket_type = models.ForeignKey(CPUSocketType, on_delete=models.CASCADE)
-    memory_slots = models.IntegerField(choices=[(2, '2 Slots'), (4, '4 Slots')])
-    storage_form_factor = models.ForeignKey(StorageFormFactor, on_delete=models.CASCADE)
-    max_memory_capacity = models.IntegerField(default=128)
-    supported_ram_types = models.ManyToManyField(RAMType)
-    supported_ram_speeds = models.ManyToManyField(RAMSpeed)
-
-    def __str__(self):
-        return self.name
-
-    # Compatibility checks for RAM
-    def is_ram_type_compatible(self, ram):
-        return ram.ram_type in self.supported_ram_types.all()
-
-    def is_ram_speed_compatible(self, ram):
-        return ram.ram_speed in self.supported_ram_speeds.all()
-
-    def is_ram_capacity_compatible(self, ram):
-        total_capacity = int(ram.ram_capacity.capacity.split()[0]) * ram.ram_number_of_modules.number_of_modules
-        return total_capacity <= self.max_memory_capacity
-
-    def is_ram_modules_compatible(self, ram):
-        return ram.ram_number_of_modules.number_of_modules <= self.memory_slots
-
-    def is_ram_compatible(self, ram):
-        return (self.is_ram_type_compatible(ram) and self.is_ram_speed_compatible(ram) and self.is_ram_capacity_compatible(ram) and self.is_ram_modules_compatible(ram))
-
-    # Compatibility check for CPU
-    def is_cpu_compatible(self, cpu):
-        return self.cpu_socket_type == cpu.socket_type
-
-    # Compatibility check for storage
-    def is_storage_compatible(self, storage):
-        return self.storage_form_factor == storage.storage_form_factor
-    
-    # Overall build compatibility check
-    def is_build_compatible(self, cpu, ram, storage):
-        return (self.is_cpu_compatible(cpu) and self.is_ram_compatible(ram) and self.is_storage_compatible(storage))
-
-# CPU models
+# CPU Models
 class Microarchitecture(models.Model):
-    name = models.CharField(max_length=100)
+    """
+    Model to define CPU microarchitecture.
+    """
+    name = models.CharField(max_length=100, unique=True)  # Ensure the microarchitecture name is unique
+
+    def __str__(self):
+        return self.name  # String representation of the Microarchitecture model
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['name'])  # Index the name field for faster search
+        ]
+
+class CPUMicroarchitectureManager(models.Manager):
+    def by_microarchitecture(self, name):
+        return self.filter(microarchitecture__name=name)
+
+    def by_socket_type(self, socket_type_name):
+        return self.filter(socket_type__name=socket_type_name)
+
+class CPU(models.Model):
+    """
+    Model to define a CPU with its characteristics.
+    """
+    cpu_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for CPU model
+    name = models.CharField(max_length=100, unique=True)  # Ensure unique CPU name
+    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)  # Foreign key to Manufacturer model
+    microarchitecture = models.ForeignKey('Microarchitecture', on_delete=models.CASCADE)  # Foreign key to Microarchitecture model
+    socket_type = models.ForeignKey('CPUSocketType', on_delete=models.CASCADE)  # Foreign key to CPUSocketType model
+    motherboards = models.ManyToManyField('Motherboard', through='CPUMotherboardCompatibility')  # Many-to-Many relationship with Motherboard
+
+    objects = CPUMicroarchitectureManager()  # Use custom manager
+
+    def __str__(self):
+        return self.name  # String representation of the CPU model
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['name']),  # Index the name field for faster search
+            models.Index(fields=['manufacturer']),  # Index the manufacturer field for faster search
+            models.Index(fields=['microarchitecture']),  # Index the microarchitecture field for faster search
+            models.Index(fields=['socket_type'])  # Index the socket_type field for faster search
+        ]
+
+# Storage Models
+class StorageCapacity(models.Model):
+    """
+    Model to define storage capacity.
+    """
+    capacity = models.CharField(max_length=100, unique=True)  # Ensure the storage capacity is unique
+
+    def __str__(self):
+        return self.capacity  # String representation of the StorageCapacity model
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['capacity'])  # Index the capacity field for faster search
+        ]
+
+class StorageManager(models.Manager):
+    def by_type(self, storage_type):
+        return self.filter(type__type=storage_type)
+
+    def by_capacity_range(self, min_capacity, max_capacity):
+        return self.filter(capacity__capacity__gte=min_capacity, capacity__capacity__lte=max_capacity)
+
+class Storage(models.Model):
+    """
+    Model to define a storage component with its characteristics.
+    """
+    storage_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for storage model
+    name = models.CharField(max_length=100)  # Name of the storage device
+    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)  # Foreign key to Manufacturer model
+    form_factor = models.ForeignKey('FormFactor', on_delete=models.CASCADE)  # Foreign key to FormFactor model
+    capacity = models.ForeignKey('StorageCapacity', on_delete=models.CASCADE)  # Foreign key to StorageCapacity model
+    type = models.ForeignKey('StorageType', on_delete=models.CASCADE)  # Foreign key to StorageType model
 
     def __str__(self):
         return f"{self.name} - {self.form_factor.name} - {self.capacity.capacity}"  # String representation of the Storage model

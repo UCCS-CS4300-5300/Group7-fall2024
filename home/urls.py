@@ -2,7 +2,8 @@ from django.urls import path, include
 from . import views
 from .models import *
 from .views import *
-from .views_api_call import *
+from .views_api import *
+from .views_render import *
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
 
@@ -25,15 +26,6 @@ path('login/', login_or_register, name='login_or_register'),
 path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
 path('search/', views.search_pc_parts, name='search_pc_parts'),
 path('register/', views.register_view, name='register'),
-
-# paths for api endpoints
-path('api/', include(router.urls)),  # Prefix API routes with /api/
-path('api/get_builds/', get_builds, name='get_builds'),
-path('api/get_builds/user<int:user_id>/', get_builds_user, name='get_builds'), # get builds belonging to logged in user
-path('api/get_mobos/', get_mobos, name='get_mobos'),
-path('api/get_cpus/', get_cpus, name='get_cpus'),
-path('api/get_rams/', get_rams, name='get_rams'),
-path('api/get_storages/', get_storages, name='get_storages'),
 
 # see views_api_call.py to see the views that are related to these urls.
 # the views referenced by these urls will call the api endpoints
