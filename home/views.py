@@ -119,18 +119,13 @@ def search_pc_parts(request):
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
 
 def register_view(request):
-    """
-    Handle user registration.
-    """
     if request.method == 'POST':
         register_form = UserCreationForm(request.POST)
         if register_form.is_valid():
             user = register_form.save()
-            login(request, user)
+            login(request, user)  # Log the user in after registration
             messages.success(request, "Registration successful.")
-            return redirect('index')
-        else:
-            messages.error(request, "Registration failed.")
+            return redirect('index')  # Redirect to your home page after successful registration
     else:
         register_form = UserCreationForm()
 
