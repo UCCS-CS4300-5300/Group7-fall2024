@@ -4,88 +4,94 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from .models import RAM, CPU, Motherboard, Storage
 from django.db.models import Q
-from rest_framework import viewsets
-from .models import Build
-from .serializers import *
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
 
-class BuildViewSet(viewsets.ModelViewSet):
-    queryset = Build.objects.all()
-    serializer_class = BuildSerializer
-
-############################
-# start api endpoint views # 
-############################
-
-# these views are the enpoints for our compatilibilty checker api
-# they get data from our database and then return the database object's
-# information in a human readable string by using serializers
-
-# return serialized data about all motherboards in our database
-@api_view(['GET'])
-def get_mobos(request):
-    queryset = Motherboard.objects.all()
-    serializer = MotherBoardSerializer(queryset, many=True)
-    return Response(serializer.data)
-
-# return serialized data about all cpus in our database
-@api_view(['GET'])
-def get_cpus(request):
-    queryset = CPU.objects.all()
-    serializer = CPUSerializer(queryset, many=True)
-    return Response(serializer.data)
-
-# return serialized data about all builds in our database
-@api_view(['GET'])
-def get_builds(request):
-    queryset = Build.objects.all()
-    serializer = BuildSerializer(queryset, many=True)
-    return Response(serializer.data)
-
-# return serialized data about builds belonging to the logged in user
-# logged in user is associated with the user_id parameter
-@api_view(['GET'])
-def get_builds_user(request, user_id):
-    queryset = Build.objects.all().filter(profile__user__id=user_id)
-    print(queryset)
-    serializer = BuildSerializer(queryset, many=True)
-    return Response(serializer.data)
-
-# return serialized data about all ram objects in our database
-@api_view(['GET'])
-def get_rams(request):
-    queryset = RAM.objects.all()
-    serializer = RAMSerializer(queryset, many=True)
-    return Response(serializer.data)
-
-# return serialized data about all storage objects in our database
-@api_view(['GET'])
-def get_storages(request):
-    queryset = Storage.objects.all()
-    serializer = StorageSerializer(queryset, many=True)
-    return Response(serializer.data)
-
-##########################
-# end api endpoint views #
-##########################
+def logout_view(request):
+    """
+    Handle user logout by logging out the user and redirecting to the login page.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Redirects to the login_or_register view.
+    """
+    auth_logout(request)
+    messages.success(request, "Logged out successfully.")
+    return redirect('login_or_register')
 
 def index(request):
+    """
+    Render the index page.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the index.html template.
+    """
     return render(request, 'index.html')
 
-# Create your views here.
 def build(request):
+    """
+    Render the build page where users can create and manage their builds.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the build.html template.
+    """
     return render(request, 'build.html')
 
 def part_browser(request):
+    """
+    Render the part browser page where users can browse various PC parts.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the part_browser.html template.
+    """
     return render(request, 'part_browser.html')
 
 def pre_built(request):
+    """
+    Render the pre-built page where users can view pre-built PC configurations.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the pre_built.html template.
+    """
     return render(request, 'pre_built.html')
 
+def account_page(request):
+    """
+    Render the account page where users can manage their account information.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the account_page.html template.
+    """
+    return render(request, 'account_page.html')
+
 def login_or_register(request):
+    """
+    Handle user login and registration. Present the login form to the user.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the login.html template with the login form.
+    """
     if request.method == 'POST':
-        # Handle user login
         login_form = AuthenticationForm(request, data=request.POST)
         if login_form.is_valid():
             username = login_form.cleaned_data.get('username')
@@ -94,79 +100,101 @@ def login_or_register(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, "Login successful.")
-                return redirect('index')  # Redirect to your home page or desired page
+                return redirect('index')
+            else:
+                messages.error(request, "Invalid login credentials.")
         else:
-            messages.error(request, "Invalid login credentials.")
+            messages.error(request, "Invalid login form submission.")
     
-    # Display the login form
     login_form = AuthenticationForm()
     return render(request, 'auth/login.html', {'login_form': login_form})
 
+@login_required
 def search_pc_parts(request):
+    """
+    Search for PC parts based on the user's query and category selection.
+    
+    Args:
+        request (HttpRequest): The HTTP request object containing the query and category.
+        
+    Returns:
+        HttpResponse: Renders the part_browser.html template with search results.
+    """
     query = request.GET.get('q', '').strip()
     category = request.GET.get('category', 'All Categories')
 
     results = []
 
     if query:
-        # Perform search based on the category
-        if category == 'All Categories' or category == 'RAM':
-            if query.lower() == "ram":  # General term to match all RAM entries
-                results += list(RAM.objects.all())
-            else:
-                results += list(RAM.objects.filter(
-                    Q(ram_type__type__icontains=query) |
-                    Q(ram_speed__speed__icontains=query) |
-                    Q(ram_capacity__capacity__icontains=query)
-                ).distinct())
+        try:
+            if category == 'All Categories' or category == 'RAM':
+                if query.lower() == "ram":
+                    results += list(RAM.objects.all())
+                else:
+                    results += list(RAM.objects.filter(
+                        Q(ram_type__type__icontains=query) |
+                        Q(ram_speed__speed__icontains=query) |
+                        Q(ram_capacity__capacity__icontains=query)
+                    ).distinct())
 
-        if category == 'All Categories' or category == 'CPU':
-            if query.lower() == "cpu":
-                results += list(CPU.objects.all())
-            else:
-                results += list(CPU.objects.filter(
-                    Q(cpu_name__icontains=query) |
-                    Q(cpu_manufacturer__name__icontains=query) |
-                    Q(cpu_microarchitecture__name__icontains=query) |
-                    Q(socket_type__name__icontains=query)
-                ).distinct())
+            if category == 'All Categories' or category == 'CPU':
+                if query.lower() == "cpu":
+                    results += list(CPU.objects.all())
+                else:
+                    results += list(CPU.objects.filter(
+                        Q(name__icontains=query) |
+                        Q(manufacturer__name__icontains=query) |
+                        Q(microarchitecture__name__icontains=query) |
+                        Q(socket_type__name__icontains=query)
+                    ).distinct())
 
-        if category == 'All Categories' or category == 'Motherboard':
-            if query.lower() == "motherboard":
-                results += list(Motherboard.objects.all())
-            else:
-                results += list(Motherboard.objects.filter(
-                    Q(name__icontains=query) |
-                    Q(motherboard_manufacturer__name__icontains=query) |
-                    Q(cpu_socket_type__name__icontains=query) |
-                    Q(supported_ram_types__type__icontains=query) |
-                    Q(supported_ram_speeds__speed__icontains=query)
-                ).distinct())
+            if category == 'All Categories' or category == 'Motherboard':
+                if query.lower() == "motherboard":
+                    results += list(Motherboard.objects.all())
+                else:
+                    results += list(Motherboard.objects.filter(
+                        Q(name__icontains=query) |
+                        Q(manufacturer__name__icontains=query) |
+                        Q(cpu_socket_type__name__icontains=query) |
+                        Q(supported_ram_types__type__icontains=query) |
+                        Q(supported_ram_speeds__speed__icontains=query)
+                    ).distinct())
 
-        if category == 'All Categories' or category == 'Storage':
-            if query.lower() == "storage":
-                results += list(Storage.objects.all())
-            else:
-                results += list(Storage.objects.filter(
-                    Q(name__icontains=query) |
-                    Q(storage_form_factor__name__icontains=query) |
-                    Q(storage_capacity__capacity__icontains=query) |
-                    Q(storage_type__type__icontains=query)
-                ).distinct())
+            if category == 'All Categories' or category == 'Storage':
+                if query.lower() == "storage":
+                    results += list(Storage.objects.all())
+                else:
+                    results += list(Storage.objects.filter(
+                        Q(name__icontains=query) |
+                        Q(form_factor__name__icontains=query) |
+                        Q(capacity__capacity__icontains=query) |
+                        Q(type__type__icontains=query)
+                    ).distinct())
+        except Exception as e:
+            messages.error(request, f"An error occurred during the search: {e}")
 
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
-    # return render(request, 'auth/login.html', {'login_form': login_form})
 
 def register_view(request):
+    """
+    Handle user registration by creating a new user and logging them in.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the register.html template with the registration form.
+    """
     if request.method == 'POST':
         register_form = UserCreationForm(request.POST)
         if register_form.is_valid():
             user = register_form.save()
-            login(request, user)  # Log the user in after registration
+            login(request, user)
             messages.success(request, "Registration successful.")
-            return redirect('index')  # Redirect to your home page after successful registration
+            return redirect('index')
+        else:
+            messages.error(request, "Registration failed.")
     else:
         register_form = UserCreationForm()
 
     return render(request, 'auth/register.html', {'register_form': register_form})
-

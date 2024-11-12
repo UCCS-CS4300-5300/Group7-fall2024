@@ -1,25 +1,25 @@
 from rest_framework import serializers
 from .models import *
+from .compatibility_service import CompatibilityService
 
-#---------------------------------------------------------------------------------
-# | Serializers for models that support CPU, Build, RAM, Storage, and MotherBoard |
-#---------------------------------------------------------------------------------
+# Serializers for core models
 
-#serializers to support cpu
-class Manufacturerserializer(serializers.ModelSerializer):
+class ManufacturerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacturer
         exclude = ['id']
+
 class MicroarchitectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Microarchitecture
-        exclude = ['id'] 
+        exclude = ['id']
+
 class CPUSocketTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CPUSocketType
-        exclude = ['id'] 
+        exclude = ['id']
 
-# serializers to support rams
+# RAM Serializers
 class RAMTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = RAMType
@@ -34,44 +34,50 @@ class RAMCapacitySerializer(serializers.ModelSerializer):
     class Meta:
         model = RAMCapacity
         exclude = ['id']
+
 class RAMNumberOfModulesSerializer(serializers.ModelSerializer):
     class Meta:
         model = RAMNumberOfModules
-        exclude = ['id']  
+        exclude = ['id']
 
-# serializers to support storages
-class StorageFormFactorSerializer(serializers.ModelSerializer):
+# Storage Serializers
+class FormFactorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = StorageFormFactor
-        exclude = ['id'] 
+        model = FormFactor
+        exclude = ['id']
+
 class StorageCapacitySerializer(serializers.ModelSerializer):
     class Meta:
         model = StorageCapacity
         exclude = ['id']
+
 class StorageTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = StorageType
         exclude = ['id']
 
-class MotherBoardSerializer(serializers.ModelSerializer):
-    motherboard_manufacturer = Manufacturerserializer()
+class MotherboardSerializer(serializers.ModelSerializer):
+    manufacturer = ManufacturerSerializer()
     cpu_socket_type = CPUSocketTypeSerializer()
-    storage_form_factor = StorageFormFactorSerializer()
+    form_factor = FormFactorSerializer()
     supported_ram_types = RAMTypeSerializer(many=True, read_only=True)
     supported_ram_speeds = RAMSpeedSerializer(many=True, read_only=True)
 
     class Meta:
         model = Motherboard
-        fields = ('motherboard_id','name','motherboard_manufacturer','cpu_socket_type','memory_slots','storage_form_factor',
-        'max_memory_capacity','supported_ram_types','supported_ram_speeds')
+        fields = (
+            'motherboard_id', 'name', 'manufacturer', 'cpu_socket_type', 'memory_slots', 'form_factor',
+            'max_memory_capacity', 'supported_ram_types', 'supported_ram_speeds'
+        )
 
 class CPUSerializer(serializers.ModelSerializer):
-    cpu_manufacturer = Manufacturerserializer()
-    cpu_microarchitecture = MicroarchitectureSerializer()
+    manufacturer = ManufacturerSerializer()
+    microarchitecture = MicroarchitectureSerializer()
     socket_type = CPUSocketTypeSerializer()
+    
     class Meta:
         model = CPU
-        fields = ('cpu_id','cpu_name','cpu_manufacturer','cpu_microarchitecture','socket_type')
+        fields = ('cpu_id', 'name', 'manufacturer', 'microarchitecture', 'socket_type')
 
 class RAMSerializer(serializers.ModelSerializer):
     ram_type = RAMTypeSerializer()
@@ -81,41 +87,45 @@ class RAMSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RAM
-        fields = ('ram_id','ram_type','ram_speed','ram_capacity','ram_number_of_modules')
-    
+        fields = ('ram_id', 'name', 'manufacturer', 'ram_type', 'ram_speed', 'ram_capacity', 'ram_number_of_modules')
+
 class StorageSerializer(serializers.ModelSerializer):
-    storage_form_factor = StorageFormFactorSerializer()
-    storage_capacity = StorageCapacitySerializer()
-    storage_type = StorageTypeSerializer()
+    form_factor = FormFactorSerializer()
+    capacity = StorageCapacitySerializer()
+    type = StorageTypeSerializer()
 
     class Meta:
         model = Storage
-        fields = ('storage_id','name','storage_form_factor','storage_capacity','storage_type')
+        fields = ('storage_id', 'name', 'manufacturer', 'form_factor', 'capacity', 'type')
 
-# build model serializer
+# Build Serializer
 class BuildSerializer(serializers.ModelSerializer):
-    motherboard = MotherBoardSerializer()
+    motherboard = MotherboardSerializer()
     cpu = CPUSerializer()
     ram = RAMSerializer(many=True, read_only=True)
-    storage = StorageSerializer()
+    storage = StorageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Build
-        fields = ('build_id','name','profile','is_complete','motherboard',
-        'cpu','ram','storage')
+        fields = ('build_id', 'name', 'profile', 'is_complete', 'motherboard', 'cpu', 'ram', 'storage')
 
     def validate(self, data):
-        motherboard = data.get('motherboard')
-        cpu = data.get('cpu')
-        ram = data.get('ram')
+        """
+        Validate the build by checking component compatibility using the CompatibilityService.
 
-        if motherboard and cpu:
-            if not motherboard.is_cpu_compatible(cpu):
-                raise serializers.ValidationError("The selected CPU is not compatible with the motherboard.")
+        Args:
+            data (dict): The data to be validated.
 
-        if motherboard and ram:
-            for ram_module in ram:
-                if not motherboard.is_ram_compatible(ram_module):
-                    raise serializers.ValidationError("The selected RAM is not compatible with the motherboard.")
+        Returns:
+            dict: The validated data if no issues are found.
+
+        Raises:
+            serializers.ValidationError: If any compatibility issues are found.
+        """
+        build = self.instance or Build(**data)
+        compatible, issues = CompatibilityService.check_build_compatibility(build)
+        
+        if not compatible:
+            raise serializers.ValidationError(issues)
 
         return data

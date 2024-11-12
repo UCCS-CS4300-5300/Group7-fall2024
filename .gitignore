@@ -1,15 +1,18 @@
-
-# Database
+# Database files
 db.sqlite3
 sample_data.json
 
 # Ignore __pycache__ at all levels
 **/__pycache__/
 
-# Python specific
+# Python specific files
 *.log
 *.pot
 *.pyc
+__pycache__/
+/pycache/*
+Optimal_Performance_Platform/__pycache__/*
+Optimal_Performance_Platform/__pycache__/
 **/*.pyc
 **/*.py[cod]
 **/*$py.class
@@ -20,15 +23,20 @@ ENV/
 env.bak/
 venv.bak/
 optimal/
+myenv/
+NeakosEnv/
 joelvenv/
 
-# Database
-db.sqlite3
-sample_data.json
-
 # Static and media files
+# Media files
 /media
-/staticfiles
+# Static files  
+/staticfiles  
+/staticfiles/
+/static/
+
+# Environment variables
+.env
 
 # Backup files
 *.bak
@@ -60,15 +68,6 @@ celerybeat-schedule.*
 
 # SageMath
 *.sage.py
-
-# Environments
-.env
-.venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-myenv/
 
 # mkdocs documentation
 /site
