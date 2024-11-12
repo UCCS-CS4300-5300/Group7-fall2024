@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -126,12 +127,16 @@ class StorageType(models.Model):
         ]
 
 # Motherboard models
-class MotherboardManager(models.Manager):
-    def by_cpu_socket(self, socket_type):
-        return self.filter(cpu_socket_type__name=socket_type)
+class MotherboardQuerySet(models.QuerySet):
+    def by_ram_type(self, ram_type):
+        return self.filter(ram__type=ram_type)
 
-    def by_form_factor(self, form_factor_name):
-        return self.filter(form_factor__name=form_factor_name)
+class MotherboardManager(models.Manager):
+    def get_queryset(self):
+        return MotherboardQuerySet(self.model, using=self._db)
+
+    def by_ram_type(self, ram_type):
+        return self.get_queryset().by_ram_type(ram_type)
 
 class Motherboard(models.Model):
     """
@@ -246,7 +251,7 @@ class RAM(models.Model):
 
     def clean(self):
         # Custom validation logic
-        if self.ram_speed.speed not in range(800, 5000):
+        if self.ram_speed.speed not in range(800, 8001):
             raise ValidationError(f"RAM speed {self.ram_speed.speed} is out of the valid range.")
 
     def __str__(self):

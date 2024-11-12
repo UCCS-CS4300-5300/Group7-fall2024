@@ -5,41 +5,91 @@ from django.contrib import messages
 from .models import RAM, CPU, Motherboard, Storage
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout as auth_logout
+
+def logout_view(request):
+    """
+    Handle user logout by logging out the user and redirecting to the login page.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Redirects to the login_or_register view.
+    """
+    auth_logout(request)
+    messages.success(request, "Logged out successfully.")
+    return redirect('login_or_register')
 
 def index(request):
     """
     Render the index page.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the index.html template.
     """
     return render(request, 'index.html')
 
 def build(request):
     """
-    Render the build page.
+    Render the build page where users can create and manage their builds.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the build.html template.
     """
     return render(request, 'build.html')
 
 def part_browser(request):
     """
-    Render the part browser page.
+    Render the part browser page where users can browse various PC parts.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the part_browser.html template.
     """
     return render(request, 'part_browser.html')
 
 def pre_built(request):
     """
-    Render the pre-built page.
+    Render the pre-built page where users can view pre-built PC configurations.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the pre_built.html template.
     """
     return render(request, 'pre_built.html')
 
 def account_page(request):
     """
-    Render the pre-built page.
+    Render the account page where users can manage their account information.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the account_page.html template.
     """
     return render(request, 'account_page.html')
 
 def login_or_register(request):
     """
-    Handle user login and registration.
-    !!!!!!!!Needs to be updated.!!!!!!!!!!!
+    Handle user login and registration. Present the login form to the user.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the login.html template with the login form.
     """
     if request.method == 'POST':
         login_form = AuthenticationForm(request, data=request.POST)
@@ -62,7 +112,13 @@ def login_or_register(request):
 @login_required
 def search_pc_parts(request):
     """
-    Search for PC parts based on query and category.
+    Search for PC parts based on the user's query and category selection.
+    
+    Args:
+        request (HttpRequest): The HTTP request object containing the query and category.
+        
+    Returns:
+        HttpResponse: Renders the part_browser.html template with search results.
     """
     query = request.GET.get('q', '').strip()
     category = request.GET.get('category', 'All Categories')
@@ -86,9 +142,9 @@ def search_pc_parts(request):
                     results += list(CPU.objects.all())
                 else:
                     results += list(CPU.objects.filter(
-                        Q(cpu_name__icontains=query) |
-                        Q(cpu_manufacturer__name__icontains=query) |
-                        Q(cpu_microarchitecture__name__icontains=query) |
+                        Q(name__icontains=query) |
+                        Q(manufacturer__name__icontains=query) |
+                        Q(microarchitecture__name__icontains=query) |
                         Q(socket_type__name__icontains=query)
                     ).distinct())
 
@@ -98,7 +154,7 @@ def search_pc_parts(request):
                 else:
                     results += list(Motherboard.objects.filter(
                         Q(name__icontains=query) |
-                        Q(motherboard_manufacturer__name__icontains=query) |
+                        Q(manufacturer__name__icontains=query) |
                         Q(cpu_socket_type__name__icontains=query) |
                         Q(supported_ram_types__type__icontains=query) |
                         Q(supported_ram_speeds__speed__icontains=query)
@@ -110,9 +166,9 @@ def search_pc_parts(request):
                 else:
                     results += list(Storage.objects.filter(
                         Q(name__icontains=query) |
-                        Q(storage_form_factor__name__icontains=query) |
-                        Q(storage_capacity__capacity__icontains=query) |
-                        Q(storage_type__type__icontains=query)
+                        Q(form_factor__name__icontains=query) |
+                        Q(capacity__capacity__icontains=query) |
+                        Q(type__type__icontains=query)
                     ).distinct())
         except Exception as e:
             messages.error(request, f"An error occurred during the search: {e}")
@@ -121,7 +177,13 @@ def search_pc_parts(request):
 
 def register_view(request):
     """
-    Handle user registration.
+    Handle user registration by creating a new user and logging them in.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the register.html template with the registration form.
     """
     if request.method == 'POST':
         register_form = UserCreationForm(request.POST)

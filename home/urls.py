@@ -1,15 +1,14 @@
-from django.urls import path, include
-from django.contrib.auth import views as auth_views
+from django.urls import path
 from . import views
 
-# Define the non-API urlpatterns
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('builds/', views.build, name='build'),
-    path('pre_build/', views.pre_built, name='pre_build'),
-    path('login/', views.login_or_register, name='login_or_register'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
-    path('search/', views.search_pc_parts, name='search_pc_parts'),
+    path('logout/', views.logout_view, name='logout'),
     path('register/', views.register_view, name='register'),
+    path('pre_built/', views.pre_built, name='pre_built'),
+    path('build/', views.build, name='build'),
+    path('part_browser/', views.part_browser, name='part_browser'),
     path('account_page/', views.account_page, name='account_page'),
+    path('', views.index, name='index'),
+    path('search_pc_parts/', views.search_pc_parts, name='search_pc_parts'),
+    path('login_or_register/', views.login_or_register, name='login_or_register'),  # Ensure this line is correct
 ]

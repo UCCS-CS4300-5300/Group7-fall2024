@@ -1,154 +1,159 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from .models import Build, RAM, CPU, Motherboard, Storage
+from .models import Build, Motherboard, CPU, RAM, Storage
+from home.models import Storage, StorageType, Manufacturer, FormFactor, StorageCapacity
 from .serializers import BuildSerializer, MotherboardSerializer, CPUSerializer, RAMSerializer, StorageSerializer
 from .compatibility_service import CompatibilityService
+from django.shortcuts import get_object_or_404 
 
-@api_view(['POST'])
-def create_build(request):
-    """
-    Create a new build with compatibility checks.
-    """
-    serializer = BuildSerializer(data=request.data)
-    if serializer.is_valid():
-        # Ensure compatibility
-        build = Build(
-            cpu=CPU.objects.get(id=request.data['cpu']),
-            motherboard=Motherboard.objects.get(id=request.data['motherboard']),
-        )
-        build.ram.set(RAM.objects.filter(id__in=request.data['ram']))
-        build.storage.set(Storage.objects.filter(id__in=request.data['storage']))
-
-        compatible, issues = CompatibilityService.check_build_compatibility(build)
-        if not compatible:
-            return Response({'errors': issues}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+# BuildViewSet: Manages CRUD operations for Builds.
 class BuildViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for handling build operations.
-    """
-    queryset = Build.objects.all()
-    serializer_class = BuildSerializer
+    queryset = Build.objects.all()  # QuerySet that returns all Build instances
+    serializer_class = BuildSerializer  # Serializer to convert Build instances to JSON
 
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        # Get search parameters from the request
+        user_id = request.GET.get('user_id', None)
+        user_username = request.GET.get('user_username', None)
+
+        builds = Build.objects.all()  # Get all Build instances
+
+        # Filter builds by user's ID if provided
+        if user_id:
+            builds = builds.filter(profile__user__id=user_id)
+        # Filter builds by user's username if provided (case-insensitive)
+        if user_username:
+            builds = builds.filter(profile__user__username__iexact=user_username)
+
+        serializer = BuildSerializer(builds, many=True)  # Serialize the filtered builds
+        return Response(serializer.data)  # Return the serialized data as a response
+
+# MotherboardViewSet: Manages CRUD operations for Motherboards.
 class MotherboardViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for handling motherboard operations.
-    """
-    queryset = Motherboard.objects.all()
-    serializer_class = MotherboardSerializer
+    queryset = Motherboard.objects.all()  # QuerySet that returns all Motherboard instances
+    serializer_class = MotherboardSerializer  # Serializer to convert Motherboard instances to JSON
 
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        # Get search parameters from the request
+        manufacturer = request.GET.get('manufacturer', None)
+        socket_type = request.GET.get('socket_type', None)
+
+        motherboards = Motherboard.objects.all()  # Get all Motherboard instances
+
+        # Filter motherboards by manufacturer if provided
+        if manufacturer:
+            motherboards = motherboards.filter(manufacturer__name__iexact=manufacturer)
+        # Filter motherboards by socket type if provided
+        if socket_type:
+            motherboards = motherboards.filter(cpu_socket_type__name__iexact=socket_type)
+
+        serializer = MotherboardSerializer(motherboards, many=True)  # Serialize the filtered motherboards
+        return Response(serializer.data)  # Return the serialized data as a response
+
+# CPUViewSet: Manages CRUD operations for CPUs.
 class CPUViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for handling CPU operations.
-    """
-    queryset = CPU.objects.all()
-    serializer_class = CPUSerializer
+    queryset = CPU.objects.all()  # QuerySet that returns all CPU instances
+    serializer_class = CPUSerializer  # Serializer to convert CPU instances to JSON
 
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        # Get search parameters from the request
+        socket_type = request.GET.get('socket_type', None)
+        manufacturer = request.GET.get('manufacturer', None)
+        microarchitecture = request.GET.get('microarchitecture', None)
+
+        cpus = CPU.objects.all()  # Get all CPU instances
+
+        # Filter CPUs by socket type if provided (case-insensitive)
+        if socket_type:
+            cpus = cpus.filter(socket_type__name__iexact=socket_type)
+        # Filter CPUs by manufacturer if provided (case-insensitive)
+        if manufacturer:
+            cpus = cpus.filter(manufacturer__name__iexact=manufacturer)
+        # Filter CPUs by microarchitecture if provided (case-insensitive)
+        if microarchitecture:
+            cpus = cpus.filter(microarchitecture__iexact=microarchitecture)
+
+        serializer = CPUSerializer(cpus, many=True)  # Serialize the filtered CPUs
+        return Response(serializer.data)  # Return the serialized data as a response
+
+# RAMViewSet: Manages CRUD operations for RAM.
 class RAMViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for handling RAM operations.
-    """
-    queryset = RAM.objects.all()
-    serializer_class = RAMSerializer
+    queryset = RAM.objects.all()  # QuerySet that returns all RAM instances
+    serializer_class = RAMSerializer  # Serializer to convert RAM instances to JSON
 
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        # Get search parameters from the request
+        memory_type = request.GET.get('memory_type', None)
+        speed = request.GET.get('speed', None)
+        capacity = request.GET.get('capacity', None)
+        number_of_modules = request.GET.get('number_of_modules', None)
+        manufacturer = request.GET.get('manufacturer', None)
+
+        rams = RAM.objects.all()  # Get all RAM instances
+
+        # Filter RAMs by memory type if provided (case-insensitive)
+        if memory_type:
+            rams = rams.filter(type__iexact=memory_type)
+        # Filter RAMs by speed if provided (case-insensitive)
+        if speed:
+            rams = rams.filter(speed__iexact=speed)
+        # Filter RAMs by capacity if provided (exact match)
+        if capacity:
+            rams = rams.filter(capacity=capacity)
+        # Filter RAMs by number of modules if provided (exact match)
+        if number_of_modules:
+            rams = rams.filter(number_of_modules=number_of_modules)
+        # Filter RAMs by manufacturer if provided (case-insensitive)
+        if manufacturer:
+            rams = rams.filter(manufacturer__name__iexact=manufacturer)
+
+        serializer = RAMSerializer(rams, many=True)  # Serialize the filtered RAMs
+        return Response(serializer.data)  # Return the serialized data as a response
+
+# StorageViewSet: Manages CRUD operations for Storage.
 class StorageViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet for handling storage operations.
-    """
-    queryset = Storage.objects.all()
-    serializer_class = StorageSerializer
+    queryset = Storage.objects.all()  # QuerySet that returns all Storage instances
+    serializer_class = StorageSerializer  # Serializer to convert Storage instances to JSON
 
-def get_objects(model, serializer_class):
-    """
-    Generic function to get all objects of a model.
-    """
-    @api_view(['GET'])
-    def view_function(request):
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        # Get search parameters from the request
+        manufacturer = request.GET.get('manufacturer', None)
+        form_factor = request.GET.get('form_factor', None)
+        capacity = request.GET.get('capacity', None)
+        storage_type = request.GET.get('type', None)  # Renamed variable to avoid shadowing built-in type
+
+        storages = Storage.objects.all()  # Get all Storage instances
+
+        # Filter storage by manufacturer if provided
+        if manufacturer:
+            storages = storages.filter(manufacturer__name__exact=manufacturer)
+        # Filter storage by form factor if provided
+        if form_factor:
+            storages = storages.filter(form_factor__name__exact=form_factor)
+        # Filter storage by capacity if provided
+        if capacity:
+            storage_capacity = get_object_or_404(StorageCapacity, capacity=capacity)  # Ensure capacity exists
+            storages = storages.filter(capacity=storage_capacity)
+        # Filter storage by type if provided
+        if storage_type:
+            storage_type_obj = get_object_or_404(StorageType, type__exact=storage_type)  # Ensure type exists
+            storages = storages.filter(type=storage_type_obj)
+
+        serializer = StorageSerializer(storages, many=True)  # Serialize the filtered storages
+        return Response(serializer.data)  # Return the serialized data as a response
+
+# UserBuildViewSet: Manages listing builds for a specific user.
+class UserBuildViewSet(viewsets.ViewSet):
+    def list(self, request, user_id=None):
         try:
-            queryset = model.objects.all()
-            serializer = serializer_class(queryset, many=True)
-            return Response(serializer.data)
+            queryset = Build.objects.filter(profile__user__id=user_id)  # Filter builds by user's ID through profile
+            serializer = BuildSerializer(queryset, many=True)  # Serialize the filtered builds
+            return Response(serializer.data)  # Return the serialized data as a response
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    return view_function
-
-# API endpoint views using the generic function
-get_mobos = get_objects(Motherboard, MotherboardSerializer)
-get_cpus = get_objects(CPU, CPUSerializer)
-get_builds = get_objects(Build, BuildSerializer)
-get_rams = get_objects(RAM, RAMSerializer)
-get_storages = get_objects(Storage, StorageSerializer)
-
-@api_view(['GET'])
-def get_builds_user(request, user_id):
-    """
-    Get builds for a specific user.
-    """
-    try:
-        queryset = Build.objects.filter(profile__user__id=user_id)
-        serializer = BuildSerializer(queryset, many=True)
-        return Response(serializer.data)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# Search views
-@api_view(['GET'])
-def search_motherboards(request):
-    """
-    Search for motherboards based on query parameters.
-    """
-    ram_type = request.query_params.get('ram_type', None)
-    if ram_type:
-        motherboards = Motherboard.objects.filter(supported_ram_types__type__iexact=ram_type)
-    else:
-        motherboards = Motherboard.objects.all()
-    
-    serializer = MotherboardSerializer(motherboards, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def search_cpus(request):
-    """
-    Search for CPUs based on query parameters.
-    """
-    socket_type = request.query_params.get('socket_type', None)
-    if socket_type:
-        cpus = CPU.objects.filter(socket_type__name__iexact=socket_type)
-    else:
-        cpus = CPU.objects.all()
-    
-    serializer = CPUSerializer(cpus, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def search_rams(request):
-    """
-    Search for RAMs based on query parameters.
-    """
-    memory_type = request.query_params.get('memory_type', None)
-    if memory_type:
-        rams = RAM.objects.filter(ram_type__type__iexact=memory_type)
-    else:
-        rams = RAM.objects.all()
-    
-    serializer = RAMSerializer(rams, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def search_storages(request):
-    """
-    Search for storages based on query parameters.
-    """
-    storage_type = request.query_params.get('storage_type', None)
-    if storage_type:
-        storages = Storage.objects.filter(storage_type__type__iexact=storage_type)
-    else:
-        storages = Storage.objects.all()
-    
-    serializer = StorageSerializer(storages, many=True)
-    return Response(serializer.data)
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  # Return error response if exception occurs
