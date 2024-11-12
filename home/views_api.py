@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from .models import Build, RAM, CPU, Motherboard, Storage, RAMType
+from .models import Build, RAM, CPU, Motherboard, Storage
 from .serializers import BuildSerializer, MotherboardSerializer, CPUSerializer, RAMSerializer, StorageSerializer
 from .compatibility_service import CompatibilityService
 
@@ -12,9 +12,18 @@ def create_build(request):
     """
     serializer = BuildSerializer(data=request.data)
     if serializer.is_valid():
-        errors = check_compatibility(request.data)
-        if errors:
-            return Response({'errors': errors}, status=status.HTTP_400_BAD_REQUEST)
+        # Ensure compatibility
+        build = Build(
+            cpu=CPU.objects.get(id=request.data['cpu']),
+            motherboard=Motherboard.objects.get(id=request.data['motherboard']),
+        )
+        build.ram.set(RAM.objects.filter(id__in=request.data['ram']))
+        build.storage.set(Storage.objects.filter(id__in=request.data['storage']))
+
+        compatible, issues = CompatibilityService.check_build_compatibility(build)
+        if not compatible:
+            return Response({'errors': issues}, status=status.HTTP_400_BAD_REQUEST)
+
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

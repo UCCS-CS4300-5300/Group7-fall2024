@@ -3,7 +3,7 @@
 from django.contrib import admin
 from .models import Profile, ShoppingCart, Build, Manufacturer
 from .models import CPU, CPUSocketType, Microarchitecture, Motherboard 
-from .models import StorageFormFactor, StorageCapacity, StorageType,  Storage
+from .models import FormFactor, StorageCapacity, StorageType, Storage
 from .models import RAM, RAMCapacity, RAMNumberOfModules, RAMSpeed, RAMType, BuildRAM
 from .compatibility_service import CompatibilityService
 
@@ -12,14 +12,14 @@ class RAMInline(admin.TabularInline):
     extra = 4
 
 class MotherboardAdmin(admin.ModelAdmin):
-    list_display = ('name', 'motherboard_manufacturer', 'cpu_socket_type')
+    list_display = ('name', 'manufacturer', 'cpu_socket_type')
     search_fields = ('name',)
-    list_filter = ('motherboard_manufacturer', 'cpu_socket_type')
+    list_filter = ('manufacturer', 'cpu_socket_type')
 
 class CPUAdmin(admin.ModelAdmin):
-    list_display = ('cpu_manufacturer', 'cpu_name', 'socket_type')
-    search_fields = ('cpu_name',)
-    list_filter = ('cpu_manufacturer', 'socket_type')
+    list_display = ('manufacturer', 'name', 'socket_type')
+    search_fields = ('name',)
+    list_filter = ('manufacturer', 'socket_type')
 
 @admin.action(description='Check Build Compatibility')
 def check_build_compatibility(modeladmin, request, queryset):
@@ -31,8 +31,7 @@ def check_build_compatibility(modeladmin, request, queryset):
             modeladmin.message_user(request, f'Build "{build.name}" compatibility error: {str(e)}', level='error')
 
 class BuildAdmin(admin.ModelAdmin):
-    list_display = ('profile', 'is_complete', 'motherboard', 'cpu', 'storage')
-    search_fields = ('profile__user__username',)
+    list_display = ('name', 'profile', 'is_complete', 'motherboard', 'cpu')
     list_filter = ('is_complete',)
     inlines = [RAMInline]
     actions = [check_build_compatibility]
@@ -48,7 +47,7 @@ admin.site.register(ShoppingCart)
 admin.site.register(Manufacturer)
 admin.site.register(CPUSocketType)
 admin.site.register(Microarchitecture)
-admin.site.register(StorageFormFactor)
+admin.site.register(FormFactor)  # Updated here
 admin.site.register(StorageCapacity)
 admin.site.register(StorageType)
 admin.site.register(Storage)
