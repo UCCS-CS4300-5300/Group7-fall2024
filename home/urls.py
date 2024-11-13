@@ -26,6 +26,9 @@ path('login/', login_or_register, name='login_or_register'),
 path('logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
 path('search/', views.search_pc_parts, name='search_pc_parts'),
 path('register/', views.register_view, name='register'),
+path('add_to_build/<int:part_id>/<str:category>/', views.add_to_build, name='add_to_build'),
+path('remove_from_build/<str:category>/', views.remove_from_build, name='remove_from_build'),
+path('part_browser/', views.part_browser, name='part_browser'),
 
 # see views_api_call.py to see the views that are related to these urls.
 # the views referenced by these urls will call the api endpoints
@@ -35,6 +38,7 @@ path('motherboards/', call_motherboards_view, name='call_motherboards_view'),
 path('cpus/', call_cpus_view, name='call_cpus_view'),
 path('rams/', call_rams_view, name='call_rams_view'),
 path('storages/', call_storages_view, name='call_storages_view'),
+
 
 # create an add cpu, ram, storage, mobo, etc ... paths that looks like this:
 # path('build/<int:build_id>/add_cpu/', , ),

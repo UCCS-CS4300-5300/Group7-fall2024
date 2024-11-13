@@ -11,22 +11,29 @@
                 
                 {% if part.ram_type %}
                     <strong>Type:</strong> {{ part.ram_type.type }}<br>
-                    <strong>Speed:</strong> {{ part.ram_speed.speed }}<br>
+                    <strong>Speed:</strong> {{ part.ram_speed.speed }} MHz<br>
                     <strong>Capacity:</strong> {{ part.ram_capacity.capacity }}<br>
                     <strong>Number of Modules:</strong> {{ part.ram_number_of_modules.number_of_modules }}<br>
+                    <!-- Add to Build button with ram_id -->
+                    <a href="{% url 'add_to_build' part.ram_id 'RAM' %}" class="btn btn-primary">Add to Build</a>
                 {% elif part.socket_type %}
                     <strong>Manufacturer:</strong> {{ part.manufacturer.name }}<br>
                     <strong>Microarchitecture:</strong> {{ part.microarchitecture.name }}<br>
                     <strong>Socket Type:</strong> {{ part.socket_type.name }}<br>
+                    <a href="{% url 'add_to_build' part.id 'CPU' %}" class="btn btn-primary">Add to Build</a>
                 {% elif part.cpu_socket_type %}
                     <strong>Motherboard Name:</strong> {{ part.name }}<br>
                     <strong>Socket Type:</strong> {{ part.cpu_socket_type.name }}<br>
                     <strong>Supported RAM Types:</strong> {{ part.supported_ram_types.all|join:", " }}<br>
                     <strong>Supported RAM Speeds:</strong> {{ part.supported_ram_speeds.all|join:", " }}<br>
+                    <a href="{% url 'add_to_build' part.id 'Motherboard' %}" class="btn btn-primary">Add to Build</a>
                 {% elif part.form_factor %}
                     <strong>Storage Type:</strong> {{ part.type.type }}<br>
                     <strong>Form Factor:</strong> {{ part.form_factor.name }}<br>
                     <strong>Capacity:</strong> {{ part.capacity.capacity }}<br>
+                    <a href="{% url 'add_to_build' part.id 'Storage' %}" class="btn btn-primary">Add to Build</a>
+                {% else %}
+                    <p>Part ID not available</p>
                 {% endif %}
                 
                 <hr>
