@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from .models import RAM, CPU, Motherboard, Storage
@@ -137,3 +137,7 @@ def view_profile(request):
     }
 
     return render(request, 'account_page.html', context)
+
+def logout_user(request):
+    logout(request)
+    return redirect('index')
