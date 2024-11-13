@@ -1,14 +1,40 @@
 {% extends "base_template.html" %}
 
 {% block content %}
-    <h2>Search Results</h2>
-    {% if results %}
-        <ul>
-            {% for result in results %}
-                <li>{{ result }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No results found.</p>
-    {% endif %}
+<h2>Search Results</h2>
+
+{% if results %}
+    <ul>
+        {% for part in results %}
+            <li>
+                <strong>Name:</strong> {{ part.name }}<br>
+                
+                {% if part.ram_type %}
+                    <strong>Type:</strong> {{ part.ram_type.type }}<br>
+                    <strong>Speed:</strong> {{ part.ram_speed.speed }}<br>
+                    <strong>Capacity:</strong> {{ part.ram_capacity.capacity }}<br>
+                    <strong>Number of Modules:</strong> {{ part.ram_number_of_modules.number_of_modules }}<br>
+                {% elif part.socket_type %}
+                    <strong>Manufacturer:</strong> {{ part.manufacturer.name }}<br>
+                    <strong>Microarchitecture:</strong> {{ part.microarchitecture.name }}<br>
+                    <strong>Socket Type:</strong> {{ part.socket_type.name }}<br>
+                {% elif part.cpu_socket_type %}
+                    <strong>Motherboard Name:</strong> {{ part.name }}<br>
+                    <strong>Socket Type:</strong> {{ part.cpu_socket_type.name }}<br>
+                    <strong>Supported RAM Types:</strong> {{ part.supported_ram_types.all|join:", " }}<br>
+                    <strong>Supported RAM Speeds:</strong> {{ part.supported_ram_speeds.all|join:", " }}<br>
+                {% elif part.form_factor %}
+                    <strong>Storage Type:</strong> {{ part.type.type }}<br>
+                    <strong>Form Factor:</strong> {{ part.form_factor.name }}<br>
+                    <strong>Capacity:</strong> {{ part.capacity.capacity }}<br>
+                {% endif %}
+                
+                <hr>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+
 {% endblock %}
