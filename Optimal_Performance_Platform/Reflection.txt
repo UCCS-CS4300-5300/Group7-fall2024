@@ -1,9 +1,6 @@
-Jagger Zlotoff: I didn't learn a ton in this iteration
-because I've already done most of this in CS3300 but it
-was great review and will definitly help me going forward. 
-The one thing I did learn was how to start working with a 
-group using github. I've never had to merge someone elses 
-work with mine so it was good practice. 
+Jagger Zlotoff: For this sprint I learn about how to connect the 
+database and search queries. Otherwise it was a lot of doing 
+of what I already know. 
 
 Neako Hallisey: As far as hands-on (coding) stuff goes, 
 I didn't learn a whole lot for this sprint. This was 
