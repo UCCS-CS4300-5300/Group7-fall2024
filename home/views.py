@@ -6,6 +6,15 @@ from .models import RAM, CPU, Motherboard, Storage
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import ProfileForm
 
 def logout_view(request):
     """
@@ -79,11 +88,21 @@ def account_page(request):
     Returns:
         HttpResponse: Renders the account_page.html template.
     """
-    return render(request, 'account_page.html')
 
-def login_or_register(request):
+def account_page(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            # Process the data
+            pass
+    else:
+        form = ProfileForm()
+
+    return render(request, 'account_page.html', {'form': form})
+
+def login_view(request):
     """
-    Handle user login and registration. Present the login form to the user.
+    Handle user login. Present the login form to the user.
     
     Args:
         request (HttpRequest): The HTTP request object.
@@ -108,6 +127,29 @@ def login_or_register(request):
     
     login_form = AuthenticationForm()
     return render(request, 'auth/login.html', {'login_form': login_form})
+
+def register_view(request):
+    """
+    Handle user registration. Present the registration form to the user.
+    
+    Args:
+        request (HttpRequest): The HTTP request object.
+        
+    Returns:
+        HttpResponse: Renders the register.html template with the registration form.
+    """
+    if request.method == 'POST':
+        registration_form = UserCreationForm(request.POST)
+        if registration_form.is_valid():
+            user = registration_form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect('index')
+        else:
+            messages.error(request, "Registration form submission failed.")
+    
+    registration_form = UserCreationForm()
+    return render(request, 'auth/register.html', {'registration_form': registration_form})
 
 @login_required
 def search_pc_parts(request):
