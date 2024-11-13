@@ -222,16 +222,16 @@ def add_to_build(request, part_id, category):
 
     # Retrieve the part based on the category and add it to the build
     if category == 'CPU':
-        part = get_object_or_404(CPU, id=part_id)
+        part = get_object_or_404(CPU, cpu_id=part_id)
         build.cpu = part
     elif category == 'RAM':
         part = get_object_or_404(RAM, ram_id=part_id)
         build.ram.add(part)  # Assuming RAM can have multiple items
     elif category == 'Motherboard':
-        part = get_object_or_404(Motherboard, id=part_id)
+        part = get_object_or_404(Motherboard, motherboard_id=part_id)
         build.motherboard = part
     elif category == 'Storage':
-        part = get_object_or_404(Storage, id=part_id)
+        part = get_object_or_404(Storage, storage_id=part_id)
         build.storages.add(part)  # Assuming Storage is also a ManyToManyField in the build model
 
     # Save the build after modifications
