@@ -7,20 +7,6 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
 
-def logout_view(request):
-    """
-    Handle user logout by logging out the user and redirecting to the login page.
-    
-    Args:
-        request (HttpRequest): The HTTP request object.
-        
-    Returns:
-        HttpResponse: Redirects to the login_or_register view.
-    """
-    auth_logout(request)
-    messages.success(request, "Logged out successfully.")
-    return redirect('login_or_register')
-
 def index(request):
     """
     Render the index page.
