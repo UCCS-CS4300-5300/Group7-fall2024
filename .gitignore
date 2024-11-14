@@ -25,13 +25,15 @@ venv.bak/
 optimal/
 myenv/
 NeakosEnv/
+joelvenv/
 
 # Static and media files
 # Media files
 /media
 # Static files  
 /staticfiles  
-staticfiles/
+/staticfiles/
+/static/
 
 # Environment variables
 .env

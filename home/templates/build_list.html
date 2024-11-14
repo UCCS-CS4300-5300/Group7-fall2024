@@ -1,0 +1,71 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Build List</title>
+</head>
+<body>
+    <h1>Build List</h1>
+    {% for build in data %}
+        <h2>{{ build.name }}</h2>
+        <p><strong>Build ID:</strong> {{ build.build_id }}</p>
+        <p><strong>Profile:</strong> {{ build.profile }}</p>
+        <p><strong>Is Complete:</strong> {{ build.is_complete|yesno:"Yes,No" }}</p>
+        
+        <h3>Motherboard</h3>
+        <ul>
+            <li><strong>Name:</strong> {{ build.motherboard.name }}</li>
+            <li><strong>Manufacturer:</strong> {{ build.motherboard.motherboard_manufacturer.name }}</li>
+            <li><strong>CPU Socket Type:</strong> {{ build.motherboard.cpu_socket_type.name }}</li>
+            <li><strong>Memory Slots:</strong> {{ build.motherboard.memory_slots }}</li>
+            <li><strong>Form Factor:</strong> {{ build.motherboard.storage_form_factor.name }}</li>
+            <li><strong>Max Memory Capacity:</strong> {{ build.motherboard.max_memory_capacity }} GB</li>
+            <li><strong>Supported RAM Types:</strong> 
+                {% for ram_type in build.motherboard.supported_ram_types %}
+                    {{ ram_type.type }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </li>
+            <li><strong>Supported RAM Speeds:</strong> 
+                {% for ram_speed in build.motherboard.supported_ram_speeds %}
+                    {{ ram_speed.speed }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </li>
+        </ul>
+
+        <h3>CPU</h3>
+        <ul>
+            <li><strong>Name:</strong> {{ build.cpu.cpu_name }}</li>
+            <li><strong>Manufacturer:</strong> {{ build.cpu.cpu_manufacturer.name }}</li>
+            <li><strong>Microarchitecture:</strong> {{ build.cpu.cpu_microarchitecture.name }}</li>
+            <li><strong>Socket Type:</strong> {{ build.cpu.socket_type.name }}</li>
+        </ul>
+
+        <h3>RAM</h3>
+        <ul>
+            {% for ram in build.ram %}
+                <li>
+                    <strong>Type:</strong> {{ ram.ram_type.type }},
+                    <strong>Speed:</strong> {{ ram.ram_speed.speed }},
+                    <strong>Capacity:</strong> {{ ram.ram_capacity.capacity }},
+                    <strong>Modules:</strong> {{ ram.ram_number_of_modules.number_of_modules }}
+                </li>
+            {% empty %}
+                <li>No RAM installed</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Storage</h3>
+        <ul>
+            <li><strong>Name:</strong> {{ build.storage.name }}</li>
+            <li><strong>Form Factor:</strong> {{ build.storage.storage_form_factor.name }}</li>
+            <li><strong>Capacity:</strong> {{ build.storage.storage_capacity.capacity }}</li>
+            <li><strong>Type:</strong> {{ build.storage.storage_type.type }}</li>
+        </ul>
+        <hr>
+    {% endfor %}
+</body>
+</html>
+{% endblock %}
