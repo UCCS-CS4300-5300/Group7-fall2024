@@ -79,6 +79,7 @@
 <body>
     <header class="custom-header">
         <h1>Optimal Performance</h1>
+        <script src="https://kit.fontawesome.com/802595e9f2.js" crossorigin="anonymous"></script>
     </header>
 
     <!-- Navbar -->
@@ -89,22 +90,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav me-auto">
-                    <a class="button" aria-current="page" href="{% url 'index' %}">Home</a>
-                    <a class="button" href="{% url 'build' %}">Create Your Build</a>
-                    <a class="button" href="{% url 'pre_build' %}">Pre-Built PC</a>
+                    <a class="button" aria-current="page" href="{% url 'index' %}">
+                        <i class="fa-solid fa-house"></i> Home</a>
+                    <a class="button" href="{% url 'build' %}">
+                        <i class="fa-solid fa-desktop"></i> Create Your Build</a>
+                    <a class="button" href="{% url 'pre_build' %}">
+                        <i class="fa-solid fa-laptop"></i> Pre-Build PC</a>
 
-                    <!-- Dropdown button on the left -->
-                    <div class="dropdown me-3">
-                        <button class="button dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Browse PC Parts
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li><a class="dropdown-item" href="{% url 'call_cpus_view' %}">CPU</a></li>
-                            <li><a class="dropdown-item" href="{% url 'call_motherboards_view' %}">Motherboard</a></li>
-                            <li><a class="dropdown-item" href="{% url 'call_rams_view' %}">Ram</a></li>
-                            <li><a class="dropdown-item" href="{% url 'call_storages_view' %}">Storage</a></li>
-                        </ul>
-                    </div>
+                   
                 </div>
                 <!-- Search form -->
                 <form method="get" action="{% url 'search_pc_parts' %}" class="d-flex">
@@ -116,15 +109,19 @@
                         <option value="Motherboard" {% if category == 'Motherboard' %}selected{% endif %}>Motherboard</option>
                         <option value="Storage" {% if category == 'Storage' %}selected{% endif %}>Storage</option>
                     </select>
-                    <button type="submit" class="button">Search</button>
+                    <button type="submit" class="button d-flex align-items-center">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                    </button> 
                 </form>
 
 
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
-                        <a class="button" href="{% url 'logout' %}">Logout</a>
+                        <a class="button" href="{% url 'logout' %}">
+                             <i class="fa-solid fa-right-from-bracket"></i>Logout</a>
                     {% else %}
-                        <a class="button" href="{% url 'login_or_register' %}">Login</a>
+                        <a class="button" href="{% url 'login_or_register' %}">
+                             <i class="fa-solid fa-right-to-bracket"></i>Login</a>
                     {% endif %}
                 </div>
             </div>
