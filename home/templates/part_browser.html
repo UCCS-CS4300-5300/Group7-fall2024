@@ -9,6 +9,15 @@
             <li>
                 <strong>Name:</strong> {{ part.name }}<br>
                 
+                {% if part.image %}
+                    <img src="{{ part.image.url }}" alt="{{ part.name }}" width="100"><br>
+                {% endif %}
+                
+                <strong>Price:</strong> ${{ part.price }}<br>
+                {% if part.description %}
+                    <strong>Description:</strong> {{ part.description }}<br>
+                {% endif %}
+                
                 {% if part.ram_type %}
                     <strong>Type:</strong> {{ part.ram_type.type }}<br>
                     <strong>Speed:</strong> {{ part.ram_speed.speed }} MHz<br>

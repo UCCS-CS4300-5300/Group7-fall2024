@@ -7,6 +7,9 @@ from .views_api import *
 from .views_render import *
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 #path function defines a url pattern
 #'' is empty to represent based path to app
@@ -50,3 +53,6 @@ path('storages/', call_storages_view, name='call_storages_view'),
 
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

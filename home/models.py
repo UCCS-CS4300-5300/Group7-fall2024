@@ -156,6 +156,9 @@ class Motherboard(models.Model):
     supported_ram_speeds = models.ManyToManyField('RAMSpeed')  # Many-to-many relationship with RAMSpeed model
     supported_storage_types = models.ManyToManyField('StorageType', through='SupportedStorageConfiguration')  # Many-to-many relationship with StorageType model through SupportedStorageConfiguration
     rams = models.ManyToManyField('RAM', through='SupportedRAMConfiguration')  # Many-to-many relationship with RAM model through SupportedRAMConfiguration
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the Motherboard
+    image = models.ImageField(upload_to='images/motherboard/', null=True, blank=True)  # Image of the Motherboard
+    description = models.TextField(blank=True)  # Add description field here
 
     def __str__(self):
         return self.name  # String representation of the Motherboard model
@@ -248,6 +251,9 @@ class RAM(models.Model):
     ram_speed = models.ForeignKey('RAMSpeed', on_delete=models.CASCADE)  # Foreign key to RAMSpeed model
     ram_capacity = models.ForeignKey('RAMCapacity', on_delete=models.CASCADE)  # Foreign key to RAMCapacity model
     ram_number_of_modules = models.ForeignKey('RAMNumberOfModules', on_delete=models.CASCADE)  # Foreign key to RAMNumberOfModules model
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the RAM
+    image = models.ImageField(upload_to='images/ram/', null=True, blank=True)  # Image of the RAM
+    description = models.TextField(blank=True)  # Add description field here
 
     def clean(self):
         # Custom validation logic
@@ -295,6 +301,9 @@ class CPU(models.Model):
     microarchitecture = models.ForeignKey('Microarchitecture', on_delete=models.CASCADE)  # Foreign key to Microarchitecture model
     socket_type = models.ForeignKey('CPUSocketType', on_delete=models.CASCADE)  # Foreign key to CPUSocketType model
     motherboards = models.ManyToManyField('Motherboard', through='CPUMotherboardCompatibility')  # Many-to-Many relationship with Motherboard
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the CPU
+    image = models.ImageField(upload_to='images/cpu/', null=True, blank=True)  # Image of the CPU
+    description = models.TextField(blank=True)  # Add description field here
 
     objects = CPUMicroarchitectureManager()  # Use custom manager
 
@@ -341,6 +350,9 @@ class Storage(models.Model):
     form_factor = models.ForeignKey('FormFactor', on_delete=models.CASCADE)  # Foreign key to FormFactor model
     capacity = models.ForeignKey('StorageCapacity', on_delete=models.CASCADE)  # Foreign key to StorageCapacity model
     type = models.ForeignKey('StorageType', on_delete=models.CASCADE)  # Foreign key to StorageType model
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the Storage
+    image = models.ImageField(upload_to='images/storage/', null=True, blank=True)  # Image of the Storage
+    description = models.TextField(blank=True)  # Add description field here
 
     def __str__(self):
         return f"{self.name} - {self.form_factor.name} - {self.capacity.capacity}"  # String representation of the Storage model
