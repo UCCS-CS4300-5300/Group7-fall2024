@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/root/Group7-fall2024/optimal/bin/mutmut", line 8, in <module>
+    sys.exit(cli())
+             ^^^^^
+  File "/root/Group7-fall2024/optimal/lib/python3.12/site-packages/click/core.py", line 1157, in __call__
+    return self.main(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/Group7-fall2024/optimal/lib/python3.12/site-packages/click/core.py", line 1078, in main
+    rv = self.invoke(ctx)
+         ^^^^^^^^^^^^^^^^
+  File "/root/Group7-fall2024/optimal/lib/python3.12/site-packages/click/core.py", line 1688, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/Group7-fall2024/optimal/lib/python3.12/site-packages/click/core.py", line 1434, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/Group7-fall2024/optimal/lib/python3.12/site-packages/click/core.py", line 783, in invoke
+    return __callback(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/Group7-fall2024/optimal/lib/python3.12/site-packages/mutmut/__main__.py", line 1211, in run
+    read_config()
+  File "/root/Group7-fall2024/optimal/lib/python3.12/site-packages/mutmut/__main__.py", line 1024, in read_config
+    ] or guess_paths_to_mutate()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/Group7-fall2024/optimal/lib/python3.12/site-packages/mutmut/__main__.py", line 132, in guess_paths_to_mutate
+    raise FileNotFoundError(
+FileNotFoundError: Could not figure out where the code to mutate is. Please specify it by adding "paths_to_mutate=code_dir" in setup.cfg to the [mutmut] section.

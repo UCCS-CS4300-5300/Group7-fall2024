@@ -52,7 +52,7 @@ class Build(models.Model):
 
     class Meta:
         constraints = [
-            models.CheckConstraint(check=models.Q(is_complete__in=[True, False]), name='is_complete_valid')
+            models.CheckConstraint(condition=models.Q(is_complete__in=[True, False]), name='is_complete_valid')
         ]
         indexes = [
             models.Index(fields=['name'])  # Index the name field for faster queries
@@ -162,7 +162,7 @@ class Motherboard(models.Model):
 
     class Meta:
         constraints = [
-            models.CheckConstraint(check=models.Q(max_memory_capacity__gte=0), name='max_memory_capacity_positive')
+            models.CheckConstraint(condition=models.Q(max_memory_capacity__gte=0), name='max_memory_capacity_positive')
         ]
         indexes = [
             models.Index(fields=['name']),  # Index the name field for faster search
@@ -369,7 +369,7 @@ class SupportedRAMConfiguration(models.Model):
     class Meta:
         unique_together = ('motherboard', 'ram')  # Ensure unique combinations of motherboard and RAM
         constraints = [
-            models.CheckConstraint(check=models.Q(supported__in=[True, False]), name='supported_valid')
+            models.CheckConstraint(condition=models.Q(supported__in=[True, False]), name='supported_valid')
         ]
         indexes = [
             models.Index(fields=['motherboard']),  # Index the motherboard field for faster search
@@ -391,7 +391,7 @@ class SupportedStorageConfiguration(models.Model):
     class Meta:
         unique_together = ('motherboard', 'storage_type')  # Ensure unique combinations of motherboard and storage type
         constraints = [
-            models.CheckConstraint(check=models.Q(slots__gte=0), name='slots_positive')
+            models.CheckConstraint(condition=models.Q(slots__gte=0), name='slots_positive')
         ]
         indexes = [
             models.Index(fields=['motherboard']),  # Index the motherboard field for faster search
@@ -430,7 +430,7 @@ class BuildStorageConfiguration(models.Model):
     class Meta:
         unique_together = ('build', 'storage')  # Ensure unique combinations of build and storage
         constraints = [
-            models.CheckConstraint(check=models.Q(role__in=['Primary', 'Secondary']), name='role_valid')
+            models.CheckConstraint(condition=models.Q(role__in=['Primary', 'Secondary']), name='role_valid')
         ]
         indexes = [
             models.Index(fields=['build']),  # Index the build field for faster search

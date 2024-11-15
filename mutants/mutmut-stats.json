@@ -1,0 +1,251 @@
+{
+    "tests_by_mangled_function_name": {
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_CPU_id_field_label": [],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_manufacturer_field_label": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_manufacturer_field_label"
+        ],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_microarchitecture_field_label": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_microarchitecture_field_label"
+        ],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_name_field_label": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_name_field_label"
+        ],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_CPU_id_values": [],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_CPU_manufacturer_values": [],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_CPU_microarchitecture_values": [],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_CPU_socket_type_values": [],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_fields_values": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_fields_values"
+        ],
+        "home.models.x\u01c1CPU\u01c1__str__": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_cpu_str",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_cpu_id_field_label",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_id_values",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_socket_type_values",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_manufacturer_values",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_microarchitecture_values",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_fields_values"
+        ],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_socket_type_field_label": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_socket_type_field_label"
+        ],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_cpu_name_validation": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_cpu_name_validation"
+        ],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_cpu_str": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_cpu_str"
+        ],
+        "test_cpus.x\u01c1CPUTestCase\u01c1test_unique_cpu_id": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_unique_cpu_id"
+        ],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_cpusocket_type_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_form_factor_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_manufacturer_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_max_memory_capacity_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_mb_id_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_memory_slots_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_name_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_supported_ram_speeds_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_Motherboard_supported_ram_types_field_label": [],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_name_validation": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_name_validation"
+        ],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_str": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_str"
+        ],
+        "home.models.x\u01c1Motherboard\u01c1__str__": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_cpu_socket_type_field_label",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_max_memory_capacity_field_label",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_motherboard_id_field_label",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_manufacturer_field_label",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_memory_slots_field_label",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_supported_ram_speeds_field_label",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_str",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_form_factor_field_label",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_supported_ram_types_field_label",
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_name_field_label"
+        ],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_supported_ram_types_relationship": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_supported_ram_types_relationship"
+        ],
+        "test_motherboards.x\u01c1MotherboardTestCase\u01c1test_unique_motherboard_id": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_unique_motherboard_id"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_RAM_Ram_id_field_label": [],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_RAM_capacity_field_label": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_capacity_field_label"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_RAM_number_of_modules_label": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_number_of_modules_label"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_RAM_object_RAM_id_values": [],
+        "home.models.x\u01c1RAM\u01c1__str__": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_object_fields_values",
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_object_ram_id_values",
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_ram_str",
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_ram_id_field_label"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_RAM_object_fields_values": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_object_fields_values"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_RAM_speed_field_label": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_speed_field_label"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_RAM_type_field_label": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_type_field_label"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_ram_name_validation": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_ram_name_validation"
+        ],
+        "home.models.x\u01c1RAM\u01c1clean": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_ram_name_validation"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_ram_str": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_ram_str"
+        ],
+        "test_ram.x\u01c1RAMTestCase\u01c1test_unique_ram_id": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_unique_ram_id"
+        ],
+        "test_storage.x\u01c1StorageTestCase\u01c1test_Storage_storage_id_field_label": [
+            "home/tests/test_models/test_storage.py::StorageTestCase::test_Storage_storage_id_field_label"
+        ],
+        "test_storage.x\u01c1StorageTestCase\u01c1test_Storage_type_field_label": [
+            "home/tests/test_models/test_storage.py::StorageTestCase::test_Storage_type_field_label"
+        ],
+        "test_storage.x\u01c1StorageTestCase\u01c1test_storage_name_validation": [
+            "home/tests/test_models/test_storage.py::StorageTestCase::test_storage_name_validation"
+        ],
+        "home.models.x\u01c1Storage\u01c1__str__": [
+            "home/tests/test_models/test_storage.py::StorageTestCase::test_storage_str"
+        ],
+        "test_storage.x\u01c1StorageTestCase\u01c1test_storage_str": [
+            "home/tests/test_models/test_storage.py::StorageTestCase::test_storage_str"
+        ],
+        "test_storage.x\u01c1StorageTestCase\u01c1test_unique_storage_id": [
+            "home/tests/test_models/test_storage.py::StorageTestCase::test_unique_storage_id"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_cpu_socket_type_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_cpu_socket_type_field_label"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_max_memory_capacity_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_max_memory_capacity_field_label"
+        ],
+        "home.tests.test_models.test_ram.x\u01c1RAMTestCase\u01c1test_RAM_object_ram_id_values": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_object_ram_id_values"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_motherboard_id_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_motherboard_id_field_label"
+        ],
+        "home.models.x\u01c1Manufacturer\u01c1__str__": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_microarchitecture_values",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_cpu_id_field_label",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_socket_type_values"
+        ],
+        "home.tests.test_models.test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_cpu_id_field_label": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_cpu_id_field_label"
+        ],
+        "home.models.x\u01c1CPUSocketType\u01c1__str__": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_microarchitecture_values",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_cpu_id_field_label",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_socket_type_values"
+        ],
+        "home.models.x\u01c1Microarchitecture\u01c1__str__": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_microarchitecture_values",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_cpu_id_field_label",
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_socket_type_values"
+        ],
+        "home.tests.test_models.test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_cpu_id_values": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_id_values"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_manufacturer_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_manufacturer_field_label"
+        ],
+        "home.tests.test_models.test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_cpu_socket_type_values": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_socket_type_values"
+        ],
+        "home.tests.test_models.test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_cpu_manufacturer_values": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_manufacturer_values"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_memory_slots_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_memory_slots_field_label"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_supported_ram_speeds_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_supported_ram_speeds_field_label"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_form_factor_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_form_factor_field_label"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_supported_ram_types_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_supported_ram_types_field_label"
+        ],
+        "home.tests.test_models.test_motherboards.x\u01c1MotherboardTestCase\u01c1test_motherboard_name_field_label": [
+            "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_name_field_label"
+        ],
+        "home.tests.test_models.test_cpus.x\u01c1CPUTestCase\u01c1test_CPU_object_cpu_microarchitecture_values": [
+            "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_microarchitecture_values"
+        ],
+        "home.tests.test_models.test_ram.x\u01c1RAMTestCase\u01c1test_RAM_ram_id_field_label": [
+            "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_ram_id_field_label"
+        ]
+    },
+    "duration_by_test": {
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_CPU_id_field_label": 0.00014084577560424805,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_manufacturer_field_label": 0.0001234719529747963,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_microarchitecture_field_label": 0.0001186523586511612,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_name_field_label": 0.00015235692262649536,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_CPU_id_values": 0.00012137927114963531,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_CPU_manufacturer_values": 0.00017871614545583725,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_CPU_microarchitecture_values": 0.00012183934450149536,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_CPU_socket_type_values": 0.00016410928219556808,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_fields_values": 0.00011833291500806808,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_socket_type_field_label": 0.00012102816253900528,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_cpu_name_validation": 0.00014684628695249557,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_cpu_str": 0.00012221001088619232,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_unique_cpu_id": 0.0008175093680620193,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_cpusocket_type_field_label": 0.0001239422708749771,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_form_factor_field_label": 0.00011873431503772736,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_manufacturer_field_label": 0.00011683069169521332,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_max_memory_capacity_field_label": 0.0001452649012207985,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_mb_id_field_label": 0.00011602789163589478,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_memory_slots_field_label": 0.00011180061846971512,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_name_field_label": 0.00012196972966194153,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_supported_ram_speeds_field_label": 0.00018375739455223083,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_Motherboard_supported_ram_types_field_label": 0.00016322731971740723,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_name_validation": 0.00019597914069890976,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_str": 0.00017993059009313583,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_supported_ram_types_relationship": 0.0001380806788802147,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_unique_motherboard_id": 0.0008965888991951942,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_Ram_id_field_label": 0.00015982240438461304,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_capacity_field_label": 0.00014436151832342148,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_number_of_modules_label": 0.00012173876166343689,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_object_RAM_id_values": 0.0001301448792219162,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_object_fields_values": 0.00016418937593698502,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_speed_field_label": 0.00017098337411880493,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_type_field_label": 0.00015534274280071259,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_ram_name_validation": 0.00012373365461826324,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_ram_str": 0.0001534605398774147,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_unique_ram_id": 0.0009046532213687897,
+        "home/tests/test_models/test_storage.py::StorageTestCase::test_Storage_storage_id_field_label": 0.00016511045396327972,
+        "home/tests/test_models/test_storage.py::StorageTestCase::test_Storage_type_field_label": 0.00011534616351127625,
+        "home/tests/test_models/test_storage.py::StorageTestCase::test_storage_name_validation": 0.00011695083230733871,
+        "home/tests/test_models/test_storage.py::StorageTestCase::test_storage_str": 0.00012412387877702713,
+        "home/tests/test_models/test_storage.py::StorageTestCase::test_unique_storage_id": 0.0007214490324258804,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_cpu_socket_type_field_label": 0.00017455779016017914,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_max_memory_capacity_field_label": 0.0010095499455928802,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_object_ram_id_values": 0.000895204022526741,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_motherboard_id_field_label": 0.0007949173450469971,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_cpu_id_field_label": 0.0001948866993188858,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_id_values": 0.04687400348484516,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_manufacturer_field_label": 0.0006913011893630028,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_socket_type_values": 0.00021032430231571198,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_manufacturer_values": 0.0006619561463594437,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_memory_slots_field_label": 0.00012832973152399063,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_supported_ram_speeds_field_label": 0.00015936046838760376,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_form_factor_field_label": 0.0001148860901594162,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_supported_ram_types_field_label": 0.00011501647531986237,
+        "home/tests/test_models/test_motherboards.py::MotherboardTestCase::test_motherboard_name_field_label": 0.0006721848621964455,
+        "home/tests/test_models/test_cpus.py::CPUTestCase::test_CPU_object_cpu_microarchitecture_values": 0.000527041032910347,
+        "home/tests/test_models/test_ram.py::RAMTestCase::test_RAM_ram_id_field_label": 0.0006507653743028641
+    },
+    "stats_time": 0.608536119
+}
