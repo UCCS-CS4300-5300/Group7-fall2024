@@ -35,7 +35,7 @@ class Build(models.Model):
     Build model containing the configuration of PC components.
     """
     build_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for Build model
-    name = models.CharField(max_length=100, default='Default Build Name', unique=True)  # Ensure unique build name
+    name = models.CharField(max_length=100, default='Default Build Name')  
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)  # Foreign key to the Profile model
     is_complete = models.BooleanField(default=False)  # Flag to indicate if the build is complete
     motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE, null=True)  # Foreign key to Motherboard model

@@ -2,7 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
-from .models import RAM, CPU, Motherboard, Storage, Build
+from django.db import IntegrityError
+from .models import RAM, CPU, Motherboard, Storage, Build, Profile
+from .forms import BuildForm
+from .compatibility_service import CompatibilityService
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
@@ -248,3 +251,73 @@ def view_profile(request):
 def logout_user(request):
     logout(request)
     return redirect('index')
+
+
+def save_build(request):
+    build_name = request.GET.get("build_name")
+    if build_name:
+        profile = Profile.objects.get(user=request.user)
+
+        # Check if a build with the same name already exists for this profile
+        if Build.objects.filter(profile=profile, name=build_name).exists():
+            # Display an error message to the user
+            messages.error(request, f"A build with the name '{build_name}' already exists. Please choose a different name.")
+            return redirect('build_page')  # Redirect back to the build creation page
+        
+        # Check if there is an unsaved build related to the user's profile
+        current_build = Build.objects.filter(profile=profile, is_complete=False).first()
+        if current_build:
+            try:
+                # Update the build with the provided name and mark it as complete
+                current_build.name = build_name
+                current_build.is_complete = True
+                current_build.save()
+                
+                # Display a success message
+                messages.success(request, f"Build '{build_name}' saved successfully!")
+                return redirect('account_page')
+            except IntegrityError:
+                # Handle unexpected integrity errors
+                messages.error(request, "An error occurred while saving the build. Please try again.")
+                return redirect('build_page')  # Redirect back to the build creation page
+    
+    # If no build name or no unsaved build exists, show error
+    return render(request, 'error.html', {'message': 'Failed to save the build. No active build found.'})
+
+@login_required
+def delete_build(request, build_id):
+    build = get_object_or_404(Build, build_id=build_id, profile__user=request.user)
+    build.delete()
+    messages.success(request, "Build deleted successfully.")
+    return redirect('account_page')
+
+
+def edit_build(request, build_id):
+    build = get_object_or_404(Build, build_id=build_id, profile__user=request.user)
+
+    if request.method == "POST":
+        form = BuildForm(request.POST, instance=build)
+        if form.is_valid():
+            # Save the form first to ensure build_id is generated
+            build = form.save(commit=False)
+            build.save()  # Save to get a primary key
+
+            # Now set the many-to-many fields
+            form.cleaned_data.get('ram') and build.ram.set(form.cleaned_data['ram'])
+            form.cleaned_data.get('storages') and build.storages.set(form.cleaned_data['storages'])
+
+            # Check compatibility after saving
+            try:
+                CompatibilityService.check_build_compatibility(build)
+                messages.success(request, "Build saved and is compatible!")
+            except ValueError as e:
+                messages.error(request, f"Build saved but compatibility issues detected: {e}")
+            return redirect('account_page')
+    else:
+        form = BuildForm(instance=build)
+
+    return render(request, 'edit_build.html', {'form': form})
+
+def view_build(request, build_id):
+    build = get_object_or_404(Build, build_id=build_id)
+    return render(request, 'view_build.html', {'build': build})

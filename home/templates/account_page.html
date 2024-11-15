@@ -115,18 +115,17 @@
         <div id="Builds" class="tabcontent">
             <h2>Saved PC Builds</h2>
             <ul>
-                <li>
-                    Gaming Beast 3000
-                    <button onclick="editBuild('Gaming Beast 3000')">Edit</button>
-                    <button onclick="deleteBuild('Gaming Beast 3000')">Delete</button>
-                </li>
-                <li>
-                    Budget Workstation
-                    <button onclick="editBuild('Budget Workstation')">Edit</button>
-                    <button onclick="deleteBuild('Budget Workstation')">Delete</button>
-                </li>
+                {% for build in user.profile.build_set.all %}
+                    <li>
+                        {{ build.name }}
+                        <a href="{% url 'edit_build' build.build_id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'delete_build' build.build_id %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'view_build' build.build_id %}" class="btn btn-info">View</a>
+                    </li>
+                {% empty %}
+                    <li>No saved builds found.</li>
+                {% endfor %}
             </ul>
-            <button onclick="createNewBuild()">Create New Build</button>
         </div>
 
         <div id="Orders" class="tabcontent">

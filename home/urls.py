@@ -34,6 +34,12 @@ path('add_to_build/<int:part_id>/<str:category>/', views.add_to_build, name='add
 path('remove_from_build/<str:category>/', views.remove_from_build, name='remove_from_build'),
 path('part_browser/', views.part_browser, name='part_browser'),
 path('account_page/', views.account_page, name='account_page'),
+path('save_build/', views.save_build, name='save_build'),
+path('delete_build/<int:build_id>/', views.delete_build, name='delete_build'),
+path('edit_build/<int:build_id>/', views.edit_build, name='edit_build'),
+path('view_build/<int:build_id>/', views.view_build, name='view_build'),
+
+
 
 # see views_api_call.py to see the views that are related to these urls.
 # the views referenced by these urls will call the api endpoints

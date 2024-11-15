@@ -1,0 +1,93 @@
+{% extends "base_template.html" %}
+{% block content %}
+
+<h1 style="color: black;">View Build</h1>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="px-0 py-3 col-12">
+            <table class="table table-bordered">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th scope="col">Component</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Product Image</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Processor Row -->
+                    <tr>
+                        <td><strong>Processor</strong></td>
+                        <td>{{ build.cpu.name }}</td>
+                        <td>
+                            {% if build.cpu and build.cpu.image %}
+                                <img src="{{ build.cpu.image.url }}" alt="{{ build.cpu.name }}" width="100">
+                            {% endif %}
+                        </td>
+                        <td>${{ build.cpu.price }}</td>
+                        <td>{{ build.cpu.description }}</td>
+                    </tr>
+
+                    <!-- Motherboard Row -->
+                    <tr>
+                        <td><strong>Motherboard</strong></td>
+                        <td>{{ build.motherboard.name }}</td>
+                        <td>
+                            {% if build.motherboard and build.motherboard.image %}
+                                <img src="{{ build.motherboard.image.url }}" alt="{{ build.motherboard.name }}" width="100">
+                            {% endif %}
+                        </td>
+                        <td>${{ build.motherboard.price }}</td>
+                        <td>{{ build.motherboard.description }}</td>
+                    </tr>
+
+                    <!-- RAM Row -->
+                    <tr>
+                        <td><strong>RAM</strong></td>
+                        <td>
+                            {% for ram in build.ram.all %}
+                                {{ ram.name }}<br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for ram in build.ram.all %}
+                                {% if ram.image %}
+                                    <img src="{{ ram.image.url }}" alt="{{ ram.name }}" width="100"><br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for ram in build.ram.all %}
+                                ${{ ram.price }}<br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for ram in build.ram.all %}
+                                {{ ram.description }}<br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+                    <!-- Storage Row -->
+                    <tr>
+                        <td><strong>Storage</strong></td>
+                        <td>{{ build.storage.name }}</td>
+                        <td>
+                            {% if build.storage and build.storage.image %}
+                                <img src="{{ build.storage.image.url }}" alt="{{ build.storage.name }}" width="100">
+                            {% endif %}
+                        </td>
+                        <td>${{ build.storage.price }}</td>
+                        <td>{{ build.storage.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<a href="{% url 'account_page' %}" class="btn btn-secondary">Back to Saved Builds</a>
+
+{% endblock %}

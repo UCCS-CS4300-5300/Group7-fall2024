@@ -23,29 +23,30 @@
                         <td><strong>Processor</strong></td>
                         <td>
                             {% if build.cpu %}
-                                {{ build.cpu.name }}
+                            {{ build.cpu.name }}
                             {% else %}
-                                <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);" href="{% url 'part_browser' %}?category=CPU">Add Component</a>
+                            <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);"
+                                href="{% url 'part_browser' %}?category=CPU">Add Component</a>
                             {% endif %}
                         </td>
                         <td>
                             {% if build.cpu and build.cpu.image %}
-                                <img src="{{ build.cpu.image.url }}" alt="{{ build.cpu.name }}" width="100">
+                            <img src="{{ build.cpu.image.url }}" alt="{{ build.cpu.name }}" width="100">
                             {% endif %}
                         </td>
                         <td>
                             {% if build.cpu %}
-                                ${{ build.cpu.price }}
+                            ${{ build.cpu.price }}
                             {% endif %}
                         </td>
                         <td>
                             {% if build.cpu %}
-                                {{ build.cpu.description }}
+                            {{ build.cpu.description }}
                             {% endif %}
                         </td>
                         <td>
                             {% if build.cpu %}
-                                <a href="{% url 'remove_from_build' 'CPU' %}" class="btn btn-danger">Remove</a>
+                            <a href="{% url 'remove_from_build' 'CPU' %}" class="btn btn-danger">Remove</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -55,29 +56,30 @@
                         <td><strong>Motherboard</strong></td>
                         <td>
                             {% if build.motherboard %}
-                                {{ build.motherboard.name }}
+                            {{ build.motherboard.name }}
                             {% else %}
-                                <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);" href="{% url 'part_browser' %}?category=Motherboard">Add Component</a>
+                            <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);"
+                                href="{% url 'part_browser' %}?category=Motherboard">Add Component</a>
                             {% endif %}
                         </td>
                         <td>
                             {% if build.motherboard and build.motherboard.image %}
-                                <img src="{{ build.motherboard.image.url }}" alt="{{ build.motherboard.name }}" width="100">
+                            <img src="{{ build.motherboard.image.url }}" alt="{{ build.motherboard.name }}" width="100">
                             {% endif %}
                         </td>
                         <td>
                             {% if build.motherboard %}
-                                ${{ build.motherboard.price }}
+                            ${{ build.motherboard.price }}
                             {% endif %}
                         </td>
                         <td>
                             {% if build.motherboard %}
-                                {{ build.motherboard.description }}
+                            {{ build.motherboard.description }}
                             {% endif %}
                         </td>
                         <td>
                             {% if build.motherboard %}
-                                <a href="{% url 'remove_from_build' 'Motherboard' %}" class="btn btn-danger">Remove</a>
+                            <a href="{% url 'remove_from_build' 'Motherboard' %}" class="btn btn-danger">Remove</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -87,39 +89,40 @@
                         <td><strong>RAM</strong></td>
                         <td>
                             {% if build.ram.all %}
-                                {% for ram in build.ram.all %}
-                                    {{ ram.name }}<br>
-                                {% endfor %}
+                            {% for ram in build.ram.all %}
+                            {{ ram.name }}<br>
+                            {% endfor %}
                             {% else %}
-                                <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);" href="{% url 'part_browser' %}?category=RAM">Add Component</a>
+                            <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);"
+                                href="{% url 'part_browser' %}?category=RAM">Add Component</a>
                             {% endif %}
                         </td>
                         <td>
                             {% if build.ram.all %}
-                                {% for ram in build.ram.all %}
-                                    {% if ram.image %}
-                                        <img src="{{ ram.image.url }}" alt="{{ ram.name }}" width="100"><br>
-                                    {% endif %}
-                                {% endfor %}
+                            {% for ram in build.ram.all %}
+                            {% if ram.image %}
+                            <img src="{{ ram.image.url }}" alt="{{ ram.name }}" width="100"><br>
+                            {% endif %}
+                            {% endfor %}
                             {% endif %}
                         </td>
                         <td>
                             {% if build.ram.all %}
-                                {% for ram in build.ram.all %}
-                                    ${{ ram.price }}<br>
-                                {% endfor %}
+                            {% for ram in build.ram.all %}
+                            ${{ ram.price }}<br>
+                            {% endfor %}
                             {% endif %}
                         </td>
                         <td>
                             {% if build.ram.all %}
-                                {% for ram in build.ram.all %}
-                                    {{ ram.description }}<br>
-                                {% endfor %}
+                            {% for ram in build.ram.all %}
+                            {{ ram.description }}<br>
+                            {% endfor %}
                             {% endif %}
                         </td>
                         <td>
                             {% if build.ram.all %}
-                                <a href="{% url 'remove_from_build' 'RAM' %}" class="btn btn-danger">Remove</a>
+                            <a href="{% url 'remove_from_build' 'RAM' %}" class="btn btn-danger">Remove</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -128,30 +131,41 @@
                     <tr>
                         <td><strong>Storage</strong></td>
                         <td>
-                            {% if build.storage %}
-                                {{ build.storage.name }}
+                            {% if build.storages.all %}
+                            {% for storage in build.storages.all %}
+                            {{ storage.name }}<br>
+                            {% endfor %}
                             {% else %}
-                                <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);" href="{% url 'part_browser' %}?category=Storage">Add Component</a>
+                            <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);"
+                                href="{% url 'part_browser' %}?category=Storage">Add Component</a>
                             {% endif %}
                         </td>
                         <td>
-                            {% if build.storage and build.storage.image %}
-                                <img src="{{ build.storage.image.url }}" alt="{{ build.storage.name }}" width="100">
+                            {% if build.storages.all %}
+                            {% for storage in build.storages.all %}
+                            {% if storage.image %}
+                            <img src="{{ storage.image.url }}" alt="{{ storage.name }}" width="100"><br>
+                            {% endif %}
+                            {% endfor %}
                             {% endif %}
                         </td>
                         <td>
-                            {% if build.storage %}
-                                ${{ build.storage.price }}
+                            {% if build.storages.all %}
+                            {% for storage in build.storages.all %}
+                            ${{ storage.price }}<br>
+                            {% endfor %}
                             {% endif %}
                         </td>
                         <td>
-                            {% if build.storage %}
-                                {{ build.storage.description }}
+                            {% if build.storages.all %}
+                            {% for storage in build.storages.all %}
+                            {{ storage.description }}<br>
+                            {% endfor %}
                             {% endif %}
                         </td>
                         <td>
-                            {% if build.storage %}
-                                <a href="{% url 'remove_from_build' 'Storage' %}" class="btn btn-danger">Remove</a>
+                            {% if build.storages.all %}
+                            <a href="{% url 'remove_from_build' 'Storage' %}" class="btn btn-danger">Remove</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -160,5 +174,16 @@
         </div>
     </div>
 </div>
+
+<button class="btn btn-primary" onclick="saveBuild()">Save Build</button>
+<script>
+    function saveBuild() {
+        const buildName = prompt("Enter a name for your build:");
+        if (buildName) {
+            // Redirect to the save build URL, passing the build name as a query parameter
+            window.location.href = "{% url 'save_build' %}?build_name=" + encodeURIComponent(buildName);
+        }
+    }
+</script>
 
 {% endblock %}
