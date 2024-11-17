@@ -9,6 +9,14 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_name = models.CharField(max_length=20, blank=True)
     
+    current_build = models.OneToOneField(
+        'Build', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='active_profile'
+    )
+
     def __str__(self):
         return self.user.username
     
@@ -35,9 +43,10 @@ class Build(models.Model):
     Build model containing the configuration of PC components.
     """
     build_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for Build model
-    name = models.CharField(max_length=100, default='Default Build Name')  
+    name = models.CharField(max_length=100, default='Default Build Name')  # Ensure unique build name
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)  # Foreign key to the Profile model
     is_complete = models.BooleanField(default=False)  # Flag to indicate if the build is complete
+    is_active = models.BooleanField(default=False)
     motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE, null=True)  # Foreign key to Motherboard model
     cpu = models.ForeignKey('CPU', on_delete=models.CASCADE, null=True)  # Foreign key to CPU model
     ram = models.ManyToManyField('RAM', through='BuildRAM', blank=True)  # Many-to-many relationship with RAM model
@@ -52,10 +61,14 @@ class Build(models.Model):
 
     class Meta:
         constraints = [
-            models.CheckConstraint(condition=models.Q(is_complete__in=[True, False]), name='is_complete_valid')
+            models.CheckConstraint(condition=models.Q(is_complete__in=[True, False]), name='is_complete_valid'),
+            models.CheckConstraint(condition=models.Q(is_active__in=[True, False]), name='is_active_valid'),  # NEW: Ensure is_active is valid
+
         ]
         indexes = [
-            models.Index(fields=['name'])  # Index the name field for faster queries
+            models.Index(fields=['name']),  # Index the name field for faster queries
+            models.Index(fields=['is_active']),  # NEW: Index is_active for faster queries
+
         ]
 
 class BuildRAM(models.Model):

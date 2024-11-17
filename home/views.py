@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from .models import RAM, CPU, Motherboard, Storage, Build, Profile
 from .forms import BuildForm
 from .compatibility_service import CompatibilityService
@@ -33,8 +33,21 @@ def build(request):
     Returns:
         HttpResponse: Renders the build.html template with the user's build components.
     """
-    # Retrieve or create a Build object for the current user's profile
-    build, created = Build.objects.get_or_create(profile__user=request.user, defaults={'profile': request.user.profile})
+    profile = request.user.profile
+
+    # Retrieve or create an active Build object for the user's profile
+    build, created = Build.objects.get_or_create(
+        profile=profile,
+        is_active=True,
+        defaults={'profile': profile, 'is_active': True}
+    )
+
+    # If the build was newly created, save it to generate a primary key (build_id)
+    if created:
+        build.save()
+
+    # Deactivate other active builds for the profile
+    Build.objects.filter(profile=profile, is_active=True).exclude(build_id=build.build_id).update(is_active=False)
 
     context = {
         'build': build,
@@ -44,6 +57,7 @@ def build(request):
         'storages': build.storages.all()  # Assuming storages is a ManyToManyField
     }
     return render(request, 'build.html', context)
+
 
 def part_browser(request):
     # Handle logic here if needed, e.g., fetching all parts or filtering by category
@@ -198,48 +212,51 @@ def register_view(request):
 
 @login_required
 def add_to_build(request, part_id, category):
-    # Ensure the user has a Build object; if not, create one
-    build, created = Build.objects.get_or_create(profile__user=request.user, defaults={'profile': request.user.profile})
+    profile = request.user.profile
 
-    # Retrieve the part based on the category and add it to the build
+    # Retrieve the active build
+    build = Build.objects.filter(profile=profile, is_active=True).first()
+
+    if not build:
+        messages.error(request, "No active build found. Please create a new build.")
+        return redirect('build_page')
+
+    # Add the part to the active build
     if category == 'CPU':
         part = get_object_or_404(CPU, cpu_id=part_id)
         build.cpu = part
     elif category == 'RAM':
         part = get_object_or_404(RAM, ram_id=part_id)
-        build.ram.add(part)  # Assuming RAM can have multiple items
+        build.ram.add(part)
     elif category == 'Motherboard':
         part = get_object_or_404(Motherboard, motherboard_id=part_id)
         build.motherboard = part
     elif category == 'Storage':
         part = get_object_or_404(Storage, storage_id=part_id)
-        build.storages.add(part)  # Assuming Storage is also a ManyToManyField in the build model
+        build.storages.add(part)
 
-    # Save the build after modifications
-    build.save()
-    return redirect('build')  # Redirect to the build page after adding
+    build.save()  # Save the changes
+    return redirect('build')
 
 @login_required
 def remove_from_build(request, category):
-    # Get the user's build based on their profile
-    build = get_object_or_404(Build, profile__user=request.user)
+    # Get the active build for the user
+    build = get_object_or_404(Build, profile__user=request.user, is_active=True)
 
-    # Clear the specified component based on the category
+    # Remove the specified component based on the category
     if category == 'CPU':
         build.cpu = None
     elif category == 'RAM':
-        build.ram.clear()  # Assuming RAM is a ManyToManyField
+        build.ram.clear()  # RAM is Many-to-Many
     elif category == 'Motherboard':
         build.motherboard = None
     elif category == 'Storage':
-        build.storages.clear()  # Assuming Storage is a ManyToManyField
-    # Add similar conditions for other components like GPU, Case, etc.
+        build.storages.clear()  # Storage is Many-to-Many
 
-    # Save the build after removing the component
+    # Save the build
     build.save()
 
-    # Redirect to the build page after removal
-    return redirect('build')
+    return redirect('build')  # Redirect back to the build page
 
 def view_profile(request):
     context = {
@@ -252,37 +269,37 @@ def logout_user(request):
     logout(request)
     return redirect('index')
 
-
+@login_required
 def save_build(request):
     build_name = request.GET.get("build_name")
-    if build_name:
-        profile = Profile.objects.get(user=request.user)
+    profile = request.user.profile
 
-        # Check if a build with the same name already exists for this profile
-        if Build.objects.filter(profile=profile, name=build_name).exists():
-            # Display an error message to the user
-            messages.error(request, f"A build with the name '{build_name}' already exists. Please choose a different name.")
-            return redirect('build_page')  # Redirect back to the build creation page
-        
-        # Check if there is an unsaved build related to the user's profile
-        current_build = Build.objects.filter(profile=profile, is_complete=False).first()
-        if current_build:
-            try:
-                # Update the build with the provided name and mark it as complete
-                current_build.name = build_name
-                current_build.is_complete = True
-                current_build.save()
-                
-                # Display a success message
-                messages.success(request, f"Build '{build_name}' saved successfully!")
-                return redirect('account_page')
-            except IntegrityError:
-                # Handle unexpected integrity errors
-                messages.error(request, "An error occurred while saving the build. Please try again.")
-                return redirect('build_page')  # Redirect back to the build creation page
-    
-    # If no build name or no unsaved build exists, show error
-    return render(request, 'error.html', {'message': 'Failed to save the build. No active build found.'})
+    if not build_name:
+        messages.error(request, "Build name cannot be empty.")
+        return redirect('build')
+
+    # Retrieve the active build
+    current_build = Build.objects.filter(profile=profile, is_active=True).first()
+
+    if not current_build:
+        messages.error(request, "No active build found.")
+        return redirect('build')
+
+    # Check for duplicate names
+    if Build.objects.filter(profile=profile, name=build_name).exists():
+        messages.error(request, f"A build with the name '{build_name}' already exists.")
+        return redirect('build')
+
+    # Save components and mark the build as complete
+    current_build.name = build_name
+    current_build.is_active = False  # Mark build as inactive
+    current_build.is_complete = True
+    current_build.save()
+
+    # Clear the builder page components
+    Build.objects.create(profile=profile, is_active=True)  # Create a new active build
+    messages.success(request, f"Build '{build_name}' saved successfully!")
+    return redirect('account_page')
 
 @login_required
 def delete_build(request, build_id):
