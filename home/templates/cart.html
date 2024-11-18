@@ -23,7 +23,10 @@
 
 {% if not cart_items %}
     <p>Your cart is empty.</p>
+{% else %}
+    <h3>Total Price: ${{ total_price }}</h3>
+    <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);" href="{% url 'checkout_with_paypal' %}">Checkout with PayPal</a>
 {% endif %}
 
-<h3>Total Price: ${{ total_price }}</h3>
+
 {% endblock %}

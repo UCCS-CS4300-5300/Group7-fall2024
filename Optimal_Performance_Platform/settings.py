@@ -125,3 +125,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
+
+PAYPAL_CLIENT_ID = 'AZe2ODP9VWTVdmSQuGLML688dlemTmcZxr-4n0ZoCdRop0i-NO4Sm5VtZkTSvsWlVExGZU-GlHOswutr'
+PAYPAL_CLIENT_SECRET = 'ELpiJjOIlQXIMF1hmldyRzUDdofLyK7qrqxwLLWwdVsp_q1HxoY1QvL0-5LOiG-Ed9rNkPXC-jJnlEzL'
+PAYPAL_ENVIRONMENT = 'sandbox'  # Change to 'live' for production

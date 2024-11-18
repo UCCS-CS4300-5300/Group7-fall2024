@@ -9,6 +9,10 @@ from .compatibility_service import CompatibilityService
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
+from django.conf import settings
+from .services.paypal_service import create_payment
+from django.http import JsonResponse
+import paypalrestsdk
 
 def index(request):
     """
@@ -492,3 +496,58 @@ def add_saved_build_to_cart(request, build_id):
 
     messages.success(request, f"'{saved_build.name}' has been added to your cart.")
     return redirect('account_page')
+
+@login_required
+def create_paypal_payment(request):
+    # Example: Calculate the total price from the shopping cart
+    profile = request.user.profile
+    cart = profile.shoppingcart
+    total_price = sum(item.price * item.quantity for item in cart.cart_items.all())
+
+    # Create a PayPal payment
+    payment = create_payment(total_price)
+
+    if payment.create():
+        # Redirect to PayPal approval URL
+        for link in payment.links:
+            if link.rel == "approval_url":
+                return redirect(link.href)
+    else:
+        return render(request, "payment_error.html", {"error": payment.error})
+
+def execute_paypal_payment(request):
+    payment_id = request.GET.get('paymentId')
+    payer_id = request.GET.get('PayerID')
+
+    payment = paypalrestsdk.Payment.find(payment_id)
+    if payment.execute({"payer_id": payer_id}):
+        # Payment successful
+        return render(request, "payment_success.html")
+    else:
+        # Payment failed
+        return render(request, "payment_error.html", {"error": payment.error})
+
+def test_paypal(request):
+    try:
+        # Attempt a simple request to PayPal
+        paypalrestsdk.configure({
+            "mode": settings.PAYPAL_ENVIRONMENT,
+            "client_id": settings.PAYPAL_CLIENT_ID,
+            "client_secret": settings.PAYPAL_CLIENT_SECRET
+        })
+        response = paypalrestsdk.Payment.all({"count": 1})
+        return JsonResponse({"status": "success", "response": response.to_dict()})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)})
+
+def purchase_confirmed(request):
+    profile = request.user.profile
+
+    # Clear the shopping cart
+    shopping_cart, created = ShoppingCart.objects.get_or_create(profile=profile)
+    shopping_cart.cart_items.all().delete()  # Remove all cart items
+    shopping_cart.total_price = 0  # Reset the total price
+    shopping_cart.save()
+
+    # Render the confirmation page
+    return render(request, 'purchase_confirmed.html', {'message': "Your payment was successful, and your cart has been cleared!"})

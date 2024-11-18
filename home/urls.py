@@ -43,6 +43,11 @@ path('cart/add/<int:item_id>/<str:category>/', views.add_to_cart, name='add_to_c
 path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
 path('cart/add_build/', views.add_build_to_cart, name='add_build_to_cart'),
 path('cart/add_saved_build/<int:build_id>/', views.add_saved_build_to_cart, name='add_saved_build_to_cart'),
+path("payment/create/", views.create_paypal_payment, name="create_paypal_payment"),
+path('paypal/checkout/', views.create_paypal_payment, name='checkout_with_paypal'),
+path("payment/execute/", views.execute_paypal_payment, name="execute_paypal_payment"),
+path('test-paypal/', views.test_paypal, name='test_paypal'),
+path('purchase-confirmed/', views.purchase_confirmed, name='purchase_confirmed'),
 
 
 
