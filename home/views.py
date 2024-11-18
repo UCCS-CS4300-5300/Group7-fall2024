@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from django.db import IntegrityError, transaction
-from .models import RAM, CPU, Motherboard, Storage, Build, Profile
+from .models import RAM, CPU, Motherboard, Storage, Build, Profile, ShoppingCart, CartItem
 from .forms import BuildForm
 from .compatibility_service import CompatibilityService
 from django.db.models import Q
@@ -338,3 +338,123 @@ def edit_build(request, build_id):
 def view_build(request, build_id):
     build = get_object_or_404(Build, build_id=build_id)
     return render(request, 'view_build.html', {'build': build})
+
+@login_required
+def add_to_cart(request, item_id, category):
+    profile = request.user.profile
+    cart, created = ShoppingCart.objects.get_or_create(profile=profile)
+
+    # Fetch the part based on its category
+    if category == "RAM":
+        item = get_object_or_404(RAM, pk=item_id)
+    elif category == "CPU":
+        item = get_object_or_404(CPU, pk=item_id)
+    elif category == "Motherboard":
+        item = get_object_or_404(Motherboard, pk=item_id)
+    elif category == "Storage":
+        item = get_object_or_404(Storage, pk=item_id)
+    else:
+        messages.error(request, "Invalid category.")
+        return redirect('part_browser')
+
+    # Check if the part is already in the cart
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        name=item.name,
+        price=item.price,
+        category=category
+    )
+    if not created:
+        cart_item.quantity += 1
+    cart_item.save()
+
+    # Update cart's total price
+    cart.total_price += item.price
+    cart.save()
+
+    messages.success(request, f"Added {item.name} to your cart.")
+    return redirect('view_cart')
+
+
+@login_required
+def add_build_to_cart(request):
+    profile = request.user.profile
+    cart, created = ShoppingCart.objects.get_or_create(profile=profile)
+
+    if request.method == "POST":
+        build_name = request.POST.get("build_name", "").strip()
+        if not build_name:
+            messages.error(request, "Build name cannot be empty.")
+            return redirect('add_build_to_cart')
+
+        active_build = Build.objects.filter(profile=profile, is_active=True).first()
+        if not active_build:
+            messages.error(request, "No active build found to add to the cart.")
+            return redirect('build')
+
+        # Update the build's name and mark it as complete
+        active_build.name = build_name
+        active_build.is_active = False
+        active_build.is_complete = True
+        active_build.save()
+
+        # Add the build to the cart
+        CartItem.objects.create(
+            cart=cart,
+            name=active_build.name,
+            price=sum((
+                active_build.cpu.price if active_build.cpu else 0,
+                active_build.motherboard.price if active_build.motherboard else 0,
+                sum(ram.price for ram in active_build.ram.all()),
+                sum(storage.price for storage in active_build.storages.all())
+            )),
+            is_build=True
+        )
+
+        # Clear the active build
+        Build.objects.create(profile=profile, is_active=True)
+
+        messages.success(request, f"Added build '{build_name}' to your cart and cleared the builder page.")
+        return redirect('build')
+
+    return render(request, 'add_build_to_cart.html')
+
+
+
+def get_active_build(profile):
+    active_build = Build.objects.filter(profile=profile, is_active=True).first()
+    if not active_build:
+        return None, "No active build found."
+    return active_build, None
+
+@login_required
+def view_cart(request):
+    profile = request.user.profile
+    cart = get_object_or_404(ShoppingCart, profile=profile)
+    cart_items = cart.cart_items.all()
+
+    context = {
+        'cart_items': cart_items,
+        'total_price': sum(item.price * item.quantity for item in cart_items)
+    }
+    return render(request, 'cart.html', context)
+
+
+
+@login_required
+def remove_from_cart(request, item_id):
+    profile = request.user.profile
+    cart = get_object_or_404(ShoppingCart, profile=profile)
+
+    cart_item = get_object_or_404(CartItem, cart=cart, id=item_id)
+
+    # Update the total price
+    cart.total_price -= cart_item.price * cart_item.quantity
+    cart.total_price = max(cart.total_price, 0)  # Prevent negative total price
+    cart.save()
+
+    cart_item.delete()
+
+    messages.success(request, f"Removed {cart_item.name} from your cart.")
+    return redirect('view_cart')
+

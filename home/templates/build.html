@@ -186,4 +186,24 @@
     }
 </script>
 
+<form id="add-build-form" action="{% url 'add_build_to_cart' %}" method="POST" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" id="build_name" name="build_name">
+</form>
+
+<button type="button" class="btn btn-primary" onclick="addBuildToCart()">Add Build to Cart</button>
+
+<script>
+    function addBuildToCart() {
+        const buildName = prompt("Enter a name for your build:");
+        if (buildName) {
+            document.getElementById("build_name").value = buildName;
+            document.getElementById("add-build-form").submit();
+        } else {
+            alert("Build name cannot be empty!");
+        }
+    }
+</script>
+
+
 {% endblock %}

@@ -113,8 +113,11 @@
                         <i class="fa-solid fa-magnifying-glass"></i> Search
                     </button> 
                 </form>
-
-
+                <div class="navbar-nav">
+                    <!-- Add the Shopping Cart Icon -->
+                    <a class="button" href="{% url 'view_cart' %}">
+                        <i class="fa-solid fa-cart-shopping"></i> Cart
+                    </a>
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}
                         <a class="button" href="{% url 'account_page' %}">My Account</a>

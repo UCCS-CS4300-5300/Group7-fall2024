@@ -38,6 +38,10 @@ path('save_build/', views.save_build, name='save_build'),
 path('delete_build/<int:build_id>/', views.delete_build, name='delete_build'),
 path('edit_build/<int:build_id>/', views.edit_build, name='edit_build'),
 path('view_build/<int:build_id>/', views.view_build, name='view_build'),
+path('cart/', views.view_cart, name='view_cart'),
+path('cart/add/<int:item_id>/<str:category>/', views.add_to_cart, name='add_to_cart'),
+path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+path('cart/add_build/', views.add_build_to_cart, name='add_build_to_cart'),
 
 
 

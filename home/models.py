@@ -30,12 +30,6 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-class ShoppingCart(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    total_price = models.FloatField(default=0.0)
-    
-    def __str__(self):
-        return f"Shopping Cart for {self.profile.user.username}"
 
 # Build Models
 class Build(models.Model):
@@ -461,3 +455,22 @@ class BuildStorageConfiguration(models.Model):
             models.Index(fields=['build']),  # Index the build field for faster search
             models.Index(fields=['storage']),  # Index the storage field for faster search
         ]
+
+class ShoppingCart(models.Model):
+    profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
+    total_price = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return f"Shopping Cart for {self.profile.user.username}"
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE, related_name='cart_items')
+    name = models.CharField(max_length=100)  # Name of the part or build
+    price = models.FloatField()
+    category = models.CharField(max_length=50, blank=True, null=True)  # "RAM", "CPU", "Motherboard", etc.
+    quantity = models.PositiveIntegerField(default=1)
+    is_build = models.BooleanField(default=False)  # True if the item is a full build, False if it’s an individual part
+
+    def __str__(self):
+        return f"{self.name} ({'Build' if self.is_build else self.category})"
+
