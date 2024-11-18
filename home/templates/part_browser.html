@@ -4,69 +4,69 @@
 <h2>Search Results</h2>
 
 {% if results %}
-    <ul>
-        {% for part in results %}
-            <li>
-                <strong>Name:</strong> {{ part.name }}<br>
-                
-                {% if part.image %}
-                    <img src="{{ part.image.url }}" alt="{{ part.name }}" width="100"><br>
-                {% endif %}
-                
-                <strong>Price:</strong> ${{ part.price }}<br>
-                {% if part.description %}
-                    <strong>Description:</strong> {{ part.description }}<br>
-                {% endif %}
-                
-                {% if part.ram_type %}
-                    <strong>Type:</strong> {{ part.ram_type.type }}<br>
-                    <strong>Speed:</strong> {{ part.ram_speed.speed }} MHz<br>
-                    <strong>Capacity:</strong> {{ part.ram_capacity.capacity }}<br>
-                    <strong>Number of Modules:</strong> {{ part.ram_number_of_modules.number_of_modules }}<br>
-                    <!-- Add to Build button with ram_id -->
-                    <a href="{% url 'add_to_build' part.ram_id 'RAM' %}" class="btn btn-primary">Add to Build</a>
-                    <form action="{% url 'add_to_cart' part.ram_id 'RAM' %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success">Add to Cart</button>
-                    </form>
-                {% elif part.socket_type %}
-                    <strong>Manufacturer:</strong> {{ part.manufacturer.name }}<br>
-                    <strong>Microarchitecture:</strong> {{ part.microarchitecture.name }}<br>
-                    <strong>Socket Type:</strong> {{ part.socket_type.name }}<br>
-                    <a href="{% url 'add_to_build' part.cpu_id 'CPU' %}" class="btn btn-primary">Add to Build</a>
-                    <form action="{% url 'add_to_cart' part.cpu_id 'CPU' %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success">Add to Cart</button>
-                    </form>
-                {% elif part.cpu_socket_type %}
-                    <strong>Motherboard Name:</strong> {{ part.name }}<br>
-                    <strong>Socket Type:</strong> {{ part.cpu_socket_type.name }}<br>
-                    <strong>Supported RAM Types:</strong> {{ part.supported_ram_types.all|join:", " }}<br>
-                    <strong>Supported RAM Speeds:</strong> {{ part.supported_ram_speeds.all|join:", " }}<br>
-                    <a href="{% url 'add_to_build' part.motherboard_id 'Motherboard' %}" class="btn btn-primary">Add to Build</a>
-                    <form action="{% url 'add_to_cart' part.motherboard_id 'Motherboard' %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success">Add to Cart</button>
-                    </form>
-                {% elif part.form_factor %}
-                    <strong>Storage Type:</strong> {{ part.type.type }}<br>
-                    <strong>Form Factor:</strong> {{ part.form_factor.name }}<br>
-                    <strong>Capacity:</strong> {{ part.capacity.capacity }}<br>
-                    <a href="{% url 'add_to_build' part.storage_id 'Storage' %}" class="btn btn-primary">Add to Build</a>
-                    <form action="{% url 'add_to_cart' part.storage_id 'Storage' %}" method="POST" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-success">Add to Cart</button>
-                    </form>
-                {% else %}
-                    <p>Part ID not available</p>
-                {% endif %}
-                
-                <hr>
-            </li>
-        {% endfor %}
-    </ul>
+<ul>
+    {% for part in results %}
+    <li>
+        <strong>Name:</strong> {{ part.name }}<br>
+
+        {% if part.image %}
+        <img src="{{ part.image.url }}" alt="{{ part.name }}" width="100"><br>
+        {% endif %}
+
+        <strong>Price:</strong> ${{ part.price }}<br>
+        {% if part.description %}
+        <strong>Description:</strong> {{ part.description }}<br>
+        {% endif %}
+
+        {% if part.ram_type %}
+        <strong>Type:</strong> {{ part.ram_type.type }}<br>
+        <strong>Speed:</strong> {{ part.ram_speed.speed }} MHz<br>
+        <strong>Capacity:</strong> {{ part.ram_capacity.capacity }}<br>
+        <strong>Number of Modules:</strong> {{ part.ram_number_of_modules.number_of_modules }}<br>
+        <!-- Add to Build button with ram_id -->
+        <a href="{% url 'add_to_build' part.ram_id 'RAM' %}" class="btn btn-primary">Add to Build</a>
+        <form action="{% url 'add_to_cart' part.ram_id 'RAM' %}" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);">Add to Cart</button>
+        </form>
+        {% elif part.socket_type %}
+        <strong>Manufacturer:</strong> {{ part.manufacturer.name }}<br>
+        <strong>Microarchitecture:</strong> {{ part.microarchitecture.name }}<br>
+        <strong>Socket Type:</strong> {{ part.socket_type.name }}<br>
+        <a href="{% url 'add_to_build' part.cpu_id 'CPU' %}" class="btn btn-primary">Add to Build</a>
+        <form action="{% url 'add_to_cart' part.cpu_id 'CPU' %}" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);">Add to Cart</button>
+        </form>
+        {% elif part.cpu_socket_type %}
+        <strong>Motherboard Name:</strong> {{ part.name }}<br>
+        <strong>Socket Type:</strong> {{ part.cpu_socket_type.name }}<br>
+        <strong>Supported RAM Types:</strong> {{ part.supported_ram_types.all|join:", " }}<br>
+        <strong>Supported RAM Speeds:</strong> {{ part.supported_ram_speeds.all|join:", " }}<br>
+        <a href="{% url 'add_to_build' part.motherboard_id 'Motherboard' %}" class="btn btn-primary">Add to Build</a>
+        <form action="{% url 'add_to_cart' part.motherboard_id 'Motherboard' %}" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);">Add to Cart</button>
+        </form>
+        {% elif part.form_factor %}
+        <strong>Storage Type:</strong> {{ part.type.type }}<br>
+        <strong>Form Factor:</strong> {{ part.form_factor.name }}<br>
+        <strong>Capacity:</strong> {{ part.capacity.capacity }}<br>
+        <a href="{% url 'add_to_build' part.storage_id 'Storage' %}" class="btn btn-primary">Add to Build</a>
+        <form action="{% url 'add_to_cart' part.storage_id 'Storage' %}" method="POST" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);">Add to Cart</button>
+        </form>
+        {% else %}
+        <p>Part ID not available</p>
+        {% endif %}
+
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
 {% else %}
-    <p>No results found.</p>
+<p>No results found.</p>
 {% endif %}
 
 {% endblock %}
