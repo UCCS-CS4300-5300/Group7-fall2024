@@ -106,6 +106,12 @@ def account_page(request):
     Returns:
         HttpResponse: Renders the account_page.html template.
     """
+    profile = request.user.profile
+    saved_builds = Build.objects.filter(profile=profile, is_complete=True)
+
+    context = {
+        'saved_builds': saved_builds,
+    }
     return render(request, 'account_page.html')
 
 def login_or_register(request):
@@ -458,3 +464,31 @@ def remove_from_cart(request, item_id):
     messages.success(request, f"Removed {cart_item.name} from your cart.")
     return redirect('view_cart')
 
+@login_required
+def add_saved_build_to_cart(request, build_id):
+    profile = request.user.profile
+    cart, created = ShoppingCart.objects.get_or_create(profile=profile)
+
+    # Retrieve the saved build
+    saved_build = get_object_or_404(Build, build_id=build_id, profile=profile)
+
+    # Check if the build is already in the cart
+    if CartItem.objects.filter(cart=cart, name=saved_build.name, category="Build").exists():
+        messages.warning(request, f"The build '{saved_build.name}' is already in your cart.")
+        return redirect('account_page')
+
+    # Add the build to the cart as a CartItem
+    CartItem.objects.create(
+        cart=cart,
+        name=saved_build.name,
+        price=saved_build.get_total_price(),  # Calculate price dynamically
+        category="Build",
+        quantity=1
+    )
+
+    # Update the cart's total price
+    cart.total_price += saved_build.get_total_price()
+    cart.save()
+
+    messages.success(request, f"'{saved_build.name}' has been added to your cart.")
+    return redirect('account_page')

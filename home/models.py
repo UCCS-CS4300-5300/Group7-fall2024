@@ -53,6 +53,16 @@ class Build(models.Model):
         # Custom validation logic can be added here if needed
         pass
 
+    def get_total_price(self):
+        total_price = 0
+        if self.cpu:
+            total_price += self.cpu.price
+        if self.motherboard:
+            total_price += self.motherboard.price
+        total_price += sum(ram.price for ram in self.ram.all())
+        total_price += sum(storage.price for storage in self.storages.all())
+        return total_price
+
     class Meta:
         constraints = [
             models.CheckConstraint(condition=models.Q(is_complete__in=[True, False]), name='is_complete_valid'),

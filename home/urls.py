@@ -42,6 +42,8 @@ path('cart/', views.view_cart, name='view_cart'),
 path('cart/add/<int:item_id>/<str:category>/', views.add_to_cart, name='add_to_cart'),
 path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
 path('cart/add_build/', views.add_build_to_cart, name='add_build_to_cart'),
+path('cart/add_saved_build/<int:build_id>/', views.add_saved_build_to_cart, name='add_saved_build_to_cart'),
+
 
 
 
