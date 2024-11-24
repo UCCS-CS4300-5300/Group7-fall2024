@@ -1,0 +1,330 @@
+./Optimal_Performance_Platform/settings_old.py:118:1: E303 too many blank lines (3)
+./Optimal_Performance_Platform/settings_old.py:137:1: E122 continuation line missing indentation or outdented
+./Optimal_Performance_Platform/settings_old.py:156:1: E402 module level import not at top of file
+./Optimal_Performance_Platform/settings_old.py:157:1: F811 redefinition of unused 'os' from line 14
+./Optimal_Performance_Platform/settings_old.py:157:1: E402 module level import not at top of file
+./Optimal_Performance_Platform/settings_old.py:175:1: E128 continuation line under-indented for visual indent
+./Optimal_Performance_Platform/settings_old.py:262:1: E303 too many blank lines (3)
+./Optimal_Performance_Platform/settings_old.py:281:1: E122 continuation line missing indentation or outdented
+./home/admin.py:5:71: W291 trailing whitespace
+./home/admin.py:10:1: E302 expected 2 blank lines, found 1
+./home/admin.py:14:1: E302 expected 2 blank lines, found 1
+./home/admin.py:19:1: E302 expected 2 blank lines, found 1
+./home/admin.py:24:1: E302 expected 2 blank lines, found 1
+./home/admin.py:33:1: E302 expected 2 blank lines, found 1
+./home/admin.py:45:1: E305 expected 2 blank lines after class or function definition, found 1
+./home/compatibility_service.py:4:1: E302 expected 2 blank lines, found 1
+./home/compatibility_service.py:29:1: W293 blank line contains whitespace
+./home/compatibility_service.py:34:1: W293 blank line contains whitespace
+./home/compatibility_service.py:59:1: W293 blank line contains whitespace
+./home/compatibility_service.py:137:1: W293 blank line contains whitespace
+./home/forms.py:5:1: E302 expected 2 blank lines, found 1
+./home/models.py:8:1: E302 expected 2 blank lines, found 1
+./home/models.py:11:1: W293 blank line contains whitespace
+./home/models.py:14:1: W293 blank line contains whitespace
+./home/models.py:16:20: W291 trailing whitespace
+./home/models.py:17:100: W291 trailing whitespace
+./home/models.py:20:1: E302 expected 2 blank lines, found 1
+./home/models.py:25:1: E302 expected 2 blank lines, found 1
+./home/models.py:28:1: W293 blank line contains whitespace
+./home/models.py:33:1: E302 expected 2 blank lines, found 1
+./home/models.py:61:1: E302 expected 2 blank lines, found 1
+./home/models.py:73:1: E302 expected 2 blank lines, found 1
+./home/models.py:87:1: E302 expected 2 blank lines, found 1
+./home/models.py:101:1: E302 expected 2 blank lines, found 1
+./home/models.py:115:1: E302 expected 2 blank lines, found 1
+./home/models.py:130:1: E302 expected 2 blank lines, found 1
+./home/models.py:134:1: E302 expected 2 blank lines, found 1
+./home/models.py:141:1: E302 expected 2 blank lines, found 1
+./home/models.py:175:1: E302 expected 2 blank lines, found 1
+./home/models.py:189:1: E302 expected 2 blank lines, found 1
+./home/models.py:205:1: E302 expected 2 blank lines, found 1
+./home/models.py:219:1: E302 expected 2 blank lines, found 1
+./home/models.py:233:1: E302 expected 2 blank lines, found 1
+./home/models.py:240:1: E302 expected 2 blank lines, found 1
+./home/models.py:267:1: E302 expected 2 blank lines, found 1
+./home/models.py:281:1: E302 expected 2 blank lines, found 1
+./home/models.py:288:1: E302 expected 2 blank lines, found 1
+./home/models.py:313:1: E302 expected 2 blank lines, found 1
+./home/models.py:327:1: E302 expected 2 blank lines, found 1
+./home/models.py:334:1: E302 expected 2 blank lines, found 1
+./home/models.py:357:1: E302 expected 2 blank lines, found 1
+./home/models.py:379:1: E302 expected 2 blank lines, found 1
+./home/models.py:401:1: E302 expected 2 blank lines, found 1
+./home/models.py:418:1: E302 expected 2 blank lines, found 1
+./home/populate_fake_data.py:15:1: E402 module level import not at top of file
+./home/populate_fake_data.py:19:1: E302 expected 2 blank lines, found 1
+./home/populate_fake_data.py:94:1: E305 expected 2 blank lines after class or function definition, found 1
+./home/serializers.py:7:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:9:17: F405 'Manufacturer' may be undefined, or defined from star imports: .models
+./home/serializers.py:12:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:14:17: F405 'Microarchitecture' may be undefined, or defined from star imports: .models
+./home/serializers.py:17:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:19:17: F405 'CPUSocketType' may be undefined, or defined from star imports: .models
+./home/serializers.py:23:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:25:17: F405 'RAMType' may be undefined, or defined from star imports: .models
+./home/serializers.py:28:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:30:17: F405 'RAMSpeed' may be undefined, or defined from star imports: .models
+./home/serializers.py:33:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:35:17: F405 'RAMCapacity' may be undefined, or defined from star imports: .models
+./home/serializers.py:38:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:40:17: F405 'RAMNumberOfModules' may be undefined, or defined from star imports: .models
+./home/serializers.py:44:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:46:17: F405 'FormFactor' may be undefined, or defined from star imports: .models
+./home/serializers.py:49:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:51:17: F405 'StorageCapacity' may be undefined, or defined from star imports: .models
+./home/serializers.py:54:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:56:17: F405 'StorageType' may be undefined, or defined from star imports: .models
+./home/serializers.py:59:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:67:17: F405 'Motherboard' may be undefined, or defined from star imports: .models
+./home/serializers.py:73:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:77:1: W293 blank line contains whitespace
+./home/serializers.py:79:17: F405 'CPU' may be undefined, or defined from star imports: .models
+./home/serializers.py:82:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:89:17: F405 'RAM' may be undefined, or defined from star imports: .models
+./home/serializers.py:92:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:98:17: F405 'Storage' may be undefined, or defined from star imports: .models
+./home/serializers.py:102:1: E302 expected 2 blank lines, found 1
+./home/serializers.py:109:17: F405 'Build' may be undefined, or defined from star imports: .models
+./home/serializers.py:125:34: F405 'Build' may be undefined, or defined from star imports: .models
+./home/serializers.py:127:1: W293 blank line contains whitespace
+./home/tests.py:8:1: E302 expected 2 blank lines, found 1
+./home/tests.py:9:1: W293 blank line contains whitespace
+./home/tests.py:13:9: F405 'post_save' may be undefined, or defined from star imports: .models
+./home/tests.py:13:30: F405 'create_profile' may be undefined, or defined from star imports: .models
+./home/tests.py:17:9: F405 'post_save' may be undefined, or defined from star imports: .models
+./home/tests.py:17:27: F405 'create_profile' may be undefined, or defined from star imports: .models
+./home/tests.py:22:24: F405 'Profile' may be undefined, or defined from star imports: .models
+./home/tests.py:23:29: F405 'Manufacturer' may be undefined, or defined from star imports: .models
+./home/tests.py:24:27: F405 'CPUSocketType' may be undefined, or defined from star imports: .models
+./home/tests.py:25:34: F405 'Microarchitecture' may be undefined, or defined from star imports: .models
+./home/tests.py:26:20: F405 'CPU' may be undefined, or defined from star imports: .models
+./home/tests.py:28:25: F405 'RAMType' may be undefined, or defined from star imports: .models
+./home/tests.py:29:26: F405 'RAMSpeed' may be undefined, or defined from star imports: .models
+./home/tests.py:30:29: F405 'RAMCapacity' may be undefined, or defined from star imports: .models
+./home/tests.py:31:28: F405 'RAMNumberOfModules' may be undefined, or defined from star imports: .models
+./home/tests.py:32:20: F405 'RAM' may be undefined, or defined from star imports: .models
+./home/tests.py:34:29: F405 'StorageType' may be undefined, or defined from star imports: .models
+./home/tests.py:35:33: F405 'StorageCapacity' may be undefined, or defined from star imports: .models
+./home/tests.py:36:36: F405 'StorageFormFactor' may be undefined, or defined from star imports: .models
+./home/tests.py:37:24: F405 'Storage' may be undefined, or defined from star imports: .models
+./home/tests.py:39:28: F405 'Motherboard' may be undefined, or defined from star imports: .models
+./home/tests.py:64:37: F405 'RAMCapacity' may be undefined, or defined from star imports: .models
+./home/tests.py:65:15: F405 'RAM' may be undefined, or defined from star imports: .models
+./home/tests.py:70:33: F405 'RAMType' may be undefined, or defined from star imports: .models
+./home/tests.py:71:15: F405 'RAM' may be undefined, or defined from star imports: .models
+./home/tests.py:75:1: E302 expected 2 blank lines, found 1
+./home/tests.py:76:1: W293 blank line contains whitespace
+./home/tests/test_models.py:4:1: E302 expected 2 blank lines, found 1
+./home/tests/test_models.py:9:9: F405 'StorageFormFactor' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:10:9: F405 'StorageCapacity' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:11:9: F405 'StorageType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:13:9: F405 'Storage' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:14:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:15:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:15:29: F405 'StorageFormFactor' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:16:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:16:26: F405 'StorageCapacity' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:17:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:17:22: F405 'StorageType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:21:22: F405 'Storage' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:26:22: F405 'Storage' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:31:22: F405 'Storage' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:36:22: F405 'Storage' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:41:22: F405 'Storage' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:45:5: E265 block comment should start with '# '
+./home/tests/test_models.py:47:22: F405 'Storage' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:48:30: E225 missing whitespace around operator
+./home/tests/test_models.py:54:1: E302 expected 2 blank lines, found 1
+./home/tests/test_models.py:58:9: F405 'Manufacturer' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:59:9: F405 'Microarchitecture' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:60:9: F405 'CPUSocketType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:62:9: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:63:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:64:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:64:26: F405 'Manufacturer' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:65:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:65:31: F405 'Microarchitecture' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:66:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:66:21: F405 'CPUSocketType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:70:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:75:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:80:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:85:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:90:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:96:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:97:26: E225 missing whitespace around operator
+./home/tests/test_models.py:102:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:103:26: E225 missing whitespace around operator
+./home/tests/test_models.py:108:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:109:26: E225 missing whitespace around operator
+./home/tests/test_models.py:114:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:115:26: E225 missing whitespace around operator
+./home/tests/test_models.py:120:22: F405 'CPU' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:121:26: E225 missing whitespace around operator
+./home/tests/test_models.py:124:1: E302 expected 2 blank lines, found 1
+./home/tests/test_models.py:129:9: F405 'RAMType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:130:9: F405 'RAMSpeed' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:131:9: F405 'RAMCapacity' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:132:9: F405 'RAMNumberOfModules' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:135:9: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:136:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:136:18: F405 'RAMType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:137:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:137:19: F405 'RAMSpeed' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:138:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:138:22: F405 'RAMCapacity' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:139:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:139:31: F405 'RAMNumberOfModules' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:143:22: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:148:22: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:153:22: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:158:22: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:163:22: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:169:22: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:170:26: E225 missing whitespace around operator
+./home/tests/test_models.py:175:22: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:176:30: E225 missing whitespace around operator
+./home/tests/test_models.py:179:1: E302 expected 2 blank lines, found 1
+./home/tests/test_models.py:184:9: F405 'Manufacturer' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:185:9: F405 'CPUSocketType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:186:9: F405 'StorageFormFactor' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:187:9: F405 'RAMNumberOfModules' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:189:9: F405 'RAMType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:190:9: F405 'RAMType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:193:9: F405 'RAMSpeed' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:194:9: F405 'RAMSpeed' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:197:9: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:198:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:199:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:199:34: F405 'Manufacturer' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:200:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:200:25: F405 'CPUSocketType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:201:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:202:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:202:29: F405 'StorageFormFactor' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:203:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:206:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:207:45: E231 missing whitespace after ','
+./home/tests/test_models.py:208:46: E231 missing whitespace after ','
+./home/tests/test_models.py:212:9: F405 'RAMType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:213:9: F405 'RAMSpeed' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:214:9: F405 'RAMCapacity' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:215:9: F405 'RAMNumberOfModules' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:218:9: F405 'RAM' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:219:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:219:18: F405 'RAMType' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:220:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:220:19: F405 'RAMSpeed' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:221:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:221:22: F405 'RAMCapacity' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:222:9: E128 continuation line under-indented for visual indent
+./home/tests/test_models.py:222:31: F405 'RAMNumberOfModules' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:225:1: W293 blank line contains whitespace
+./home/tests/test_models.py:228:9: E303 too many blank lines (3)
+./home/tests/test_models.py:231:5: E301 expected 1 blank line, found 0
+./home/tests/test_models.py:232:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:237:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:242:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:247:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:252:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:257:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:262:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:267:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:272:22: F405 'Motherboard' may be undefined, or defined from star imports: home.models
+./home/tests/test_models.py:274:62: W292 no newline at end of file
+./home/urls.py:10:1: E265 block comment should start with '# '
+./home/urls.py:11:1: E265 block comment should start with '# '
+./home/urls.py:17:28: F405 'BuildViewSet' may be undefined, or defined from star imports: .models, .views, .views_api, .views_render
+./home/urls.py:22:1: E122 continuation line missing indentation or outdented
+./home/urls.py:23:1: E122 continuation line missing indentation or outdented
+./home/urls.py:23:34: E251 unexpected spaces around keyword / parameter equals
+./home/urls.py:24:1: E122 continuation line missing indentation or outdented
+./home/urls.py:24:41: E251 unexpected spaces around keyword / parameter equals
+./home/urls.py:25:1: E122 continuation line missing indentation or outdented
+./home/urls.py:25:16: F405 'login_or_register' may be undefined, or defined from star imports: .models, .views, .views_api, .views_render
+./home/urls.py:26:1: E122 continuation line missing indentation or outdented
+./home/urls.py:27:1: E122 continuation line missing indentation or outdented
+./home/urls.py:28:1: E122 continuation line missing indentation or outdented
+./home/urls.py:29:1: E122 continuation line missing indentation or outdented
+./home/urls.py:30:1: E122 continuation line missing indentation or outdented
+./home/urls.py:31:1: E122 continuation line missing indentation or outdented
+./home/urls.py:33:1: E122 continuation line missing indentation or outdented
+./home/urls.py:34:1: E122 continuation line missing indentation or outdented
+./home/urls.py:35:1: E122 continuation line missing indentation or outdented
+./home/urls.py:35:22: F405 'call_builds_view' may be undefined, or defined from star imports: .models, .views, .views_api, .views_render
+./home/urls.py:36:1: E122 continuation line missing indentation or outdented
+./home/urls.py:36:27: F405 'call_user_builds_view' may be undefined, or defined from star imports: .models, .views, .views_api, .views_render
+./home/urls.py:37:1: E122 continuation line missing indentation or outdented
+./home/urls.py:37:23: F405 'call_motherboards_view' may be undefined, or defined from star imports: .models, .views, .views_api, .views_render
+./home/urls.py:38:1: E122 continuation line missing indentation or outdented
+./home/urls.py:38:15: F405 'call_cpus_view' may be undefined, or defined from star imports: .models, .views, .views_api, .views_render
+./home/urls.py:39:1: E122 continuation line missing indentation or outdented
+./home/urls.py:39:15: F405 'call_rams_view' may be undefined, or defined from star imports: .models, .views, .views_api, .views_render
+./home/urls.py:40:1: E122 continuation line missing indentation or outdented
+./home/urls.py:40:19: F405 'call_storages_view' may be undefined, or defined from star imports: .models, .views, .views_api, .views_render
+./home/urls.py:43:1: E122 continuation line missing indentation or outdented
+./home/urls.py:44:1: E122 continuation line missing indentation or outdented
+./home/urls.py:45:1: E122 continuation line missing indentation or outdented
+./home/urls.py:46:1: E122 continuation line missing indentation or outdented
+./home/urls.py:47:1: E122 continuation line missing indentation or outdented
+./home/urls.py:50:2: W292 no newline at end of file
+./home/views.py:10:1: E302 expected 2 blank lines, found 1
+./home/views.py:13:1: W293 blank line contains whitespace
+./home/views.py:16:1: W293 blank line contains whitespace
+./home/views.py:24:1: E302 expected 2 blank lines, found 1
+./home/views.py:27:1: W293 blank line contains whitespace
+./home/views.py:30:1: W293 blank line contains whitespace
+./home/views.py:36:1: E302 expected 2 blank lines, found 1
+./home/views.py:40:1: W293 blank line contains whitespace
+./home/views.py:43:1: W293 blank line contains whitespace
+./home/views.py:59:1: E302 expected 2 blank lines, found 1
+./home/views.py:84:1: E302 expected 2 blank lines, found 1
+./home/views.py:87:1: W293 blank line contains whitespace
+./home/views.py:90:1: W293 blank line contains whitespace
+./home/views.py:96:1: E302 expected 2 blank lines, found 1
+./home/views.py:99:1: W293 blank line contains whitespace
+./home/views.py:102:1: W293 blank line contains whitespace
+./home/views.py:108:1: E302 expected 2 blank lines, found 1
+./home/views.py:111:1: W293 blank line contains whitespace
+./home/views.py:114:1: W293 blank line contains whitespace
+./home/views.py:132:1: W293 blank line contains whitespace
+./home/views.py:136:1: E302 expected 2 blank lines, found 1
+./home/views.py:137:1: C901 'search_pc_parts' is too complex (12)
+./home/views.py:197:1: W293 blank line contains whitespace
+./home/views.py:200:1: W293 blank line contains whitespace
+./home/views.py:218:1: E302 expected 2 blank lines, found 1
+./home/views.py:241:1: E302 expected 2 blank lines, found 1
+./home/views_api.py:5:1: F811 redefinition of unused 'Storage' from line 4
+./home/views_api.py:8:47: W291 trailing whitespace
+./home/views_api.py:11:1: E302 expected 2 blank lines, found 1
+./home/views_api.py:34:1: E302 expected 2 blank lines, found 1
+./home/views_api.py:57:1: E302 expected 2 blank lines, found 1
+./home/views_api.py:84:1: E302 expected 2 blank lines, found 1
+./home/views_api.py:119:1: E302 expected 2 blank lines, found 1
+./home/views_api.py:152:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:21:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:25:17: W291 trailing whitespace
+./home/views_api_call_old.py:31:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:38:50: W291 trailing whitespace
+./home/views_api_call_old.py:39:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:45:1: E303 too many blank lines (3)
+./home/views_api_call_old.py:60:1: F811 redefinition of unused 'call_motherboards_view' from line 39
+./home/views_api_call_old.py:60:1: E302 expected 2 blank lines, found 3
+./home/views_api_call_old.py:70:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:80:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:90:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:90:36: E261 at least two spaces before inline comment
+./home/views_api_call_old.py:103:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:113:1: E302 expected 2 blank lines, found 1
+./home/views_api_call_old.py:119:48: W292 no newline at end of file
+./home/views_old.py:9:1: E302 expected 2 blank lines, found 1
+./home/views_old.py:13:1: E302 expected 2 blank lines, found 1
+./home/views_old.py:22:1: E302 expected 2 blank lines, found 1
+./home/views_old.py:31:1: E302 expected 2 blank lines, found 1
+./home/views_old.py:40:1: E302 expected 2 blank lines, found 1
+./home/views_old.py:49:1: E302 expected 2 blank lines, found 1
+./home/views_old.py:58:1: E302 expected 2 blank lines, found 1
+./home/views_render.py:6:1: E302 expected 2 blank lines, found 1
+./home/views_render.py:29:1: E302 expected 2 blank lines, found 1
+./home/views_render.py:50:1: E305 expected 2 blank lines after class or function definition, found 1

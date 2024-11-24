@@ -9,6 +9,14 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_name = models.CharField(max_length=20, blank=True)
     
+    current_build = models.OneToOneField(
+        'Build', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='active_profile'
+    )
+
     def __str__(self):
         return self.user.username
     
@@ -22,12 +30,6 @@ def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-class ShoppingCart(models.Model):
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    total_price = models.FloatField(default=0.0)
-    
-    def __str__(self):
-        return f"Shopping Cart for {self.profile.user.username}"
 
 # Build Models
 class Build(models.Model):
@@ -35,9 +37,10 @@ class Build(models.Model):
     Build model containing the configuration of PC components.
     """
     build_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for Build model
-    name = models.CharField(max_length=100, default='Default Build Name', unique=True)  # Ensure unique build name
+    name = models.CharField(max_length=100, default='Default Build Name')  # Ensure unique build name
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)  # Foreign key to the Profile model
     is_complete = models.BooleanField(default=False)  # Flag to indicate if the build is complete
+    is_active = models.BooleanField(default=False)
     motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE, null=True)  # Foreign key to Motherboard model
     cpu = models.ForeignKey('CPU', on_delete=models.CASCADE, null=True)  # Foreign key to CPU model
     ram = models.ManyToManyField('RAM', through='BuildRAM', blank=True)  # Many-to-many relationship with RAM model
@@ -50,12 +53,26 @@ class Build(models.Model):
         # Custom validation logic can be added here if needed
         pass
 
+    def get_total_price(self):
+        total_price = 0
+        if self.cpu:
+            total_price += self.cpu.price
+        if self.motherboard:
+            total_price += self.motherboard.price
+        total_price += sum(ram.price for ram in self.ram.all())
+        total_price += sum(storage.price for storage in self.storages.all())
+        return total_price
+
     class Meta:
         constraints = [
-            models.CheckConstraint(check=models.Q(is_complete__in=[True, False]), name='is_complete_valid')
+            models.CheckConstraint(condition=models.Q(is_complete__in=[True, False]), name='is_complete_valid'),
+            models.CheckConstraint(condition=models.Q(is_active__in=[True, False]), name='is_active_valid'),  # NEW: Ensure is_active is valid
+
         ]
         indexes = [
-            models.Index(fields=['name'])  # Index the name field for faster queries
+            models.Index(fields=['name']),  # Index the name field for faster queries
+            models.Index(fields=['is_active']),  # NEW: Index is_active for faster queries
+
         ]
 
 class BuildRAM(models.Model):
@@ -156,13 +173,16 @@ class Motherboard(models.Model):
     supported_ram_speeds = models.ManyToManyField('RAMSpeed')  # Many-to-many relationship with RAMSpeed model
     supported_storage_types = models.ManyToManyField('StorageType', through='SupportedStorageConfiguration')  # Many-to-many relationship with StorageType model through SupportedStorageConfiguration
     rams = models.ManyToManyField('RAM', through='SupportedRAMConfiguration')  # Many-to-many relationship with RAM model through SupportedRAMConfiguration
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the Motherboard
+    image = models.ImageField(upload_to='images/motherboard/', null=True, blank=True)  # Image of the Motherboard
+    description = models.TextField(blank=True)  # Add description field here
 
     def __str__(self):
         return self.name  # String representation of the Motherboard model
 
     class Meta:
         constraints = [
-            models.CheckConstraint(check=models.Q(max_memory_capacity__gte=0), name='max_memory_capacity_positive')
+            models.CheckConstraint(condition=models.Q(max_memory_capacity__gte=0), name='max_memory_capacity_positive')
         ]
         indexes = [
             models.Index(fields=['name']),  # Index the name field for faster search
@@ -248,6 +268,9 @@ class RAM(models.Model):
     ram_speed = models.ForeignKey('RAMSpeed', on_delete=models.CASCADE)  # Foreign key to RAMSpeed model
     ram_capacity = models.ForeignKey('RAMCapacity', on_delete=models.CASCADE)  # Foreign key to RAMCapacity model
     ram_number_of_modules = models.ForeignKey('RAMNumberOfModules', on_delete=models.CASCADE)  # Foreign key to RAMNumberOfModules model
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the RAM
+    image = models.ImageField(upload_to='images/ram/', null=True, blank=True)  # Image of the RAM
+    description = models.TextField(blank=True)  # Add description field here
 
     def clean(self):
         # Custom validation logic
@@ -295,6 +318,9 @@ class CPU(models.Model):
     microarchitecture = models.ForeignKey('Microarchitecture', on_delete=models.CASCADE)  # Foreign key to Microarchitecture model
     socket_type = models.ForeignKey('CPUSocketType', on_delete=models.CASCADE)  # Foreign key to CPUSocketType model
     motherboards = models.ManyToManyField('Motherboard', through='CPUMotherboardCompatibility')  # Many-to-Many relationship with Motherboard
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the CPU
+    image = models.ImageField(upload_to='images/cpu/', null=True, blank=True)  # Image of the CPU
+    description = models.TextField(blank=True)  # Add description field here
 
     objects = CPUMicroarchitectureManager()  # Use custom manager
 
@@ -341,6 +367,9 @@ class Storage(models.Model):
     form_factor = models.ForeignKey('FormFactor', on_delete=models.CASCADE)  # Foreign key to FormFactor model
     capacity = models.ForeignKey('StorageCapacity', on_delete=models.CASCADE)  # Foreign key to StorageCapacity model
     type = models.ForeignKey('StorageType', on_delete=models.CASCADE)  # Foreign key to StorageType model
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the Storage
+    image = models.ImageField(upload_to='images/storage/', null=True, blank=True)  # Image of the Storage
+    description = models.TextField(blank=True)  # Add description field here
 
     def __str__(self):
         return f"{self.name} - {self.form_factor.name} - {self.capacity.capacity}"  # String representation of the Storage model
@@ -369,7 +398,7 @@ class SupportedRAMConfiguration(models.Model):
     class Meta:
         unique_together = ('motherboard', 'ram')  # Ensure unique combinations of motherboard and RAM
         constraints = [
-            models.CheckConstraint(check=models.Q(supported__in=[True, False]), name='supported_valid')
+            models.CheckConstraint(condition=models.Q(supported__in=[True, False]), name='supported_valid')
         ]
         indexes = [
             models.Index(fields=['motherboard']),  # Index the motherboard field for faster search
@@ -391,7 +420,7 @@ class SupportedStorageConfiguration(models.Model):
     class Meta:
         unique_together = ('motherboard', 'storage_type')  # Ensure unique combinations of motherboard and storage type
         constraints = [
-            models.CheckConstraint(check=models.Q(slots__gte=0), name='slots_positive')
+            models.CheckConstraint(condition=models.Q(slots__gte=0), name='slots_positive')
         ]
         indexes = [
             models.Index(fields=['motherboard']),  # Index the motherboard field for faster search
@@ -430,9 +459,28 @@ class BuildStorageConfiguration(models.Model):
     class Meta:
         unique_together = ('build', 'storage')  # Ensure unique combinations of build and storage
         constraints = [
-            models.CheckConstraint(check=models.Q(role__in=['Primary', 'Secondary']), name='role_valid')
+            models.CheckConstraint(condition=models.Q(role__in=['Primary', 'Secondary']), name='role_valid')
         ]
         indexes = [
             models.Index(fields=['build']),  # Index the build field for faster search
             models.Index(fields=['storage']),  # Index the storage field for faster search
         ]
+
+class ShoppingCart(models.Model):
+    profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
+    total_price = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return f"Shopping Cart for {self.profile.user.username}"
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE, related_name='cart_items')
+    name = models.CharField(max_length=100)  # Name of the part or build
+    price = models.FloatField()
+    category = models.CharField(max_length=50, blank=True, null=True)  # "RAM", "CPU", "Motherboard", etc.
+    quantity = models.PositiveIntegerField(default=1)
+    is_build = models.BooleanField(default=False)  # True if the item is a full build, False if it’s an individual part
+
+    def __str__(self):
+        return f"{self.name} ({'Build' if self.is_build else self.category})"
+

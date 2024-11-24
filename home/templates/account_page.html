@@ -1,6 +1,7 @@
-
 {% extends "base_template.html" %}
 {% block content %}
+
+{% if user.is_authenticated %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,6 +72,24 @@
         button:hover {
             background-color: rgba(0, 150, 199, 1);
         }
+        .username-header {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .user-info-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .user-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: rgba(0, 150, 199, 0.8);
+        }
     </style>
 </head>
 <body>
@@ -87,35 +106,30 @@
 
         <div id="Profile" class="tabcontent">
             <h2>Profile Information</h2>
-            <form>
-                <label for="name">Full Name:</label>
-                <input type="text" id="name" name="name" placeholder="John Doe" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="john@example.com" required>
-
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
-
-                <button type="submit">Save Changes</button>
-            </form>
+            <div class="user-info-box">
+                <div class="username-header">Username:</div>
+                <p class="user-name">{{ user.username }}</p>
+            </div>
         </div>
 
         <div id="Builds" class="tabcontent">
             <h2>Saved PC Builds</h2>
             <ul>
-                <li>
-                    Gaming Beast 3000
-                    <button onclick="editBuild('Gaming Beast 3000')">Edit</button>
-                    <button onclick="deleteBuild('Gaming Beast 3000')">Delete</button>
-                </li>
-                <li>
-                    Budget Workstation
-                    <button onclick="editBuild('Budget Workstation')">Edit</button>
-                    <button onclick="deleteBuild('Budget Workstation')">Delete</button>
-                </li>
+                {% for build in user.profile.build_set.all %}
+                    <li>
+                        {{ build.name }}
+                        <a href="{% url 'edit_build' build.build_id %}" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'delete_build' build.build_id %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'view_build' build.build_id %}" class="btn btn-info">View</a>
+                        <form action="{% url 'add_saved_build_to_cart' build.build_id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Add to Cart</button>
+                        </form>                        
+                    </li>
+                {% empty %}
+                    <li>No saved builds found.</li>
+                {% endfor %}
             </ul>
-            <button onclick="createNewBuild()">Create New Build</button>
         </div>
 
         <div id="Orders" class="tabcontent">
@@ -205,4 +219,11 @@
         }
     </script>
 </body>
+
+{% else %}
+
+<p>Login to view your details</p>
+
+{% endif %}
+
 {% endblock %}

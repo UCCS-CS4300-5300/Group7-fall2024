@@ -1,0 +1,32 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<h2>Your Shopping Cart</h2>
+<ul>
+    {% for item in cart_items %}
+        <li>
+            {% if item.is_build %}
+                <strong>Build:</strong> {{ item.name }}<br>
+                <strong>Price:</strong> ${{ item.price }}
+            {% else %}
+                <strong>Part:</strong> {{ item.name }} ({{ item.category }})<br>
+                <strong>Price:</strong> ${{ item.price }}<br>
+                <strong>Quantity:</strong> {{ item.quantity }}
+            {% endif %}
+            <form action="{% url 'remove_from_cart' item.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Remove</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+
+{% if not cart_items %}
+    <p>Your cart is empty.</p>
+{% else %}
+    <h3>Total Price: ${{ total_price }}</h3>
+    <a class="btn btn-info" style="background-color: rgba(81, 234, 239, 0.767);" href="{% url 'checkout_with_paypal' %}">Checkout with PayPal</a>
+{% endif %}
+
+
+{% endblock %}

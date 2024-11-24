@@ -1,0 +1,6 @@
+<form method="POST" action="{% url 'add_build_to_cart' %}">
+    {% csrf_token %}
+    <label for="build_name">Enter a name for your build:</label>
+    <input type="text" id="build_name" name="build_name" required>
+    <button type="submit" class="btn btn-primary">Add to Cart</button>
+</form>
