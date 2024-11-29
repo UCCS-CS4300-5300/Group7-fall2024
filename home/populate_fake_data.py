@@ -3,6 +3,7 @@ import sys
 import django
 import random
 from faker import Faker
+from home.models import RAM, CPU, Motherboard, Storage, RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules, Manufacturer, CPUSocketType, StorageFormFactor, StorageCapacity, StorageType, Microarchitecture
 
 # Add project root to sys.path
 sys.path.append('/root/Group7_Dev_App/Optimal_Performance_Platform')
@@ -10,11 +11,8 @@ sys.path.append('/root/Group7_Dev_App/Optimal_Performance_Platform')
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
-
-# Import models
-from home.models import RAM, CPU, Motherboard, Storage, RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules, Manufacturer, CPUSocketType, StorageFormFactor, StorageCapacity, StorageType, Microarchitecture
-
 fake = Faker()
+
 
 def create_fake_data():
     ram_types = ["DDR3", "DDR4", "DDR5"]
@@ -90,5 +88,6 @@ def create_fake_data():
         )
 
     print("Fake data created for testing.")
+
 
 create_fake_data()
