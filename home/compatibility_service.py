@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from home.models import CPUMotherboardCompatibility, SupportedRAMConfiguration, SupportedStorageConfiguration  # Import necessary models
 
+
 class CompatibilityService:
     """
     CompatibilityService is a utility class that provides static methods
@@ -26,12 +27,11 @@ class CompatibilityService:
         ram_compatible, ram_issues = CompatibilityService.check_ram_compatibility(build)
         # Check storage compatibility
         storage_compatible, storage_issues = CompatibilityService.check_storage_compatibility(build)
-        
         # Determine overall compatibility
         compatible = cpu_compatible and ram_compatible and storage_compatible
         # Collect all issues
         issues = cpu_issues + ram_issues + storage_issues
-        
+
         return compatible, issues
 
     @staticmethod
@@ -56,7 +56,7 @@ class CompatibilityService:
             # Check if the CPU is compatible with the motherboard
             if not CPUMotherboardCompatibility.objects.filter(cpu=cpu, motherboard=motherboard).exists():
                 issues.append("The selected CPU is not compatible with the motherboard.")
-        
+
         return not issues, issues
 
     @staticmethod
@@ -134,5 +134,4 @@ class CompatibilityService:
                 # Check if the storage device's form factor is supported by the motherboard
                 elif storage_device.form_factor not in supported_storage_config.supported_form_factors:
                     issues.append(f"Storage form factor {storage_device.form_factor} is not supported by the motherboard.")
-        
         return not issues, issues
