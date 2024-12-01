@@ -1,23 +1,26 @@
 from rest_framework import serializers
-from .models import *
+from .models import Manufacturer, Microarchitecture, CPUSocketType, RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules, FormFactor, StorageCapacity, StorageType, Motherboard, CPU, RAM, Storage, Build
 from .compatibility_service import CompatibilityService
 
-# Serializers for core models
 
+# Serializers for core models
 class ManufacturerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacturer
         exclude = ['id']
+
 
 class MicroarchitectureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Microarchitecture
         exclude = ['id']
 
+
 class CPUSocketTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CPUSocketType
         exclude = ['id']
+
 
 # RAM Serializers
 class RAMTypeSerializer(serializers.ModelSerializer):
@@ -25,20 +28,24 @@ class RAMTypeSerializer(serializers.ModelSerializer):
         model = RAMType
         fields = '__all__'
 
+
 class RAMSpeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = RAMSpeed
         fields = '__all__'
+
 
 class RAMCapacitySerializer(serializers.ModelSerializer):
     class Meta:
         model = RAMCapacity
         exclude = ['id']
 
+
 class RAMNumberOfModulesSerializer(serializers.ModelSerializer):
     class Meta:
         model = RAMNumberOfModules
         exclude = ['id']
+
 
 # Storage Serializers
 class FormFactorSerializer(serializers.ModelSerializer):
@@ -46,15 +53,18 @@ class FormFactorSerializer(serializers.ModelSerializer):
         model = FormFactor
         exclude = ['id']
 
+
 class StorageCapacitySerializer(serializers.ModelSerializer):
     class Meta:
         model = StorageCapacity
         exclude = ['id']
 
+
 class StorageTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = StorageType
         exclude = ['id']
+
 
 class MotherboardSerializer(serializers.ModelSerializer):
     manufacturer = ManufacturerSerializer()
@@ -70,14 +80,16 @@ class MotherboardSerializer(serializers.ModelSerializer):
             'max_memory_capacity', 'supported_ram_types', 'supported_ram_speeds'
         )
 
+
 class CPUSerializer(serializers.ModelSerializer):
     manufacturer = ManufacturerSerializer()
     microarchitecture = MicroarchitectureSerializer()
     socket_type = CPUSocketTypeSerializer()
-    
+
     class Meta:
         model = CPU
         fields = ('cpu_id', 'name', 'manufacturer', 'microarchitecture', 'socket_type')
+
 
 class RAMSerializer(serializers.ModelSerializer):
     ram_type = RAMTypeSerializer()
@@ -89,6 +101,7 @@ class RAMSerializer(serializers.ModelSerializer):
         model = RAM
         fields = ('ram_id', 'name', 'manufacturer', 'ram_type', 'ram_speed', 'ram_capacity', 'ram_number_of_modules')
 
+
 class StorageSerializer(serializers.ModelSerializer):
     form_factor = FormFactorSerializer()
     capacity = StorageCapacitySerializer()
@@ -97,6 +110,7 @@ class StorageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Storage
         fields = ('storage_id', 'name', 'manufacturer', 'form_factor', 'capacity', 'type')
+
 
 # Build Serializer
 class BuildSerializer(serializers.ModelSerializer):
@@ -124,7 +138,7 @@ class BuildSerializer(serializers.ModelSerializer):
         """
         build = self.instance or Build(**data)
         compatible, issues = CompatibilityService.check_build_compatibility(build)
-        
+
         if not compatible:
             raise serializers.ValidationError(issues)
 
