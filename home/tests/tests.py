@@ -3,10 +3,13 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
-from .models import *
+from django.db.models.signals import post_save
+from home.models import create_profile, Profile, Manufacturer, CPUSocketType, Microarchitecture, CPU, RAMType, RAMSpeed
+from home.models import RAMCapacity, RAMNumberOfModules, RAM, StorageType, StorageCapacity, Storage, Motherboard
+
 
 class ModelTests(TestCase):
-    
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -72,8 +75,9 @@ class ModelTests(TestCase):
                                  ram_capacity=self.ram_capacity, ram_number_of_modules=self.ram_modules)
         self.assertFalse(self.motherboard.is_ram_compatible(ram))
 
+
 class ViewTests(TestCase):
-    
+
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='password')
 
