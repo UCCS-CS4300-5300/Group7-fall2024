@@ -3,6 +3,7 @@ from home.models import Manufacturer, Microarchitecture, CPUSocketType, CPU
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 
+
 class CPUTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
