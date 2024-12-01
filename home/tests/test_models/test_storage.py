@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from home.models import Manufacturer, FormFactor, StorageCapacity, StorageType, Storage
 
+
 class StorageTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
