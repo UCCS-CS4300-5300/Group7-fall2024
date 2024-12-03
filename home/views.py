@@ -440,6 +440,7 @@ def get_active_build(profile):
 @login_required
 def view_cart(request):
     profile = request.user.profile
+    cart, created = ShoppingCart.objects.get_or_create(profile=profile)
     cart = get_object_or_404(ShoppingCart, profile=profile)
     cart_items = cart.cart_items.all()
 
