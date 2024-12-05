@@ -50,7 +50,9 @@
             border: 1px solid #ccc;
             border-top: none;
         }
-        input[type="text"], input[type="email"], input[type="tel"] {
+        .container input[type="text"], 
+        .container input[type="email"], 
+        .container input[type="tel"] {
             width: 100%;
             padding: 8px;
             margin: 5px 0 20px 0;
@@ -171,8 +173,6 @@
                 <button type="submit">Save Preferences</button>
             </form>
         </div>
-
-        <button onclick="logout()">Log Out</button>
     </div>
 
     <script>
@@ -213,10 +213,6 @@
             // Add your view order details logic here
         }
 
-        function logout() {
-            alert("Logging out");
-            // Add your logout logic here
-        }
     </script>
 </body>
 
