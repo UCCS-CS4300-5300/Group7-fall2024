@@ -3,6 +3,7 @@ from home.models import Manufacturer, CPUSocketType, FormFactor, RAMType, Mother
 from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 
+
 class MotherboardTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):

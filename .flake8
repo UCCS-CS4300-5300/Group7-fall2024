@@ -8,5 +8,6 @@ exclude =
     old,
     build,
     dist,
-    migrations
+    migrations,
+    joelvenv
 max-complexity = 10

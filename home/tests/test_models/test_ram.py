@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from home.models import Manufacturer, RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules, RAM
 
+
 class RAMTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):

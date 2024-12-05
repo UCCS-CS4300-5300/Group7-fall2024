@@ -5,25 +5,27 @@ from django.dispatch import receiver
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_name = models.CharField(max_length=20, blank=True)
-    
+
     current_build = models.OneToOneField(
-        'Build', 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        blank=True, 
+        'Build',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
         related_name='active_profile'
     )
 
     def __str__(self):
         return self.user.username
-    
+
     class Meta:
-        indexes = [ 
-            models.Index(fields=['profile_name'])  # Index the profile_name field for faster search 
+        indexes = [
+            models.Index(fields=['profile_name'])  # Index the profile_name field for faster search
         ]
+
 
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):
@@ -75,6 +77,7 @@ class Build(models.Model):
 
         ]
 
+
 class BuildRAM(models.Model):
     """
     Intermediate model for the many-to-many relationship between Build and RAM.
@@ -85,6 +88,7 @@ class BuildRAM(models.Model):
 
     def __str__(self):
         return f"{self.build.name} - {self.ram}"  # String representation of the BuildRAM model
+
 
 # General models
 class Manufacturer(models.Model):
@@ -101,6 +105,7 @@ class Manufacturer(models.Model):
             models.Index(fields=['name'])  # Index the name field for faster search
         ]
 
+
 class CPUSocketType(models.Model):
     """
     Model to define CPU socket types.
@@ -114,6 +119,7 @@ class CPUSocketType(models.Model):
         indexes = [
             models.Index(fields=['name'])  # Index the name field for faster search
         ]
+
 
 class FormFactor(models.Model):
     """
@@ -129,6 +135,7 @@ class FormFactor(models.Model):
             models.Index(fields=['name'])  # Index the name field for faster search
         ]
 
+
 class StorageType(models.Model):
     """
     Model to define storage types.
@@ -143,10 +150,12 @@ class StorageType(models.Model):
             models.Index(fields=['type'])  # Index the type field for faster search
         ]
 
+
 # Motherboard models
 class MotherboardQuerySet(models.QuerySet):
     def by_ram_type(self, ram_type):
         return self.filter(ram__type=ram_type)
+
 
 class MotherboardManager(models.Manager):
     def get_queryset(self):
@@ -154,6 +163,7 @@ class MotherboardManager(models.Manager):
 
     def by_ram_type(self, ram_type):
         return self.get_queryset().by_ram_type(ram_type)
+
 
 class Motherboard(models.Model):
     """
@@ -191,6 +201,7 @@ class Motherboard(models.Model):
             models.Index(fields=['form_factor']),  # Index the form_factor field for faster search
         ]
 
+
 # RAM Models
 class RAMType(models.Model):
     """
@@ -205,6 +216,7 @@ class RAMType(models.Model):
         indexes = [
             models.Index(fields=['type'])  # Index the type field for faster search
         ]
+
 
 class RAMSpeed(models.Model):
     """
@@ -222,6 +234,7 @@ class RAMSpeed(models.Model):
             models.Index(fields=['speed'])  # Index the speed field for faster search
         ]
 
+
 class RAMCapacity(models.Model):
     """
     Model to define RAM capacity (e.g., 16GB).
@@ -235,6 +248,7 @@ class RAMCapacity(models.Model):
         indexes = [
             models.Index(fields=['capacity'])  # Index the capacity field for faster search
         ]
+
 
 class RAMNumberOfModules(models.Model):
     """
@@ -250,12 +264,14 @@ class RAMNumberOfModules(models.Model):
             models.Index(fields=['number_of_modules'])  # Index the number_of_modules field for faster search
         ]
 
+
 class RAMManager(models.Manager):
     def by_type(self, ram_type):
         return self.filter(ram_type__type=ram_type)
 
     def by_speed_range(self, min_speed, max_speed):
         return self.filter(ram_speed__speed__gte=min_speed, ram_speed__speed__lte=max_speed)
+
 
 class RAM(models.Model):
     """
@@ -286,6 +302,7 @@ class RAM(models.Model):
             models.Index(fields=['manufacturer']),  # Index the manufacturer field for faster search
         ]
 
+
 # CPU Models
 class Microarchitecture(models.Model):
     """
@@ -301,12 +318,14 @@ class Microarchitecture(models.Model):
             models.Index(fields=['name'])  # Index the name field for faster search
         ]
 
+
 class CPUMicroarchitectureManager(models.Manager):
     def by_microarchitecture(self, name):
         return self.filter(microarchitecture__name=name)
 
     def by_socket_type(self, socket_type_name):
         return self.filter(socket_type__name=socket_type_name)
+
 
 class CPU(models.Model):
     """
@@ -335,6 +354,7 @@ class CPU(models.Model):
             models.Index(fields=['socket_type'])  # Index the socket_type field for faster search
         ]
 
+
 # Storage Models
 class StorageCapacity(models.Model):
     """
@@ -350,12 +370,14 @@ class StorageCapacity(models.Model):
             models.Index(fields=['capacity'])  # Index the capacity field for faster search
         ]
 
+
 class StorageManager(models.Manager):
     def by_type(self, storage_type):
         return self.filter(type__type=storage_type)
 
     def by_capacity_range(self, min_capacity, max_capacity):
         return self.filter(capacity__capacity__gte=min_capacity, capacity__capacity__lte=max_capacity)
+
 
 class Storage(models.Model):
     """
@@ -382,6 +404,7 @@ class Storage(models.Model):
             models.Index(fields=['type'])  # Index the type field for faster search
         ]
 
+
 # Intermediary Models
 class SupportedRAMConfiguration(models.Model):
     """
@@ -405,6 +428,7 @@ class SupportedRAMConfiguration(models.Model):
             models.Index(fields=['ram']),  # Index the ram field for faster search
         ]
 
+
 class SupportedStorageConfiguration(models.Model):
     """
     Intermediate model for the many-to-many relationship between Motherboard and StorageType.
@@ -427,6 +451,7 @@ class SupportedStorageConfiguration(models.Model):
             models.Index(fields=['storage_type']),  # Index the storage_type field for faster search
         ]
 
+
 class CPUMotherboardCompatibility(models.Model):
     """
     Intermediate model for the many-to-many relationship between CPU and Motherboard.
@@ -443,6 +468,7 @@ class CPUMotherboardCompatibility(models.Model):
             models.Index(fields=['cpu']),  # Index the cpu field for faster search
             models.Index(fields=['motherboard']),  # Index the motherboard field for faster search
         ]
+
 
 class BuildStorageConfiguration(models.Model):
     """
@@ -466,6 +492,7 @@ class BuildStorageConfiguration(models.Model):
             models.Index(fields=['storage']),  # Index the storage field for faster search
         ]
 
+
 class ShoppingCart(models.Model):
     profile = models.OneToOneField('Profile', on_delete=models.CASCADE)
     total_price = models.FloatField(default=0.0)
@@ -473,14 +500,14 @@ class ShoppingCart(models.Model):
     def __str__(self):
         return f"Shopping Cart for {self.profile.user.username}"
 
+
 class CartItem(models.Model):
     cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE, related_name='cart_items')
     name = models.CharField(max_length=100)  # Name of the part or build
     price = models.FloatField()
-    category = models.CharField(max_length=50, blank=True, null=True)  # "RAM", "CPU", "Motherboard", etc.
+    category = models.CharField(max_length=50, blank=True)  # "RAM", "CPU", "Motherboard", etc. note: empty entry will be an empty string
     quantity = models.PositiveIntegerField(default=1)
     is_build = models.BooleanField(default=False)  # True if the item is a full build, False if it’s an individual part
 
     def __str__(self):
         return f"{self.name} ({'Build' if self.is_build else self.category})"
-

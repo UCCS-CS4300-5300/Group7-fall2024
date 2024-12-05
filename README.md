@@ -5,7 +5,6 @@
 ### **By:** Daniel Buck | Joel Flinn | Jagger Z | Neako Hallisey | Jesse Meredeth
 
 ## Project Overview
-<<<<<<< HEAD
 ### This project allows users to select and build computer parts from a database, ensuring compatibility and optimal performance. It leverages Django and Django REST Framework to provide a robust API and web interface.
 
 ## Requirements
@@ -14,14 +13,11 @@
 - Django REST Framework 3.15.2
 - PostgreSQL (or another database system)
 - Virtual environment tool (like `venv`)
-=======
-This project allows users to select and build computer parts from a database, ensuring compatibility and optimal performance. It leverages Django and Django REST Framework to provide a robust API and web interface.
->>>>>>> JF_dev
+
 
 ## Notice on AI
 #### NOTE: AI was used for tasks such as formatting text, searching for documentation, error resolution, comment skeletons, etc.
 
-<<<<<<< HEAD
 ## License Information
 ### NOTE: At this time we have not finalized our decision on what license to use. Below are our considerations.
 #### MIT License
@@ -167,7 +163,6 @@ Examples:
 - `python manage.py test`
 - `coverage run --source='.' manage.py test home.tests`
 - `coverage report`
-=======
 ## Documentation
 - [Database Schema Documentation](docs/database_schema.md)
 - [System Architecture Documentation](docs/system_architecture.md)
@@ -202,4 +197,3 @@ Examples:
 - **Run Tests**: `python manage.py test`
 - **Dump Data**: `python manage.py dumpdata > sample_data.json`
 - **Load Data**: `python manage.py loaddata sample_data.json`
->>>>>>> JF_dev

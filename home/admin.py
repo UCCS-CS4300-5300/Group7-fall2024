@@ -1,7 +1,7 @@
 # admin.py
 from django.contrib import admin
 from .models import Profile, ShoppingCart, Build, Manufacturer
-from .models import CPU, CPUSocketType, Microarchitecture, Motherboard 
+from .models import CPU, CPUSocketType, Microarchitecture, Motherboard
 from .models import FormFactor, StorageCapacity, StorageType, Storage
 from .models import RAM, RAMCapacity, RAMNumberOfModules, RAMSpeed, RAMType, BuildRAM
 from .compatibility_service import CompatibilityService
