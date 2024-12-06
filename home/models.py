@@ -190,6 +190,23 @@ class Motherboard(models.Model):
     def __str__(self):
         return self.name  # String representation of the Motherboard model
 
+    def is_ram_compatible(self, ram):
+        try:
+            ram_capacity = int(ram.ram_capacity.capacity.rstrip("GB"))
+        except ValueError:
+            return False
+        return (
+            ram.ram_type in self.supported_ram_types.all() and
+            ram.ram_speed in self.supported_ram_speeds.all() and
+            ram_capacity <= self.max_memory_capacity
+        )
+
+    def is_cpu_compatible(self, cpu):
+        return cpu.socket_type == self.cpu_socket_type
+
+    def is_storage_compatible(self, storage):
+        return storage.form_factor == self.form_factor
+
     class Meta:
         constraints = [
             models.CheckConstraint(condition=models.Q(max_memory_capacity__gte=0), name='max_memory_capacity_positive')
@@ -239,7 +256,7 @@ class RAMCapacity(models.Model):
     """
     Model to define RAM capacity (e.g., 16GB).
     """
-    capacity = models.CharField(max_length=10)
+    capacity = models.CharField(max_length=10, unique=True)
 
     def __str__(self):
         return self.capacity  # String representation of the RAMCapacity model
@@ -257,6 +274,7 @@ class RAMNumberOfModules(models.Model):
     number_of_modules = models.IntegerField(validators=[MinValueValidator(1)])  # Ensure at least 1 module
 
     def __str__(self):
+        # return f"{self.number_of_modules} modules"
         return str(self.number_of_modules)  # String representation of the RAMNumberOfModules model
 
     class Meta:

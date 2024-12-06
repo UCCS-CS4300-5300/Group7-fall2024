@@ -14,26 +14,24 @@ from .services.paypal_service import create_payment
 from django.http import JsonResponse
 import paypalrestsdk
 
+
 def index(request):
     """
     Render the index page.
-    
     Args:
         request (HttpRequest): The HTTP request object.
-        
     Returns:
         HttpResponse: Renders the index.html template.
     """
     return render(request, 'index.html')
 
+
 @login_required
 def build(request):
     """
     Render the build page where users can create and manage their builds.
-    
     Args:
         request (HttpRequest): The HTTP request object.
-        
     Returns:
         HttpResponse: Renders the build.html template with the user's build components.
     """
@@ -88,43 +86,40 @@ def part_browser(request):
 
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
 
+
 def pre_built(request):
     """
     Render the pre-built page where users can view pre-built PC configurations.
-    
     Args:
         request (HttpRequest): The HTTP request object.
-        
     Returns:
         HttpResponse: Renders the pre_built.html template.
     """
     return render(request, 'pre_built.html')
 
+
 def account_page(request):
     """
     Render the account page where users can manage their account information.
-    
     Args:
         request (HttpRequest): The HTTP request object.
-        
     Returns:
         HttpResponse: Renders the account_page.html template.
     """
     profile = request.user.profile
     saved_builds = Build.objects.filter(profile=profile, is_complete=True)
-
     context = {
         'saved_builds': saved_builds,
     }
+
     return render(request, 'account_page.html')
+
 
 def login_or_register(request):
     """
     Handle user login and registration. Present the login form to the user.
-    
     Args:
         request (HttpRequest): The HTTP request object.
-        
     Returns:
         HttpResponse: Renders the login.html template with the login form.
     """
@@ -142,9 +137,59 @@ def login_or_register(request):
                 messages.error(request, "Invalid login credentials.")
         else:
             messages.error(request, "Invalid login form submission.")
-    
+
     login_form = AuthenticationForm()
     return render(request, 'auth/login.html', {'login_form': login_form})
+
+
+def get_ram_results(query):
+    ram_results = RAM.objects.filter(
+        Q(name__icontains=query) |
+        Q(ram_type__type__icontains=query) |
+        Q(ram_speed__speed__icontains=query) |
+        Q(ram_capacity__capacity__icontains=query)
+    ).distinct()
+    for ram in ram_results:
+        ram.category = 'RAM'
+    return ram_results
+
+
+def get_cpu_results(query):
+    cpu_results = CPU.objects.filter(
+        Q(name__icontains=query) |
+        Q(manufacturer__name__icontains=query) |
+        Q(microarchitecture__name__icontains=query) |
+        Q(socket_type__name__icontains=query)
+    ).distinct()
+    for cpu in cpu_results:
+        cpu.category = 'CPU'
+    return cpu_results
+
+
+def get_motherboard_results(query):
+    motherboard_results = Motherboard.objects.filter(
+        Q(name__icontains=query) |
+        Q(manufacturer__name__icontains=query) |
+        Q(cpu_socket_type__name__icontains=query) |
+        Q(supported_ram_types__type__icontains=query) |
+        Q(supported_ram_speeds__speed__icontains=query)
+    ).distinct()
+    for motherboard in motherboard_results:
+        motherboard.category = 'Motherboard'
+    return motherboard_results
+
+
+def get_storage_results(query):
+    storage_results = Storage.objects.filter(
+        Q(name__icontains=query) |
+        Q(form_factor__name__icontains=query) |
+        Q(capacity__capacity__icontains=query) |
+        Q(type__type__icontains=query)
+    ).distinct()
+    for storage in storage_results:
+        storage.category = 'Storage'
+    return storage_results
+
 
 @login_required
 def search_pc_parts(request):
@@ -155,49 +200,16 @@ def search_pc_parts(request):
     if query:
         try:
             if category == 'All Categories' or category == 'RAM':
-                ram_results = RAM.objects.filter(
-                    Q(name__icontains=query) |
-                    Q(ram_type__type__icontains=query) |
-                    Q(ram_speed__speed__icontains=query) |
-                    Q(ram_capacity__capacity__icontains=query)
-                ).distinct()
-                for ram in ram_results:
-                    ram.category = 'RAM'
-                results.extend(ram_results)
+                results.extend(get_ram_results(query))
 
             if category == 'All Categories' or category == 'CPU':
-                cpu_results = CPU.objects.filter(
-                    Q(name__icontains=query) |
-                    Q(manufacturer__name__icontains=query) |
-                    Q(microarchitecture__name__icontains=query) |
-                    Q(socket_type__name__icontains=query)
-                ).distinct()
-                for cpu in cpu_results:
-                    cpu.category = 'CPU'
-                results.extend(cpu_results)
+                results.extend(get_cpu_results(query))
 
             if category == 'All Categories' or category == 'Motherboard':
-                motherboard_results = Motherboard.objects.filter(
-                    Q(name__icontains=query) |
-                    Q(manufacturer__name__icontains=query) |
-                    Q(cpu_socket_type__name__icontains=query) |
-                    Q(supported_ram_types__type__icontains=query) |
-                    Q(supported_ram_speeds__speed__icontains=query)
-                ).distinct()
-                for motherboard in motherboard_results:
-                    motherboard.category = 'Motherboard'
-                results.extend(motherboard_results)
+                results.extend(get_motherboard_results(query))
 
             if category == 'All Categories' or category == 'Storage':
-                storage_results = Storage.objects.filter(
-                    Q(name__icontains=query) |
-                    Q(form_factor__name__icontains=query) |
-                    Q(capacity__capacity__icontains=query) |
-                    Q(type__type__icontains=query)
-                ).distinct()
-                for storage in storage_results:
-                    storage.category = 'Storage'
-                results.extend(storage_results)
+                results.extend(get_storage_results(query))
         except Exception as e:
             messages.error(request, f"An error occurred during the search: {e}")
 
@@ -219,6 +231,7 @@ def register_view(request):
         register_form = UserCreationForm()
 
     return render(request, 'auth/register.html', {'register_form': register_form})
+
 
 @login_required
 def add_to_build(request, part_id, category):
@@ -248,6 +261,7 @@ def add_to_build(request, part_id, category):
     build.save()  # Save the changes
     return redirect('build')
 
+
 @login_required
 def remove_from_build(request, category):
     # Get the active build for the user
@@ -268,6 +282,7 @@ def remove_from_build(request, category):
 
     return redirect('build')  # Redirect back to the build page
 
+
 def view_profile(request):
     context = {
         'user' : request.username
@@ -275,9 +290,11 @@ def view_profile(request):
 
     return render(request, 'account_page.html', context)
 
+
 def logout_user(request):
     logout(request)
     return redirect('index')
+
 
 @login_required
 def save_build(request):
@@ -310,6 +327,7 @@ def save_build(request):
     Build.objects.create(profile=profile, is_active=True)  # Create a new active build
     messages.success(request, f"Build '{build_name}' saved successfully!")
     return redirect('account_page')
+
 
 @login_required
 def delete_build(request, build_id):
@@ -345,9 +363,11 @@ def edit_build(request, build_id):
 
     return render(request, 'edit_build.html', {'form': form})
 
+
 def view_build(request, build_id):
     build = get_object_or_404(Build, build_id=build_id)
     return render(request, 'view_build.html', {'build': build})
+
 
 @login_required
 def add_to_cart(request, item_id, category):
@@ -430,12 +450,12 @@ def add_build_to_cart(request):
     return render(request, 'add_build_to_cart.html')
 
 
-
 def get_active_build(profile):
     active_build = Build.objects.filter(profile=profile, is_active=True).first()
     if not active_build:
         return None, "No active build found."
     return active_build, None
+
 
 @login_required
 def view_cart(request):
@@ -449,7 +469,6 @@ def view_cart(request):
         'total_price': sum(item.price * item.quantity for item in cart_items)
     }
     return render(request, 'cart.html', context)
-
 
 
 @login_required
@@ -468,6 +487,7 @@ def remove_from_cart(request, item_id):
 
     messages.success(request, f"Removed {cart_item.name} from your cart.")
     return redirect('view_cart')
+
 
 @login_required
 def add_saved_build_to_cart(request, build_id):
@@ -498,6 +518,7 @@ def add_saved_build_to_cart(request, build_id):
     messages.success(request, f"'{saved_build.name}' has been added to your cart.")
     return redirect('account_page')
 
+
 @login_required
 def create_paypal_payment(request):
     # Example: Calculate the total price from the shopping cart
@@ -516,6 +537,7 @@ def create_paypal_payment(request):
     else:
         return render(request, "payment_error.html", {"error": payment.error})
 
+
 def execute_paypal_payment(request):
     payment_id = request.GET.get('paymentId')
     payer_id = request.GET.get('PayerID')
@@ -527,6 +549,7 @@ def execute_paypal_payment(request):
     else:
         # Payment failed
         return render(request, "payment_error.html", {"error": payment.error})
+
 
 def test_paypal(request):
     try:
@@ -540,6 +563,7 @@ def test_paypal(request):
         return JsonResponse({"status": "success", "response": response.to_dict()})
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)})
+
 
 def purchase_confirmed(request):
     profile = request.user.profile
