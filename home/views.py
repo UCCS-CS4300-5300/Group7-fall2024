@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
+from django.contrib.messages import get_messages
 from django.db import IntegrityError, transaction
 from .models import RAM, CPU, Motherboard, Storage, Build, Profile, ShoppingCart, CartItem
 from .forms import BuildForm
@@ -323,6 +324,22 @@ def save_build(request):
     current_build.is_complete = True
     current_build.save()
 
+    # Check compatibility after saving
+    try:
+        # compatibility service returns a tuple with contents:(bool, list[])
+        # the first value in result will be false if the build is not valid. The second value is a list of all the error message
+        result = CompatibilityService.check_build_compatibility(current_build) 
+        if result[0] == False:
+            print('\n'.join(result[1])) 
+            raise ValueError('\n\n'.join(result[1])) # create the error message
+        messages.success(request, "Build saved and is compatible!")
+
+    except ValueError as e:
+        #self.client.cookies.pop('messages')
+        messages.warning(request, f"Build: {current_build.name} was saved but compatibility issues were detected:\n\n {e}")
+        # redirect to an error page for that  build.
+        return redirect('build_error', build_id=current_build.build_id)
+
     # Clear the builder page components
     Build.objects.create(profile=profile, is_active=True)  # Create a new active build
     messages.success(request, f"Build '{build_name}' saved successfully!")
@@ -350,13 +367,22 @@ def edit_build(request, build_id):
             # Now set the many-to-many fields
             form.cleaned_data.get('ram') and build.ram.set(form.cleaned_data['ram'])
             form.cleaned_data.get('storages') and build.storages.set(form.cleaned_data['storages'])
-
             # Check compatibility after saving
             try:
-                CompatibilityService.check_build_compatibility(build)
+                # compatibility service returns a tuple with contents:(bool, list[])
+                # the first value in result will be false if the build is not valid. The second value is a list of all the error message
+                result = CompatibilityService.check_build_compatibility(build) 
+                if result[0] == False:
+                    print('\n'.join(result[1])) 
+                    raise ValueError('\n\n'.join(result[1])) # create the error message
                 messages.success(request, "Build saved and is compatible!")
+
             except ValueError as e:
-                messages.error(request, f"Build saved but compatibility issues detected: {e}")
+                #self.client.cookies.pop('messages')
+                messages.warning(request, f"Build: {build.name} was saved but compatibility issues were detected:\n\n {e}")
+                # redirect to an error page for that  build.
+                return redirect('build_error', build_id=build_id)
+
             return redirect('account_page')
     else:
         form = BuildForm(instance=build)
@@ -576,3 +602,15 @@ def purchase_confirmed(request):
 
     # Render the confirmation page
     return render(request, 'purchase_confirmed.html', {'message': "Your payment was successful, and your cart has been cleared!"})
+
+
+def build_error(request, build_id):
+    storage = get_messages(request)
+    print(storage)
+
+    context = {
+        'error_message': storage,
+        'build_id' : build_id,
+        'user' : ""
+    }
+    return render(request, 'build_error.html', context)

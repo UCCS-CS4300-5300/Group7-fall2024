@@ -48,6 +48,8 @@ urlpatterns = [
     path("payment/execute/", views.execute_paypal_payment, name="execute_paypal_payment"),
     path('test-paypal/', views.test_paypal, name='test_paypal'),
     path('purchase-confirmed/', views.purchase_confirmed, name='purchase_confirmed'),
+    path('build_error/<int:build_id>/', views.build_error, name='build_error'),
+
 
 
     # see views_api_call.py to see the views that are related to these urls.
