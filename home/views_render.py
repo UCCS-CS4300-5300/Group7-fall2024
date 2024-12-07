@@ -3,15 +3,16 @@ from django.conf import settings
 from django.shortcuts import render, HttpResponse
 from django.contrib.auth.decorators import login_required
 
+
 def fetch_api_data(url, template_name):
     """
     Fetch data from the API and render the specified template with the context.
-
     Args:
+
         url (str): The API endpoint URL.
         template_name (str): The name of the template to render.
-
     Returns:
+
         HttpResponse: The rendered template or an error message.
     """
     try:
@@ -25,6 +26,7 @@ def fetch_api_data(url, template_name):
         return HttpResponse(f"Request error occurred: {req_err}", status=500)
     except Exception as err:
         return HttpResponse(f"An unexpected error occurred: {err}", status=500)
+
 
 def render_with_api_data(api_endpoint, template_name):
     """
@@ -45,6 +47,7 @@ def render_with_api_data(api_endpoint, template_name):
         except Exception as e:
             return HttpResponse(f"An error occurred while fetching data: {e}", status=500)
     return view_function
+
 
 # Views to fetch data from the API and render templates using the generic function
 call_motherboards_view = render_with_api_data("api/get_mobos/", 'motherboard_list.html')

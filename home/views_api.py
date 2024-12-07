@@ -1,159 +1,380 @@
+from django.core.cache import cache
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from .models import Build, Motherboard, CPU, RAM, Storage
-from home.models import Storage, StorageType, Manufacturer, FormFactor, StorageCapacity
+from home.models import Build, Motherboard, CPU, RAM, Storage, StorageType, Manufacturer, FormFactor, StorageCapacity
 from .serializers import BuildSerializer, MotherboardSerializer, CPUSerializer, RAMSerializer, StorageSerializer
 from .compatibility_service import CompatibilityService
-from django.shortcuts import get_object_or_404 
+from django.shortcuts import get_object_or_404
+import logging
 
-# BuildViewSet: Manages CRUD operations for Builds.
+
+# Set up logging configuration
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)  # You can adjust the level based on your needs
+
+# Create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# Create formatter
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Add formatter to console handler
+ch.setFormatter(formatter)
+
+# Add console handler to logger
+logger.addHandler(ch)
+
+
+def filter_by_field(queryset, field_name, value, lookup='iexact'):
+    """
+    Helper function to filter a queryset by a specific field.
+
+    Args:
+        queryset: The queryset to filter.
+        field_name: The name of the field to filter by.
+        value: The value to filter the field by.
+        lookup: The lookup type (default: 'iexact').
+
+    Returns:
+        The filtered queryset.
+    """
+    if value:
+        filter_kwargs = {f"{field_name}__{lookup}": value}
+        return queryset.filter(**filter_kwargs)
+    return queryset
+
+
+# Define a custom pagination class
+class CustomPagination(PageNumberPagination):
+    """
+    CustomPagination: Defines the default page size and query parameters for pagination.
+    """
+    page_size = 10  # Default page size
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+# ViewSet for managing Builds
 class BuildViewSet(viewsets.ModelViewSet):
-    queryset = Build.objects.all()  # QuerySet that returns all Build instances
-    serializer_class = BuildSerializer  # Serializer to convert Build instances to JSON
+    """
+    BuildViewSet: Manages CRUD operations for Builds.
+    """
+    queryset = Build.objects.all()
+    serializer_class = BuildSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])
     def search(self, request):
-        # Get search parameters from the request
+        """
+        Search for builds by user ID or username.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            Response: A JSON response containing the filtered builds.
+        """
         user_id = request.GET.get('user_id', None)
         user_username = request.GET.get('user_username', None)
 
-        builds = Build.objects.all()  # Get all Build instances
+        # Validate user_id
+        if user_id is not None and not user_id.isdigit():
+            raise ValidationError({"user_id": "user_id must be a valid integer."})
 
-        # Filter builds by user's ID if provided
-        if user_id:
-            builds = builds.filter(profile__user__id=user_id)
-        # Filter builds by user's username if provided (case-insensitive)
-        if user_username:
-            builds = builds.filter(profile__user__username__iexact=user_username)
+        # Validate user_username
+        if user_username is not None and not isinstance(user_username, str):
+            raise ValidationError({"user_username": "user_username must be a valid string."})
 
-        serializer = BuildSerializer(builds, many=True)  # Serialize the filtered builds
-        return Response(serializer.data)  # Return the serialized data as a response
+        cache_key = f"builds_search_{user_id}_{user_username}"
+        cached_results = cache.get(cache_key)
 
-# MotherboardViewSet: Manages CRUD operations for Motherboards.
+        if cached_results:
+            logger.info(f"Cache hit for key: {cache_key}")
+            return Response(cached_results)
+
+        builds = Build.objects.all()
+
+        try:
+            builds = filter_by_field(builds, 'profile__user__id', user_id, lookup='exact')
+            builds = filter_by_field(builds, 'profile__user__username', user_username, lookup='iexact')
+        except Exception as e:
+            logger.error(f"Error during search: {e}")
+            return Response({'error': 'An error occurred during the search.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        paginator = CustomPagination()
+        paginated_results = paginator.paginate_queryset(builds, request)
+        serializer = BuildSerializer(paginated_results, many=True)
+        cache.set(cache_key, serializer.data, timeout=300)  # Cache for 5 minutes
+        logger.info(f"Search results returned for user_id: {user_id}, user_username: {user_username}")
+        return paginator.get_paginated_response(serializer.data)
+
+
+# ViewSet for managing Motherboards
 class MotherboardViewSet(viewsets.ModelViewSet):
-    queryset = Motherboard.objects.all()  # QuerySet that returns all Motherboard instances
-    serializer_class = MotherboardSerializer  # Serializer to convert Motherboard instances to JSON
+    """
+    MotherboardViewSet: Manages CRUD operations for Motherboards.
+    """
+    queryset = Motherboard.objects.all()
+    serializer_class = MotherboardSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])
     def search(self, request):
-        # Get search parameters from the request
+        """
+        Search for motherboards by manufacturer or socket type.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            Response: A JSON response containing the filtered motherboards.
+        """
         manufacturer = request.GET.get('manufacturer', None)
         socket_type = request.GET.get('socket_type', None)
 
-        motherboards = Motherboard.objects.all()  # Get all Motherboard instances
+        # Validate manufacturer
+        if manufacturer is not None and not isinstance(manufacturer, str):
+            raise ValidationError({"manufacturer": "manufacturer must be a valid string."})
 
-        # Filter motherboards by manufacturer if provided
-        if manufacturer:
-            motherboards = motherboards.filter(manufacturer__name__iexact=manufacturer)
-        # Filter motherboards by socket type if provided
-        if socket_type:
-            motherboards = motherboards.filter(cpu_socket_type__name__iexact=socket_type)
+        # Validate socket_type
+        if socket_type is not None and not isinstance(socket_type, str):
+            raise ValidationError({"socket_type": "socket_type must be a valid string."})
 
-        serializer = MotherboardSerializer(motherboards, many=True)  # Serialize the filtered motherboards
-        return Response(serializer.data)  # Return the serialized data as a response
+        cache_key = f"motherboards_search_{manufacturer}_{socket_type}"
+        cached_results = cache.get(cache_key)
 
-# CPUViewSet: Manages CRUD operations for CPUs.
+        if cached_results:
+            logger.info(f"Cache hit for key: {cache_key}")
+            return Response(cached_results)
+
+        motherboards = Motherboard.objects.all()
+
+        try:
+            motherboards = filter_by_field(motherboards, 'manufacturer__name', manufacturer, lookup='iexact')
+            motherboards = filter_by_field(motherboards, 'cpu_socket_type__name', socket_type, lookup='iexact')
+        except Exception as e:
+            logger.error(f"Error during search: {e}")
+            return Response({'error': 'An error occurred during the search.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        paginator = CustomPagination()
+        paginated_results = paginator.paginate_queryset(motherboards, request)
+        serializer = MotherboardSerializer(paginated_results, many=True)
+        cache.set(cache_key, serializer.data, timeout=300)  # Cache for 5 minutes
+        logger.info(f"Search results returned for manufacturer: {manufacturer}, socket_type: {socket_type}")
+        return paginator.get_paginated_response(serializer.data)
+
+
+# ViewSet for managing CPUs
 class CPUViewSet(viewsets.ModelViewSet):
-    queryset = CPU.objects.all()  # QuerySet that returns all CPU instances
-    serializer_class = CPUSerializer  # Serializer to convert CPU instances to JSON
+    """
+    CPUViewSet: Manages CRUD operations for CPUs.
+    """
+    queryset = CPU.objects.all()
+    serializer_class = CPUSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])
     def search(self, request):
-        # Get search parameters from the request
+        """
+        Search for CPUs by socket type, manufacturer, or microarchitecture.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            Response: A JSON response containing the filtered CPUs.
+        """
         socket_type = request.GET.get('socket_type', None)
         manufacturer = request.GET.get('manufacturer', None)
         microarchitecture = request.GET.get('microarchitecture', None)
 
-        cpus = CPU.objects.all()  # Get all CPU instances
+        # Validate socket_type
+        if socket_type is not None and not isinstance(socket_type, str):
+            raise ValidationError({"socket_type": "socket_type must be a valid string."})
 
-        # Filter CPUs by socket type if provided (case-insensitive)
-        if socket_type:
-            cpus = cpus.filter(socket_type__name__iexact=socket_type)
-        # Filter CPUs by manufacturer if provided (case-insensitive)
-        if manufacturer:
-            cpus = cpus.filter(manufacturer__name__iexact=manufacturer)
-        # Filter CPUs by microarchitecture if provided (case-insensitive)
-        if microarchitecture:
-            cpus = cpus.filter(microarchitecture__iexact=microarchitecture)
+        # Validate manufacturer
+        if manufacturer is not None and not isinstance(manufacturer, str):
+            raise ValidationError({"manufacturer": "manufacturer must be a valid string."})
 
-        serializer = CPUSerializer(cpus, many=True)  # Serialize the filtered CPUs
-        return Response(serializer.data)  # Return the serialized data as a response
+        # Validate microarchitecture
+        if microarchitecture is not None and not isinstance(microarchitecture, str):
+            raise ValidationError({"microarchitecture": "microarchitecture must be a valid string."})
 
-# RAMViewSet: Manages CRUD operations for RAM.
+        cache_key = f"cpus_search_{socket_type}_{manufacturer}_{microarchitecture}"
+        cached_results = cache.get(cache_key)
+
+        if cached_results:
+            logger.info(f"Cache hit for key: {cache_key}")
+            return Response(cached_results)
+
+        cpus = CPU.objects.all()
+
+        try:
+            cpus = filter_by_field(cpus, 'socket_type__name', socket_type, lookup='iexact')
+            cpus = filter_by_field(cpus, 'manufacturer__name', manufacturer, lookup='iexact')
+            cpus = filter_by_field(cpus, 'microarchitecture', microarchitecture, lookup='iexact')
+        except Exception as e:
+            logger.error(f"Error during search: {e}")
+            return Response({'error': 'An error occurred during the search.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        paginator = CustomPagination()
+        paginated_results = paginator.paginate_queryset(cpus, request)
+        serializer = CPUSerializer(paginated_results, many=True)
+        cache.set(cache_key, serializer.data, timeout=300)  # Cache for 5 minutes
+        logger.info(f"Search results returned for socket_type: {socket_type}, manufacturer: {manufacturer}, microarchitecture: {microarchitecture}")
+        return paginator.get_paginated_response(serializer.data)
+
+
 class RAMViewSet(viewsets.ModelViewSet):
-    queryset = RAM.objects.all()  # QuerySet that returns all RAM instances
-    serializer_class = RAMSerializer  # Serializer to convert RAM instances to JSON
+    queryset = RAM.objects.all()
+    serializer_class = RAMSerializer
 
     @action(detail=False, methods=['get'])
     def search(self, request):
-        # Get search parameters from the request
-        memory_type = request.GET.get('memory_type', None)
-        speed = request.GET.get('speed', None)
+        ram_type = request.GET.get('type', None)
         capacity = request.GET.get('capacity', None)
+        speed = request.GET.get('speed', None)
         number_of_modules = request.GET.get('number_of_modules', None)
         manufacturer = request.GET.get('manufacturer', None)
 
-        rams = RAM.objects.all()  # Get all RAM instances
+        cache_key = f"rams_search_{ram_type}_{capacity}_{speed}_{number_of_modules}_{manufacturer}".replace(' ', '_')
+        cached_results = cache.get(cache_key)
 
-        # Filter RAMs by memory type if provided (case-insensitive)
-        if memory_type:
-            rams = rams.filter(type__iexact=memory_type)
-        # Filter RAMs by speed if provided (case-insensitive)
-        if speed:
-            rams = rams.filter(speed__iexact=speed)
-        # Filter RAMs by capacity if provided (exact match)
+        if cached_results:
+            return Response(cached_results)
+
+        rams = RAM.objects.all()
+
+        if ram_type:
+            rams = rams.filter(ram_type__type=ram_type)
         if capacity:
-            rams = rams.filter(capacity=capacity)
-        # Filter RAMs by number of modules if provided (exact match)
+            rams = rams.filter(ram_capacity__capacity=capacity)
+        if speed:
+            rams = rams.filter(ram_speed__speed=speed)
         if number_of_modules:
-            rams = rams.filter(number_of_modules=number_of_modules)
-        # Filter RAMs by manufacturer if provided (case-insensitive)
+            rams = rams.filter(ram_number_of_modules__number_of_modules=number_of_modules)
         if manufacturer:
-            rams = rams.filter(manufacturer__name__iexact=manufacturer)
+            rams = rams.filter(manufacturer__name=manufacturer)
 
-        serializer = RAMSerializer(rams, many=True)  # Serialize the filtered RAMs
-        return Response(serializer.data)  # Return the serialized data as a response
+        paginator = PageNumberPagination()
+        paginated_results = paginator.paginate_queryset(rams, request, view=self)
+        if paginated_results is not None:
+            serializer = RAMSerializer(paginated_results, many=True)
+            cache.set(cache_key, serializer.data, timeout=300)
+            return paginator.get_paginated_response(serializer.data)
 
-# StorageViewSet: Manages CRUD operations for Storage.
+        serializer = RAMSerializer(rams, many=True)
+        return Response(serializer.data)
+
+
 class StorageViewSet(viewsets.ModelViewSet):
-    queryset = Storage.objects.all()  # QuerySet that returns all Storage instances
-    serializer_class = StorageSerializer  # Serializer to convert Storage instances to JSON
+    """
+    StorageViewSet: Manages CRUD operations for Storage.
+    """
+    queryset = Storage.objects.all()
+    serializer_class = StorageSerializer
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])
     def search(self, request):
-        # Get search parameters from the request
+        """
+        Search for storage by manufacturer, form factor, capacity, or storage type.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            Response: A JSON response containing the filtered storage.
+        """
         manufacturer = request.GET.get('manufacturer', None)
         form_factor = request.GET.get('form_factor', None)
         capacity = request.GET.get('capacity', None)
         storage_type = request.GET.get('type', None)  # Renamed variable to avoid shadowing built-in type
 
-        storages = Storage.objects.all()  # Get all Storage instances
+        # Validate manufacturer
+        if manufacturer is not None and not isinstance(manufacturer, str):
+            raise ValidationError({"manufacturer": "manufacturer must be a valid string."})
 
-        # Filter storage by manufacturer if provided
-        if manufacturer:
-            storages = storages.filter(manufacturer__name__exact=manufacturer)
-        # Filter storage by form factor if provided
-        if form_factor:
-            storages = storages.filter(form_factor__name__exact=form_factor)
-        # Filter storage by capacity if provided
-        if capacity:
-            storage_capacity = get_object_or_404(StorageCapacity, capacity=capacity)  # Ensure capacity exists
-            storages = storages.filter(capacity=storage_capacity)
-        # Filter storage by type if provided
-        if storage_type:
-            storage_type_obj = get_object_or_404(StorageType, type__exact=storage_type)  # Ensure type exists
-            storages = storages.filter(type=storage_type_obj)
+        # Validate form_factor
+        if form_factor is not None and not isinstance(form_factor, str):
+            raise ValidationError({"form_factor": "form_factor must be a valid string."})
 
-        serializer = StorageSerializer(storages, many=True)  # Serialize the filtered storages
-        return Response(serializer.data)  # Return the serialized data as a response
+        # Validate capacity
+        if capacity is not None and not capacity.isdigit():
+            raise ValidationError({"capacity": "capacity must be a valid integer."})
 
-# UserBuildViewSet: Manages listing builds for a specific user.
+        # Validate storage_type
+        if storage_type is not None and not isinstance(storage_type, str):
+            raise ValidationError({"storage_type": "storage_type must be a valid string."})
+
+        cache_key = f"storages_search_{manufacturer}_{form_factor}_{capacity}_{storage_type}".replace(' ', '_')
+        cached_results = cache.get(cache_key)
+
+        if cached_results:
+            logger.info(f"Cache hit for key: {cache_key}")
+            return Response(cached_results)
+
+        storages = Storage.objects.all().order_by('storage_id')  # Ensure ordered query set
+
+        try:
+            storages = filter_by_field(storages, 'manufacturer__name', manufacturer, lookup='exact')
+            storages = filter_by_field(storages, 'form_factor__name', form_factor, lookup='exact')
+            if capacity:
+                storage_capacity = get_object_or_404(StorageCapacity, capacity=capacity)  # Ensure capacity exists
+                storages = storages.filter(capacity=storage_capacity)
+            storages = filter_by_field(storages, 'type__type', storage_type, lookup='exact')
+        except Exception as e:
+            logger.error(f"Error during search: {e}")
+            return Response({'error': 'An error occurred during the search.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        paginator = CustomPagination()
+        paginated_results = paginator.paginate_queryset(storages, request)
+        serializer = StorageSerializer(paginated_results, many=True)
+        cache.set(cache_key, serializer.data, timeout=300)  # Cache for 5 minutes
+        logger.info(f"Search results returned for manufacturer: {manufacturer}, form_factor: {form_factor}, capacity: {capacity}, storage_type: {storage_type}")
+        return paginator.get_paginated_response(serializer.data)
+
+
+# ViewSet for managing a user's Builds
 class UserBuildViewSet(viewsets.ViewSet):
-    def list(self, request, user_id=None):
+    """
+    UserBuildViewSet: Manages listing builds for a specific user.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        """
+        List builds for the authenticated user.
+
+        Args:
+            request: The HTTP request object.
+
+        Returns:
+            Response: A JSON response containing the user's builds or an error message.
+        """
+        user_id = kwargs.get('user_id')
+        cache_key = f"user_builds_{user_id}"
+        cached_results = cache.get(cache_key)
+
+        if cached_results:
+            logger.info(f"Cache hit for key: {cache_key}")
+            return Response(cached_results)
+
         try:
             queryset = Build.objects.filter(profile__user__id=user_id)  # Filter builds by user's ID through profile
-            serializer = BuildSerializer(queryset, many=True)  # Serialize the filtered builds
-            return Response(serializer.data)  # Return the serialized data as a response
+
+            paginator = CustomPagination()
+            paginated_results = paginator.paginate_queryset(queryset, request)
+
+            serializer = BuildSerializer(paginated_results, many=True)  # Serialize the filtered builds
+            cache.set(cache_key, serializer.data, timeout=300)  # Cache for 5 minutes
+            logger.info(f"Listing builds for user_id: {user_id}")
+            return paginator.get_paginated_response(serializer.data)  # Return the paginated response
         except Exception as e:
+            logger.error(f"Error listing builds for user_id {user_id}: {e}")
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  # Return error response if exception occurs

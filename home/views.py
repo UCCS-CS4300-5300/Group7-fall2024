@@ -337,19 +337,35 @@ def delete_build(request, build_id):
     return redirect('account_page')
 
 
+@login_required
 def edit_build(request, build_id):
+    """
+    Edit an existing build associated with the logged-in user.
+
+    Args:
+        request: The HTTP request object.
+        build_id: The ID of the build to edit.
+
+    Returns:
+        Rendered HTML template or a redirect.
+    """
     build = get_object_or_404(Build, build_id=build_id, profile__user=request.user)
 
     if request.method == "POST":
         form = BuildForm(request.POST, instance=build)
         if form.is_valid():
-            # Save the form first to ensure build_id is generated
+            # Save the form to generate the build_id
             build = form.save(commit=False)
-            build.save()  # Save to get a primary key
+            build.save()  # Save to generate a primary key
 
-            # Now set the many-to-many fields
-            form.cleaned_data.get('ram') and build.ram.set(form.cleaned_data['ram'])
-            form.cleaned_data.get('storages') and build.storages.set(form.cleaned_data['storages'])
+            # Set the many-to-many fields
+            ram_list = form.cleaned_data.get('ram')
+            if ram_list:
+                build.ram.set(ram_list)
+
+            storage_list = form.cleaned_data.get('storages')
+            if storage_list:
+                build.storages.set(storage_list)
 
             # Check compatibility after saving
             try:
@@ -357,6 +373,7 @@ def edit_build(request, build_id):
                 messages.success(request, "Build saved and is compatible!")
             except ValueError as e:
                 messages.error(request, f"Build saved but compatibility issues detected: {e}")
+
             return redirect('account_page')
     else:
         form = BuildForm(instance=build)
