@@ -365,8 +365,14 @@ def edit_build(request, build_id):
             build.save()  # Save to get a primary key
 
             # Now set the many-to-many fields
-            form.cleaned_data.get('ram') and build.ram.set(form.cleaned_data['ram'])
-            form.cleaned_data.get('storages') and build.storages.set(form.cleaned_data['storages'])
+            # Set the many-to-many fields
+            ram_list = form.cleaned_data.get('ram')
+            if ram_list:
+                build.ram.set(ram_list)
+
+            storage_list = form.cleaned_data.get('storages')
+            if storage_list:
+                build.storages.set(storage_list)
             # Check compatibility after saving
             try:
                 # compatibility service returns a tuple with contents:(bool, list[])
@@ -606,7 +612,6 @@ def purchase_confirmed(request):
 
 def build_error(request, build_id):
     storage = get_messages(request)
-    print(storage)
 
     context = {
         'error_message': storage,
