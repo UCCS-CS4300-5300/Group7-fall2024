@@ -7,6 +7,34 @@ from home.models import (
 )
 from home.serializers import BuildSerializer, MotherboardSerializer, CPUSerializer, RAMSerializer, StorageSerializer
 
+class BuildViewSetTestCase(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        cache.clear()
+        User.objects.all().delete()
+        Build.objects.all().delete()
+        self.user = User.objects.create_user(username='testuser_build', password='testpassword')
+        self.profile, created = Profile.objects.get_or_create(user=self.user)
+        self.build = Build.objects.create(name="Test Build", profile=self.profile)
+        self.client.login(username='testuser_build', password='testpassword')
+
+    def test_search_build_by_user_id(self):
+        url = reverse('build-search')
+        response = self.client.get(url, {'user_id': self.user.id})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()['results']), 1)
+
+    def test_search_build_by_user_username(self):
+        url = reverse('build-search')
+        response = self.client.get(url, {'user_username': 'testuser_build'})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['results'][0]['name'], 'Test Build')
+
+    def test_search_build_invalid_user_id(self):
+        url = reverse('build-search')
+        response = self.client.get(url, {'user_id': 'invalid'})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.json()['user_id'], "user_id must be a valid integer.")
 
 class RAMViewSetTestCase(APITestCase):
     def setUp(self):
@@ -179,3 +207,5 @@ class UserBuildViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()['results']), 1)
         self.assertEqual(response.json()['results'][0]['name'], 'Test Build')
+
+    

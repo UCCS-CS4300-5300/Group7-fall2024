@@ -98,7 +98,7 @@ def pre_built(request):
     """
     return render(request, 'pre_built.html')
 
-
+@login_required
 def account_page(request):
     """
     Render the account page where users can manage their account information.
