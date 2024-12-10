@@ -3,62 +3,136 @@ import os
 import sys
 import django
 
+print("Starting create_builds.py script...")
+
 # Add the project root to the PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# Ensure the correct DJANGO_SETTINGS_MODULE path
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
 
+print("Django setup completed.")
+
 from django.contrib.auth.models import User
-from home.models import Profile, Build, BuildRAM, BuildStorageConfiguration, RAM, CPU, Storage, Motherboard
+from home.models import Profile, Build, Motherboard, CPU, RAM, Storage
 
-# Create Builds
-user = User.objects.get(username='testuser')
-profile = Profile.objects.get(user=user)
-motherboard_asus_rog = Motherboard.objects.get(name='ASUS ROG Strix')
-cpu_i7_8700k = CPU.objects.get(name='Intel Core i7-8700K')
+print("Models imported successfully.")
 
-build, created = Build.objects.get_or_create(
-    name='High Performance Build',
-    profile=profile,
-    motherboard=motherboard_asus_rog,
-    cpu=cpu_i7_8700k,
-    is_complete=True,
-    is_active=True
-)
+# Debugging: Print all storages available
+print("List of available storage devices:")
+all_storages = Storage.objects.all()
+for storage in all_storages:
+    print(f" - {storage.name}")
 
-# Associate RAM with Build
-ram_kingston_16gb = RAM.objects.get(name='Kingston HyperX Fury 16GB')
-ram_kingston_8gb = RAM.objects.get(name='Kingston HyperX Fury 8GB')
+# Users
+users = ['testuser', 'dbuck3']
 
-build_ram_16gb, created = BuildRAM.objects.get_or_create(
-    build=build,
-    ram=ram_kingston_16gb
-)
+for username in users:
+    try:
+        user = User.objects.get(username=username)
+        profile = Profile.objects.get(user=user)
 
-build_ram_8gb, created = BuildRAM.objects.get_or_create(
-    build=build,
-    ram=ram_kingston_8gb
-)
+        # Create Compatible Builds
+        builds = [
+            {
+                'name': f'{username} High-End Build',
+                'profile': profile,
+                'motherboard': Motherboard.objects.get(name='ASUS ROG Zenith II Extreme Alpha'),
+                'cpu': CPU.objects.get(name='AMD Ryzen 9 5950X'),
+                'ram': [RAM.objects.get(name='G.Skill Ripjaws V 32GB')],
+                'storages': [
+                    Storage.objects.get(name='Samsung 970 EVO'), 
+                    Storage.objects.get(name='Seagate IronWolf')
+                ]
+            },
+            {
+                'name': f'{username} Mid-Range Build',
+                'profile': profile,
+                'motherboard': Motherboard.objects.get(name='Gigabyte Z690 AORUS MASTER'),
+                'cpu': CPU.objects.get(name='Intel Core i7 12700K'),
+                'ram': [RAM.objects.get(name='Crucial Ballistix 16GB')],
+                'storages': [
+                    Storage.objects.get(name='Western Digital Blue'), 
+                    Storage.objects.get(name='Crucial MX500')
+                ]
+            },
+            {
+                'name': f'{username} Budget Build',
+                'profile': profile,
+                'motherboard': Motherboard.objects.get(name='ASUS Prime B450M-A'),
+                'cpu': CPU.objects.get(name='AMD Ryzen 5'),
+                'ram': [RAM.objects.get(name='Kingston HyperX Fury 8GB')],
+                'storages': [Storage.objects.get(name='Samsung 860 EVO')]
+            }
+        ]
 
-# Associate Storage with Build
-storage_samsung_970 = Storage.objects.get(name='Samsung 970 EVO')
-storage_wd_blue = Storage.objects.get(name='Western Digital Blue')
+        # Create Incompatible Builds
+        incompatible_builds = [
+            {
+                'name': f'{username} Incompatible Build 1',
+                'profile': profile,
+                'motherboard': Motherboard.objects.get(name='ASUS ROG Strix'),
+                'cpu': CPU.objects.get(name='AMD Ryzen 9 5950X'),  # Incompatible CPU for this motherboard
+                'ram': [RAM.objects.get(name='G.Skill Ripjaws V 32GB')],
+                'storages': [Storage.objects.get(name='Crucial MX500')]
+            },
+            {
+                'name': f'{username} Incompatible Build 2',
+                'profile': profile,
+                'motherboard': Motherboard.objects.get(name='Gigabyte Z690 AORUS MASTER'),
+                'cpu': CPU.objects.get(name='Intel Core i5 12600K'),
+                'ram': [RAM.objects.get(name='Kingston HyperX Fury 8GB')],  # Incompatible RAM for this motherboard
+                'storages': [Storage.objects.get(name='Samsung 860 EVO')]
+            }
+        ]
 
-build_storage_970, created = BuildStorageConfiguration.objects.get_or_create(
-    build=build,
-    storage=storage_samsung_970,
-    role='Primary'
-)
+        # Create All-Wrong-Parts Build
+        all_wrong_builds = [
+            {
+                'name': f'{username} All Wrong Parts Build',
+                'profile': profile,
+                'motherboard': Motherboard.objects.get(name='ASRock X570 Taichi'),
+                'cpu': CPU.objects.get(name='Intel Core i3'),  # Incompatible CPU for this motherboard
+                'ram': [
+                    RAM.objects.get(name='Kingston HyperX Fury 8GB')  # Incompatible RAM type and speed for this motherboard
+                ],
+                'storages': [Storage.objects.get(name='Intel Optane 905P')]  # Incompatible storage type for this build
+            }
+        ]
 
-build_storage_wd, created = BuildStorageConfiguration.objects.get_or_create(
-    build=build,
-    storage=storage_wd_blue,
-    role='Secondary'
-)
+        print(f"\nCreating builds for {username}...\n")
 
-# Print Results
-print('Build:', build)
-print('Build RAM Associations:', build_ram_16gb, build_ram_8gb)
-print('Build Storage Associations:', build_storage_970, build_storage_wd)
+        for build_data in builds + incompatible_builds + all_wrong_builds:
+            try:
+                motherboard = build_data['motherboard']
+                cpu = build_data['cpu']
+                ram = build_data['ram']
+                storages = build_data['storages']
+                
+                print(f"Motherboard found: {motherboard}")
+                print(f"CPU found: {cpu}")
+                print(f"RAM found: {ram}")
+                print(f"Storages found: {storages}")
+
+                build, created = Build.objects.get_or_create(
+                    name=build_data['name'],
+                    profile=build_data['profile'],
+                    motherboard=motherboard,
+                    cpu=cpu,
+                    is_complete=True,
+                    is_active=False
+                )
+                if created:
+                    build.ram.set(ram)
+                    build.storages.set(storages)
+                    build.save()
+                    print(f"Build {build_data['name']} created for {username}.")
+                else:
+                    print(f"Build {build_data['name']} already exists for {username}.")
+            
+            except Exception as e:
+                print(f"Error creating build {build_data['name']} for {username}: {e}")
+
+    except Exception as e:
+        print(f"Error creating builds for {username}: {e}")
+
+print("Completed create_builds.py script.")

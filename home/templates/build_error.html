@@ -1,45 +1,43 @@
 {% extends "base_template.html" %}
 {% block content %}
 
-
 <style>
     .message-box {
         text-align: center;
         padding: 20px;
-        background:rgba(9, 58, 59, 0);
+        background: rgba(9, 58, 59, 0);
     }
     body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            border: 1px solid rgba(81, 234, 239, 0.767);
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .messages {
-            list-style: none;
-}
-
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+    .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        border: 1px solid rgba(81, 234, 239, 0.767);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .messages {
+        list-style: none;
+    }
 </style>
 
 <body>
     <div class="container">
         <div class="message-box">
-            <h1 style="color: rgb(216, 216, 0);"> ! Warning ! </h1>
+            <h1 style="color: rgb(216, 216, 0);">! Warning !</h1>
             
             <h4>
                 {% if messages %}
                 <ul class="messages">
                     {% for message in messages %}
-                    <li  {% if message.tags %} class=" {{ message.WARNING }} " {% endif %}> {{ message|linebreaksbr }} </li>
+                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message|linebreaksbr }}</li>
                     {% endfor %}
                 </ul>
                 {% endif %}
@@ -48,13 +46,9 @@
 
             <a href="{% url 'edit_build' build_id %}" class="btn btn-primary">Edit Build</a>
             <a href="{% url 'account_page' %}" class="btn btn-primary">Account Page</a>
-
-
         </div>
     </div>
-
 </body>
 </html>
-
 
 {% endblock %}

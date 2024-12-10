@@ -73,27 +73,31 @@ def build(request):
 
 
 def part_browser(request):
-    # Handle logic here if needed, e.g., fetching all parts or filtering by category
     category = request.GET.get('category', 'All Categories')
     query = request.GET.get('q', '')
     results = []
 
-    # You could add your filtering/search logic here based on the category and query if needed.
-    # Example:
     if category == 'CPU':
         results = CPU.objects.filter(name__icontains=query)
     elif category == 'RAM':
         results = RAM.objects.filter(name__icontains=query)
     elif category == 'Motherboard':
-        results = Motherboard.objects.filter(name__icontains=query)
+        results = Motherboard.objects.filter(name__icontains=query).prefetch_related('supported_ram_types', 'supported_ram_speeds')
+        # Print results for debugging
+        for motherboard in results:
+            print(f"Motherboard: {motherboard.name}")
+            print(f"Supported RAM Types: {', '.join([ram_type.type for ram_type in motherboard.supported_ram_types.all()])}")
+            print(f"Supported RAM Speeds: {', '.join([str(ram_speed.speed) for ram_speed in motherboard.supported_ram_speeds.all()])}")
     elif category == 'Storage':
         results = Storage.objects.filter(name__icontains=query)
     else:
-        # Fetch all components
         results = list(CPU.objects.filter(name__icontains=query)) + \
                   list(RAM.objects.filter(name__icontains=query)) + \
-                  list(Motherboard.objects.filter(name__icontains=query)) + \
+                  list(Motherboard.objects.filter(name__icontains=query).prefetch_related('supported_ram_types', 'supported_ram_speeds')) + \
                   list(Storage.objects.filter(name__icontains=query))
+
+    # Log the results
+    print(f"Results found for category '{category}' with query '{query}': {results}")
 
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
 
@@ -334,21 +338,19 @@ def save_build(request):
     current_build.is_complete = True
     current_build.save()
 
-    # Check compatibility after saving
-    try:
-        # compatibility service returns a tuple with contents:(bool, list[])
-        # the first value in result will be false if the build is not valid. The second value is a list of all the error message
-        result = CompatibilityService.check_build_compatibility(current_build) 
-        if result[0] == False:
-            print('\n'.join(result[1])) 
-            raise ValueError('\n\n'.join(result[1])) # create the error message
-        messages.success(request, "Build saved and is compatible!")
+    # Clear existing messages before checking compatibility
+    storage = messages.get_messages(request)
+    for _ in storage:
+        pass  # Clear any existing messages
 
-    except ValueError as e:
-        #self.client.cookies.pop('messages')
-        messages.warning(request, f"Build: {current_build.name} was saved but compatibility issues were detected:\n\n {e}")
-        # redirect to an error page for that  build.
+    # Check compatibility after saving
+    compatible, issues = CompatibilityService.check_build_compatibility(current_build)
+    if not compatible:
+        issue_messages = [issue for issue in issues]
+        request.session['build_messages'] = issue_messages  # Store plain strings in session
         return redirect('build_error', build_id=current_build.build_id)
+
+    messages.success(request, "Build saved and is compatible!")
 
     # Clear the builder page components
     Build.objects.create(profile=profile, is_active=True)  # Create a new active build
@@ -366,22 +368,11 @@ def delete_build(request, build_id):
 
 @login_required
 def edit_build(request, build_id):
-    """
-    Edit an existing build associated with the logged-in user.
-
-    Args:
-        request: The HTTP request object.
-        build_id: The ID of the build to edit.
-
-    Returns:
-        Rendered HTML template or a redirect.
-    """
     build = get_object_or_404(Build, build_id=build_id, profile__user=request.user)
 
     if request.method == "POST":
         form = BuildForm(request.POST, instance=build)
         if form.is_valid():
-            # Save the form to generate the build_id
             build = form.save(commit=False)
             build.save()  # Save to generate a primary key
 
@@ -393,23 +384,20 @@ def edit_build(request, build_id):
             storage_list = form.cleaned_data.get('storages')
             if storage_list:
                 build.storages.set(storage_list)
+
+            # Clear existing messages before checking compatibility
+            storage = messages.get_messages(request)
+            for _ in storage:
+                pass  # Clear any existing messages
+
             # Check compatibility after saving
-            try:
-                # compatibility service returns a tuple with contents:(bool, list[])
-                # the first value in result will be false if the build is not valid. The second value is a list of all the error message
-                result = CompatibilityService.check_build_compatibility(build) 
-                if result[0] == False:
-                    print('\n'.join(result[1])) 
-                    raise ValueError('\n\n'.join(result[1])) # create the error message
-                messages.success(request, "Build saved and is compatible!")
-
-            except ValueError as e:
-
-                #self.client.cookies.pop('messages')
-                messages.warning(request, f"Build: {build.name} was saved but compatibility issues were detected:\n\n {e}")
-                # redirect to an error page for that  build.
+            compatible, issues = CompatibilityService.check_build_compatibility(build)
+            if not compatible:
+                issue_messages = [issue for issue in issues]
+                request.session['build_messages'] = issue_messages  # Store plain strings in session
                 return redirect('build_error', build_id=build_id)
 
+            messages.success(request, "Build saved and is compatible!")
             return redirect('account_page')
     else:
         form = BuildForm(instance=build)
@@ -632,11 +620,16 @@ def purchase_confirmed(request):
 
 
 def build_error(request, build_id):
-    storage = get_messages(request)
+    build = get_object_or_404(Build, build_id=build_id)
+
+    # Retrieve and display stored session messages
+    if 'build_messages' in request.session:
+        for msg in request.session['build_messages']:
+            messages.warning(request, msg)
+        del request.session['build_messages']  # Clear the session messages after displaying
 
     context = {
-        'error_message': storage,
-        'build_id' : build_id,
-        'user' : ""
+        'build_id': build_id,
+        'user': request.user
     }
     return render(request, 'build_error.html', context)

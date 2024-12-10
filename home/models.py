@@ -169,26 +169,25 @@ class Motherboard(models.Model):
     """
     Model to define a motherboard with its characteristics.
     """
-    motherboard_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for Motherboard model
-    name = models.CharField(max_length=100, unique=True)  # Ensure unique motherboard name
-    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)  # Foreign key to Manufacturer model
-    cpu_socket_type = models.ForeignKey('CPUSocketType', on_delete=models.CASCADE)  # Foreign key to CPUSocketType model
+    motherboard_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)
+    cpu_socket_type = models.ForeignKey('CPUSocketType', on_delete=models.CASCADE)
     memory_slots = models.IntegerField(
         choices=[(2, '2 Slots'), (4, '4 Slots')],
-        validators=[MinValueValidator(1), MaxValueValidator(4)]  # Validate memory slots between 1 and 4
-    )  # Integer field for number of memory slots
-    form_factor = models.ForeignKey('FormFactor', on_delete=models.CASCADE)  # Foreign key to FormFactor model
-    max_memory_capacity = models.IntegerField(default=128, validators=[MinValueValidator(1)])  # Ensure positive memory capacity
-    supported_ram_types = models.ManyToManyField('RAMType')  # Many-to-many relationship with RAMType model
-    supported_ram_speeds = models.ManyToManyField('RAMSpeed')  # Many-to-many relationship with RAMSpeed model
-    supported_storage_types = models.ManyToManyField('StorageType', through='SupportedStorageConfiguration')  # Many-to-many relationship with StorageType model through SupportedStorageConfiguration
-    rams = models.ManyToManyField('RAM', through='SupportedRAMConfiguration')  # Many-to-many relationship with RAM model through SupportedRAMConfiguration
-    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the Motherboard
-    image = models.ImageField(upload_to='images/motherboard/', null=True, blank=True)  # Image of the Motherboard
-    description = models.TextField(blank=True)  # Add description field here
+        validators=[MinValueValidator(1), MaxValueValidator(4)]
+    )
+    form_factor = models.ForeignKey('FormFactor', on_delete=models.CASCADE)
+    max_memory_capacity = models.IntegerField(default=128, validators=[MinValueValidator(1)])
+    supported_ram_types = models.ManyToManyField('RAMType')  # This field allows for multiple RAM types.
+    supported_ram_speeds = models.ManyToManyField('RAMSpeed')  # This field allows for multiple RAM speeds.
+    supported_storage_types = models.ManyToManyField('StorageType', through='SupportedStorageConfiguration')
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    image = models.ImageField(upload_to='images/motherboard/', null=True, blank=True)
+    description = models.TextField(blank=True)
 
     def __str__(self):
-        return self.name  # String representation of the Motherboard model
+        return self.name
 
     def is_ram_compatible(self, ram):
         try:
@@ -212,43 +211,35 @@ class Motherboard(models.Model):
             models.CheckConstraint(condition=models.Q(max_memory_capacity__gte=0), name='max_memory_capacity_positive')
         ]
         indexes = [
-            models.Index(fields=['name']),  # Index the name field for faster search
-            models.Index(fields=['manufacturer']),  # Index the manufacturer field for faster search
-            models.Index(fields=['cpu_socket_type']),  # Index the cpu_socket_type field for faster search
-            models.Index(fields=['form_factor']),  # Index the form_factor field for faster search
+            models.Index(fields=['name']),
+            models.Index(fields=['manufacturer']),
+            models.Index(fields=['cpu_socket_type']),
+            models.Index(fields=['form_factor']),
         ]
 
 
 # RAM Models
 class RAMType(models.Model):
-    """
-    Model to define types of RAM (e.g., DDR4).
-    """
-    type = models.CharField(max_length=10, unique=True)  # Type of RAM (e.g., DDR4)
+    type = models.CharField(max_length=10, unique=True)
 
     def __str__(self):
-        return self.type  # String representation of the RAMType model
+        return self.type
 
     class Meta:
         indexes = [
-            models.Index(fields=['type'])  # Index the type field for faster search
+            models.Index(fields=['type'])
         ]
 
 
 class RAMSpeed(models.Model):
-    """
-    Model to define RAM speeds (e.g., 3200MHz).
-    """
-    speed = models.PositiveIntegerField(
-        validators=[MinValueValidator(800), MaxValueValidator(5000)]  # Validate speed between 800 and 5000 MHz
-    )
+    speed = models.IntegerField(unique=True)
 
     def __str__(self):
-        return f"{self.speed} MHz"  # String representation of the RAMSpeed model
+        return f"{self.speed} MHz"
 
     class Meta:
         indexes = [
-            models.Index(fields=['speed'])  # Index the speed field for faster search
+            models.Index(fields=['speed'])
         ]
 
 
@@ -426,24 +417,21 @@ class Storage(models.Model):
 # Intermediary Models
 class SupportedRAMConfiguration(models.Model):
     """
-    Intermediate model for the many-to-many relationship between Motherboard and RAM.
-    Stores whether a specific RAM module is supported by a specific motherboard.
+    Model to define supported RAM configurations for motherboards.
+    Stores supported RAM types and speeds for a specific motherboard.
     """
-    motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE)  # Foreign key to Motherboard model
-    ram = models.ForeignKey('RAM', on_delete=models.CASCADE)  # Foreign key to RAM model
-    supported = models.BooleanField(default=True)  # Boolean field indicating support status
+    motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE)
+    ram_type = models.ForeignKey('RAMType', on_delete=models.CASCADE)
+    supported_speeds = models.CharField(max_length=255)  # Comma-separated values of supported speeds
 
     def __str__(self):
-        return f"{self.motherboard.name} supports {self.ram}"  # String representation of the model
+        return f"{self.motherboard.name} supports {self.ram_type.type} at speeds {self.supported_speeds}"
 
     class Meta:
-        unique_together = ('motherboard', 'ram')  # Ensure unique combinations of motherboard and RAM
-        constraints = [
-            models.CheckConstraint(condition=models.Q(supported__in=[True, False]), name='supported_valid')
-        ]
+        unique_together = ('motherboard', 'ram_type')
         indexes = [
-            models.Index(fields=['motherboard']),  # Index the motherboard field for faster search
-            models.Index(fields=['ram']),  # Index the ram field for faster search
+            models.Index(fields=['motherboard']),
+            models.Index(fields=['ram_type'])
         ]
 
 
