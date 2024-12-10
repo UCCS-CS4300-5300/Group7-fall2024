@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from .models import Manufacturer, Microarchitecture, CPUSocketType, RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules, FormFactor, StorageCapacity, StorageType, Motherboard, CPU, RAM, Storage, Build
+from .models import (
+    Manufacturer, Microarchitecture, CPUSocketType,
+    RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules,
+    FormFactor, StorageCapacity, StorageType, Motherboard,
+    CPU, RAM, Storage, Build
+)
 from .compatibility_service import CompatibilityService
 
 

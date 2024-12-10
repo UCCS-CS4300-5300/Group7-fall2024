@@ -2,6 +2,8 @@
 import os
 import sys
 import django
+from django.contrib.auth.models import User
+from home.models import Profile, Build, Motherboard, CPU, RAM, Storage
 
 print("Starting create_builds.py script...")
 
@@ -9,13 +11,6 @@ print("Starting create_builds.py script...")
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
-
-print("Django setup completed.")
-
-from django.contrib.auth.models import User
-from home.models import Profile, Build, Motherboard, CPU, RAM, Storage
-
-print("Models imported successfully.")
 
 # Debugging: Print all storages available
 print("List of available storage devices:")
@@ -40,7 +35,7 @@ for username in users:
                 'cpu': CPU.objects.get(name='AMD Ryzen 9 5950X'),
                 'ram': [RAM.objects.get(name='G.Skill Ripjaws V 32GB')],
                 'storages': [
-                    Storage.objects.get(name='Samsung 970 EVO'), 
+                    Storage.objects.get(name='Samsung 970 EVO'),
                     Storage.objects.get(name='Seagate IronWolf')
                 ]
             },
@@ -51,7 +46,7 @@ for username in users:
                 'cpu': CPU.objects.get(name='Intel Core i7 12700K'),
                 'ram': [RAM.objects.get(name='Crucial Ballistix 16GB')],
                 'storages': [
-                    Storage.objects.get(name='Western Digital Blue'), 
+                    Storage.objects.get(name='Western Digital Blue'),
                     Storage.objects.get(name='Crucial MX500')
                 ]
             },
@@ -91,11 +86,15 @@ for username in users:
                 'name': f'{username} All Wrong Parts Build',
                 'profile': profile,
                 'motherboard': Motherboard.objects.get(name='ASRock X570 Taichi'),
-                'cpu': CPU.objects.get(name='Intel Core i3'),  # Incompatible CPU for this motherboard
+                # Incompatible CPU for this motherboard
+                'cpu': CPU.objects.get(name='Intel Core i3'),
+                # Incompatible RAM type and speed for this motherboard
                 'ram': [
-                    RAM.objects.get(name='Kingston HyperX Fury 8GB')  # Incompatible RAM type and speed for this motherboard
+                    RAM.objects.get(name='Kingston HyperX Fury 8GB')
                 ],
-                'storages': [Storage.objects.get(name='Intel Optane 905P')]  # Incompatible storage type for this build
+                'storages': [
+                    Storage.objects.get(name='Intel Optane 905P')  # Incompatible storage type for this build
+                ]
             }
         ]
 
@@ -107,7 +106,7 @@ for username in users:
                 cpu = build_data['cpu']
                 ram = build_data['ram']
                 storages = build_data['storages']
-                
+
                 print(f"Motherboard found: {motherboard}")
                 print(f"CPU found: {cpu}")
                 print(f"RAM found: {ram}")
@@ -128,7 +127,7 @@ for username in users:
                     print(f"Build {build_data['name']} created for {username}.")
                 else:
                     print(f"Build {build_data['name']} already exists for {username}.")
-            
+
             except Exception as e:
                 print(f"Error creating build {build_data['name']} for {username}: {e}")
 

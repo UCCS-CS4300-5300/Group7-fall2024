@@ -1,6 +1,5 @@
 from django import forms
 from .models import Build
-from .compatibility_service import CompatibilityService
 
 
 class BuildForm(forms.ModelForm):

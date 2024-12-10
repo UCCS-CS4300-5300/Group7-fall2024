@@ -88,7 +88,10 @@ class RAMTestCase(TestCase):
 
     def test_RAM_object_fields_values(self):
         testObject = RAM.objects.get(ram_id=1)
-        expected_RAM_info = f"{testObject.name} {testObject.ram_type.type} {testObject.ram_speed.speed} MHz - {testObject.ram_number_of_modules.number_of_modules} x {testObject.ram_capacity.capacity}"
+        expected_RAM_info = (
+            f"{testObject.name} {testObject.ram_type.type} {testObject.ram_speed.speed} MHz - "
+            f"{testObject.ram_number_of_modules.number_of_modules} x {testObject.ram_capacity.capacity}"
+        )
         self.assertEqual(str(testObject), expected_RAM_info)
 
     def test_RAM_object_ram_id_values(self):

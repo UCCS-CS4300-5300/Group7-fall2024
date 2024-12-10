@@ -2,20 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
-from django.contrib.messages import get_messages
 from django.urls import reverse
-from django.db import IntegrityError, transaction
-from .models import RAM, CPU, Motherboard, Storage, Build, Profile, ShoppingCart, CartItem
+from .models import RAM, CPU, Motherboard, Storage, Build, ShoppingCart, CartItem
 from .forms import BuildForm
 from .compatibility_service import CompatibilityService
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout as auth_logout
 from django.conf import settings
 from .services.paypal_service import create_payment
 from django.http import JsonResponse
 import paypalrestsdk
 from functools import wraps
+
 
 def custom_login_required(view_func):
     @wraps(view_func)
@@ -86,14 +84,18 @@ def part_browser(request):
     elif category == 'RAM':
         results = RAM.objects.filter(name__icontains=query)
     elif category == 'Motherboard':
-        results = Motherboard.objects.filter(name__icontains=query)
+        results = Motherboard.objects.filter(name__icontains=query).prefetch_related('supported_ram_types', 'supported_ram_speeds')
+        # Print results for debugging
+        for motherboard in results:
+            print(f"Motherboard: {motherboard.name}")
+            print(f"Supported RAM Types: {', '.join([ram_type.type for ram_type in motherboard.supported_ram_types.all()])}")
+            print(f"Supported RAM Speeds: {', '.join([str(ram_speed.speed) for ram_speed in motherboard.supported_ram_speeds.all()])}")
     elif category == 'Storage':
         results = Storage.objects.filter(name__icontains=query)
     else:
-        # Fetch all components
         results = list(CPU.objects.filter(name__icontains=query)) + \
                   list(RAM.objects.filter(name__icontains=query)) + \
-                  list(Motherboard.objects.filter(name__icontains=query)) + \
+                  list(Motherboard.objects.filter(name__icontains=query).prefetch_related('supported_ram_types', 'supported_ram_speeds')) + \
                   list(Storage.objects.filter(name__icontains=query))
 
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
@@ -107,11 +109,11 @@ def account_page(request):
     Returns:
         HttpResponse: Renders the account_page.html template.
     """
-    profile = request.user.profile
-    saved_builds = Build.objects.filter(profile=profile, is_complete=True)
-    context = {
-        'saved_builds': saved_builds,
-    }
+    # profile = request.user.profile
+    # saved_builds = Build.objects.filter(profile=profile, is_complete=True)
+    # context = {
+    #    'saved_builds': saved_builds,
+    # }
 
     return render(request, 'account_page.html')
 
@@ -286,7 +288,7 @@ def remove_from_build(request, category):
 
 def view_profile(request):
     context = {
-        'user' : request.username
+        'user': request.username
     }
 
     return render(request, 'account_page.html', context)
@@ -518,14 +520,14 @@ def view_cart(request):
 def remove_from_cart(request, item_id):
     profile = request.user.profile
     cart = get_object_or_404(ShoppingCart, profile=profile)
-    
+
     # Check if the item exists in the cart
     try:
         cart_item = CartItem.objects.get(cart=cart, id=item_id)
     except CartItem.DoesNotExist:
         messages.error(request, "Item does not exist in your cart.")
         return redirect('view_cart')
-    
+
     # Update the total price
     cart.total_price -= cart_item.price * cart_item.quantity
     cart.total_price = max(cart.total_price, 0)  # Prevent negative total price
@@ -623,14 +625,24 @@ def purchase_confirmed(request):
     shopping_cart.save()
 
     # Render the confirmation page
-    return render(request, 'purchase_confirmed.html', {'message': "Your payment was successful, and your cart has been cleared!"})
+    return render(
+        request,
+        'purchase_confirmed.html',
+        {'message': "Your payment was successful, and your cart has been cleared!"}
+    )
 
 
 def build_error(request, build_id):
-    storage = get_messages(request)
+    build = get_object_or_404(Build, build_id=build_id)
+
+    # Retrieve and display stored session messages
+    if 'build_messages' in request.session:
+        for msg in request.session['build_messages']:
+            messages.warning(request, msg)
+        del request.session['build_messages']  # Clear the session messages after displaying
 
     context = {
-        'error_message': storage,
+        'error_message': Storage,
         'build_id' : build_id,
         'user' : ""
     }

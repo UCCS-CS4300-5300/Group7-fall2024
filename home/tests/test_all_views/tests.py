@@ -3,9 +3,10 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from home.models import (
-    Storage, Manufacturer, FormFactor, StorageType, User, Profile, Build, StorageCapacity, RAM, RAMCapacity, RAMNumberOfModules, RAMSpeed, RAMType, CPU, CPUSocketType, Microarchitecture
+    Storage, Manufacturer, FormFactor, StorageType, User, Profile, Build,
+    StorageCapacity, RAM, RAMCapacity, RAMNumberOfModules, RAMSpeed, RAMType,
 )
-from home.serializers import BuildSerializer, MotherboardSerializer, CPUSerializer, RAMSerializer, StorageSerializer
+
 
 class BuildViewSetTestCase(APITestCase):
     def setUp(self):
@@ -35,6 +36,7 @@ class BuildViewSetTestCase(APITestCase):
         response = self.client.get(url, {'user_id': 'invalid'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.json()['user_id'], "user_id must be a valid integer.")
+
 
 class RAMViewSetTestCase(APITestCase):
     def setUp(self):
@@ -203,9 +205,7 @@ class UserBuildViewSetTestCase(APITestCase):
         url = reverse('user_builds', kwargs={'user_id': self.user.id})
         response = self.client.get(url)
 
-        build_names = [build['name'] for build in response.json()['results']]
+        # build_names = [build['name'] for build in response.json()['results']]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()['results']), 1)
         self.assertEqual(response.json()['results'][0]['name'], 'Test Build')
-
-    
