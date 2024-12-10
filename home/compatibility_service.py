@@ -45,7 +45,7 @@ class CompatibilityService:
 
         return isValid, issues
 
-    @staticmethod
+
     def check_ram_compatibility(build):
         """
         Check the compatibility between RAM modules and the motherboard.
@@ -78,7 +78,7 @@ class CompatibilityService:
 
         # Calculate the total RAM capacity and number of modules
         total_ram_capacity = sum(parse_capacity(ram_module.ram_capacity.capacity) for ram_module in ram_modules)
-        total_ram_modules = sum(int(ram_module.ram_number_of_modules.number_of_modules) for ram_module in ram_modules)
+        total_ram_modules = sum(ram_module.ram_number_of_modules.number_of_modules for ram_module in ram_modules)
 
         if motherboard and ram_modules.exists():
             if not motherboard_supported_rams:
@@ -105,7 +105,7 @@ class CompatibilityService:
                 issues.append(f"The total RAM capacity ({total_ram_capacity} GB) exceeds the maximum capacity of the motherboard ({motherboard.max_memory_capacity} GB).")
                 isValid = False
 
-            if total_ram_modules > motherboard.memory_slots:
+            if total_ram_modules > int(motherboard.memory_slots):
                 issues.append(f"The total number of RAM modules ({total_ram_modules}) exceeds the number of slots on the motherboard ({motherboard.memory_slots}).")
                 isValid = False
 
