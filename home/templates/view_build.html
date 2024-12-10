@@ -83,7 +83,7 @@
                     <tr>
                         <td><strong>RAM</strong></td>
                         <td>
-                            {% if build.ram.all %}
+                            {% if build.ram.exists %}
                                 {% for ram in build.ram.all %}
                                     {{ ram.name }}<br>
                                 {% endfor %}
@@ -92,21 +92,33 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% for ram in build.ram.all %}
-                                {% if ram.image %}
-                                    <img src="{{ ram.image.url }}" alt="{{ ram.name }}" width="100"><br>
-                                {% endif %}
-                            {% endfor %}
+                            {% if build.ram.exists %}
+                                {% for ram in build.ram.all %}
+                                    {% if ram.image %}
+                                        <img src="{{ ram.image.url }}" alt="{{ ram.name }}" width="100"><br>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                N/A
+                            {% endif %}
                         </td>
                         <td>
-                            {% for ram in build.ram.all %}
-                                ${{ ram.price }}<br>
-                            {% endfor %}
+                            {% if build.ram.exists %}
+                                {% for ram in build.ram.all %}
+                                    ${{ ram.price }}<br>
+                                {% endfor %}
+                            {% else %}
+                                N/A
+                            {% endif %}
                         </td>
                         <td>
-                            {% for ram in build.ram.all %}
-                                {{ ram.description }}<br>
-                            {% endfor %}
+                            {% if build.ram.exists %}
+                                {% for ram in build.ram.all %}
+                                    {{ ram.description }}<br>
+                                {% endfor %}
+                            {% else %}
+                                No description available.
+                            {% endif %}
                         </td>
                     </tr>
 
@@ -114,7 +126,7 @@
                     <tr>
                         <td><strong>Storage</strong></td>
                         <td>
-                            {% if build.storages.all %}
+                            {% if build.storages.exists %}
                                 {% for storage in build.storages.all %}
                                     {{ storage.name }}<br>
                                 {% endfor %}
@@ -123,21 +135,33 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% for storage in build.storages.all %}
-                                {% if storage.image %}
-                                    <img src="{{ storage.image.url }}" alt="{{ storage.name }}" width="100"><br>
-                                {% endif %}
-                            {% endfor %}
+                            {% if build.storages.exists %}
+                                {% for storage in build.storages.all %}
+                                    {% if storage.image %}
+                                        <img src="{{ storage.image.url }}" alt="{{ storage.name }}" width="100"><br>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                N/A
+                            {% endif %}
                         </td>
                         <td>
-                            {% for storage in build.storages.all %}
-                                ${{ storage.price }}<br>
-                            {% endfor %}
+                            {% if build.storages.exists %}
+                                {% for storage in build.storages.all %}
+                                    ${{ storage.price }}<br>
+                                {% endfor %}
+                            {% else %}
+                                N/A
+                            {% endif %}
                         </td>
                         <td>
-                            {% for storage in build.storages.all %}
-                                {{ storage.description }}<br>
-                            {% endfor %}
+                            {% if build.storages.exists %}
+                                {% for storage in build.storages.all %}
+                                    {{ storage.description }}<br>
+                                {% endfor %}
+                            {% else %}
+                                No description available.
+                            {% endif %}
                         </td>
                     </tr>
                 </tbody>
@@ -146,6 +170,6 @@
     </div>
 </div>
 
-<a href="{% url 'account_page' %}" class="btn btn-secondary">Back to Saved Builds</a>
+<a href="{% url 'account_page' %}?tab=Builds" class="btn btn-secondary">Back to Saved Builds</a>
 
 {% endblock %}

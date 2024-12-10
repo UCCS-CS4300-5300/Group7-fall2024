@@ -8,7 +8,7 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-
+    
         .custom-header {
             font-family: 'Anton', sans-serif;
             text-align: left;
@@ -17,7 +17,7 @@
             padding: 20px;
             color: white;
         }
-
+    
         .button {
             background-color: rgba(65, 169, 172, 0);
             border: 2px solid #e7e7e7;
@@ -30,75 +30,214 @@
             margin: 4px 2px;
             cursor: pointer;
             border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: calc(2.25rem + 2px); /* Matches the height of the form-control (input) */
+            padding: 0.375rem 0.75rem; /* Matches padding of the form-control (input) */
+            margin-top: 0; /* Ensure it is vertically aligned with the search box */
+            margin-bottom: 0; /* Ensure it is vertically aligned with the search box */
         }
-
+    
         .button:hover {
             background-color: rgba(81, 234, 239, 0.767);
             color: white;
         }
-
-        .box {
-            width: 100px;
-            height: 100px;
+    
+        .alert {
             padding: 10px;
-            border: 5px solid rgba(61, 249, 255, 0.5);
-            margin: 0;
+            margin: 10px 0;
+            border: 1px solid transparent;
+            border-radius: 5px;
         }
-
-        .flex-box-2 {
-            display: flex;
-            justify-content: flex-end;
+    
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
         }
-
-        .dropdown-menu {
-            z-index: 1000;
-            background-color: rgba(65, 169, 172, 0);
+    
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
         }
+    
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+    
         .custom-navbar {
             background-color: #000000;
             border-bottom: 2px solid #e7e7e7;
         }
-
+    
         .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.5);
         }
-
+    
         .navbar-toggler-icon {
             background-image: none;
         }
-
+    
         .navbar-toggler-icon::before {
             content: '\2630';
             color: white;
             font-size: 1.5em;
             display: inline-block;
         }
+    
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        .message-box {
+            text-align: center;
+            padding: 20px;
+            background: rgba(9, 58, 59, 0);
+        }
+    
+        .messages {
+            list-style: none;
+        }
+    
+        .tab {
+            overflow: hidden;
+            border: 1px solid #555;
+            background-color: #333;
+        }
+    
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            color: #fff;
+            font-weight: bold;
+        }
+    
+        .tab button:hover {
+            background-color: #555;
+        }
+    
+        .tab button.active {
+            background-color: #4a4a4a;
+        }
+    
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    
+        input[type="text"], input[type="email"], input[type="tel"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 20px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+    
+        button {
+            background-color: rgba(0, 150, 199, 0.8);
+            color: #fff;
+            font-weight: bold;
+            padding: 10px 15px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: auto;
+            transition: background-color 0.3s;
+        }
+    
+        button:hover {
+            background-color: rgba(0, 150, 199, 1);
+        }
+    
+        .username-header {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+    
+        .user-info-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    
+        .user-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: rgba(0, 150, 199, 0.8);
+        }
+    
+        .custom-navbar .dropdown-menu {
+            background-color: #333;
+            border: 1px solid #555;
+            border-radius: 0;
+            box-shadow: none;
+        }
+    
+        .custom-navbar .dropdown-menu .dropdown-item {
+            color: #fff;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+    
+        .custom-navbar .dropdown-menu .dropdown-item:hover {
+            background-color: #555;
+        }
+    
+        .custom-navbar .form-select,
+        .custom-navbar .form-control,
+        .custom-navbar .button {
+            height: calc(2.25rem + 2px) !important; /* Matches the height of the form-control (input) */
+            padding: 0.375rem 0.75rem !important; /* Matches padding of the form-control (input) */
+            margin-top: 0 !important; /* Ensure it is vertically aligned with the search box */
+            margin-bottom: 0 !important; /* Ensure it is vertically aligned with the search box */
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc; /* Ensure consistent border */
+        }
 
-        .alert {
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid transparent;
-    border-radius: 5px;
-}
+        .custom-navbar .search-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Align search components to the right */
+            flex-grow: 1;
+        }
 
-.alert-success {
-    color: #155724;
-    background-color: #d4edda;
-    border-color: #c3e6cb;
-}
+        .custom-navbar .account-container {
+            display: flex;
+            align-items: center;
+            margin-left: 15px; /* Add space between the search and account buttons */
+        }
 
-.alert-error {
-    color: #721c24;
-    background-color: #f8d7da;
-    border-color: #f5c6cb;
-}
-
-.alert-info {
-    color: #0c5460;
-    background-color: #d1ecf1;
-    border-color: #bee5eb;
-}
-    </style>
+    </style>    
 </head>
 
 <body>
@@ -107,79 +246,11 @@
         <script src="https://kit.fontawesome.com/802595e9f2.js" crossorigin="anonymous"></script>
     </header>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg custom-navbar">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav me-auto">
-                    <a class="button" aria-current="page" href="{% url 'index' %}">
-                        <i class="fa-solid fa-house"></i> Home</a>
-                    <a class="button" href="{% url 'build' %}">
-                        <i class="fa-solid fa-desktop"></i> Create Your Build</a>
-                    
+    {% include '_navbar.html' %}
 
-                   
-                </div>
-                <!-- Search form -->
-                <form method="get" action="{% url 'search_pc_parts' %}" class="d-flex">
-                    <input type="text" name="q" class="form-control me-2" placeholder="Search for parts..." value="{{ query|default:'' }}">
-                    <select name="category">
-                        <option value="All Categories" {% if category == 'All Categories' %}selected{% endif %}>All Categories</option>
-                        <option value="RAM" {% if category == 'RAM' %}selected{% endif %}>RAM</option>
-                        <option value="CPU" {% if category == 'CPU' %}selected{% endif %}>CPU</option>
-                        <option value="Motherboard" {% if category == 'Motherboard' %}selected{% endif %}>Motherboard</option>
-                        <option value="Storage" {% if category == 'Storage' %}selected{% endif %}>Storage</option>
-                    </select>
-                    <button type="submit" class="button d-flex align-items-center">
-                        <i class="fa-solid fa-magnifying-glass"></i> Search
-                    </button> 
-                </form>
-                <div class="navbar-nav">
-                    <!-- Add the Shopping Cart Icon -->
-                    <a class="button" href="{% url 'view_cart' %}">
-                        <i class="fa-solid fa-cart-shopping"></i> Cart
-                    </a>
-                <div class="navbar-nav">
-                    {% if user.is_authenticated %}
-                        <a class="button" href="{% url 'account_page' %}">
-                            <i class="fa-solid fa-user"></i> Account</a>
-                        <a class="button" href="{% url 'logout' %}">
-                             <i class="fa-solid fa-right-from-bracket"></i>Logout</a>
-                    {% else %}
-                        <a class="button" href="{% url 'login_or_register' %}">
-                             <i class="fa-solid fa-right-to-bracket"></i>Login</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </nav>   
-
-    {% if messages %}
-<div class="messages">
-    {% for message in messages %}
-    <div class="alert alert-{{ message.tags }}" id="message-{{ forloop.counter }}">
-        {{ message }}
-    </div>
-    {% endfor %}
-</div>
-<script>
-    // Automatically hide messages after 5 seconds (5000 milliseconds)
-    setTimeout(function() {
-        const messages = document.querySelectorAll('.messages .alert');
-        messages.forEach(function(message) {
-            message.style.transition = 'opacity 0.5s ease';
-            message.style.opacity = '0';
-            setTimeout(() => message.remove(), 500); // Remove element after fade-out
-        });
-    }, 3000); // Adjust the timing as needed
-</script>
-{% endif %}
+    {% include '_alerts.html' %}
 
     <div class="container-sm-12">
-        <!-- add block content from html template -->
         {% block content %}
         {% endblock %}
     </div>
