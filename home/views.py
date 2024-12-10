@@ -393,8 +393,14 @@ def edit_build(request, build_id):
 
             # Check compatibility after saving
             compatible, issues = CompatibilityService.check_build_compatibility(build)
+            print (f"issues contents: {issues}")
+            print (f"issues type: {type(issues)}")
+
             if not compatible:
                 issue_messages = [issue for issue in issues]
+                print (f"issues contents: {issue_messages}")
+                print (f"issues contentstype: {type(issues)}")
+                
                 request.session['build_messages'] = issue_messages  # Store plain strings in session
                 return redirect('build_error', build_id=build_id)
 
@@ -627,15 +633,18 @@ def purchase_confirmed(request):
 
 def build_error(request, build_id):
     build = get_object_or_404(Build, build_id=build_id)
+    warning_list = []
 
     # Retrieve and display stored session messages
     if 'build_messages' in request.session:
         for msg in request.session['build_messages']:
+            warning_list.append(msg)
             messages.warning(request, msg)
         del request.session['build_messages']  # Clear the session messages after displaying
 
     context = {
         'build_id': build_id,
-        'user': request.user
+        'user': request.user,
+        'warning_list' : warning_list
     }
     return render(request, 'build_error.html', context)

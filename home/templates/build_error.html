@@ -3,10 +3,15 @@
 <div class="container">
     <div class="message-box">
         <h1 style="color: rgb(216, 216, 0);">! Warning !</h1>
-        
-        <h4>
-            {% include '_alerts.html' %}
-        </h4>
+        {% for message in warning_list %}
+        <div class="message-box">
+
+            <h4>
+            {{message}}
+            </h4>
+        {% endfor %}
+        </div>
+
         <br>
 
         <a href="{% url 'edit_build' build_id %}" class="btn btn-primary">Edit Build</a>
