@@ -393,14 +393,9 @@ def edit_build(request, build_id):
 
             # Check compatibility after saving
             compatible, issues = CompatibilityService.check_build_compatibility(build)
-            print (f"issues contents: {issues}")
-            print (f"issues type: {type(issues)}")
 
             if not compatible:
                 issue_messages = [issue for issue in issues]
-                print (f"issues contents: {issue_messages}")
-                print (f"issues contentstype: {type(issues)}")
-                
                 request.session['build_messages'] = issue_messages  # Store plain strings in session
                 return redirect('build_error', build_id=build_id)
 
