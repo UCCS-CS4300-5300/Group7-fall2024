@@ -386,20 +386,12 @@ def edit_build(request, build_id):
             if storage_list:
                 build.storages.set(storage_list)
             # Check compatibility after saving
-            try:
-                # compatibility service returns a tuple with contents:(bool, list[])
-                # the first value in result will be false if the build is not valid. The second value is a list of all the error message
-                result = CompatibilityService.check_build_compatibility(build) 
-                if result[0] == False:
-                    print('\n'.join(result[1])) 
-                    raise ValueError('\n\n'.join(result[1])) # create the error message
-                messages.success(request, "Build saved and is compatible!")
+            compatible, issues = CompatibilityService.check_build_compatibility(build)
 
-            except ValueError as e:
+            if not compatible:
+                issue_messages = [issue for issue in issues]
+                request.session['build_messages'] = issue_messages  # Store plain strings in session
 
-                #self.client.cookies.pop('messages')
-                messages.warning(request, f"Build: {build.name} was saved but compatibility issues were detected:\n\n {e}")
-                # redirect to an error page for that  build.
                 return redirect('build_error', build_id=build_id)
 
             return redirect('account_page')
@@ -634,16 +626,19 @@ def purchase_confirmed(request):
 
 def build_error(request, build_id):
     build = get_object_or_404(Build, build_id=build_id)
+    warning_list = []
 
     # Retrieve and display stored session messages
     if 'build_messages' in request.session:
         for msg in request.session['build_messages']:
+            warning_list.append(msg)
             messages.warning(request, msg)
         del request.session['build_messages']  # Clear the session messages after displaying
 
     context = {
-        'error_message': Storage,
-        'build_id' : build_id,
-        'user' : ""
+        'build_id': build_id,
+        'user': request.user,
+        'warning_list' : warning_list
+
     }
     return render(request, 'build_error.html', context)
