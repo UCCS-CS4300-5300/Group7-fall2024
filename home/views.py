@@ -14,6 +14,16 @@ from django.conf import settings
 from .services.paypal_service import create_payment
 from django.http import JsonResponse
 import paypalrestsdk
+from functools import wraps
+
+def custom_login_required(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, "You need to log in to access this page.")
+            return redirect('index')  # Redirect to a public page
+        return view_func(request, *args, **kwargs)
+    return wrapper
 
 
 def index(request):
@@ -27,7 +37,7 @@ def index(request):
     return render(request, 'index.html')
 
 
-@login_required
+@custom_login_required
 def build(request):
     """
     Render the build page where users can create and manage their builds.
@@ -98,7 +108,7 @@ def pre_built(request):
     """
     return render(request, 'pre_built.html')
 
-@login_required
+@custom_login_required
 def account_page(request):
     """
     Render the account page where users can manage their account information.
@@ -192,7 +202,7 @@ def get_storage_results(query):
     return storage_results
 
 
-@login_required
+@custom_login_required
 def search_pc_parts(request):
     query = request.GET.get('q', '').strip()
     category = request.GET.get('category', 'All Categories')
@@ -412,7 +422,7 @@ def view_build(request, build_id):
     return render(request, 'view_build.html', {'build': build})
 
 
-@login_required
+@custom_login_required
 def add_to_cart(request, item_id, category):
     profile = request.user.profile
     cart, created = ShoppingCart.objects.get_or_create(profile=profile)
@@ -449,7 +459,7 @@ def add_to_cart(request, item_id, category):
     return redirect('view_cart')
 
 
-@login_required
+@custom_login_required
 def add_build_to_cart(request):
     profile = request.user.profile
     cart, created = ShoppingCart.objects.get_or_create(profile=profile)
@@ -500,7 +510,7 @@ def get_active_build(profile):
     return active_build, None
 
 
-@login_required
+@custom_login_required
 def view_cart(request):
     profile = request.user.profile
     cart, created = ShoppingCart.objects.get_or_create(profile=profile)
@@ -514,7 +524,7 @@ def view_cart(request):
     return render(request, 'cart.html', context)
 
 
-@login_required
+@custom_login_required
 def remove_from_cart(request, item_id):
     profile = request.user.profile
     cart = get_object_or_404(ShoppingCart, profile=profile)
@@ -532,7 +542,7 @@ def remove_from_cart(request, item_id):
     return redirect('view_cart')
 
 
-@login_required
+@custom_login_required
 def add_saved_build_to_cart(request, build_id):
     profile = request.user.profile
     cart, created = ShoppingCart.objects.get_or_create(profile=profile)
@@ -562,7 +572,7 @@ def add_saved_build_to_cart(request, build_id):
     return redirect('account_page')
 
 
-@login_required
+@custom_login_required
 def create_paypal_payment(request):
     # Example: Calculate the total price from the shopping cart
     profile = request.user.profile
