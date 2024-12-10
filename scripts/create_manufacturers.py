@@ -13,18 +13,9 @@ django.setup()
 from home.models import Manufacturer
 
 # Create Manufacturers
-manufacturer_asus, created = Manufacturer.objects.get_or_create(name='ASUS')
-manufacturer_intel, created = Manufacturer.objects.get_or_create(name='Intel')
-manufacturer_kingston, created = Manufacturer.objects.get_or_create(name='Kingston')
-manufacturer_samsung, created = Manufacturer.objects.get_or_create(name='Samsung')
-manufacturer_wd, created = Manufacturer.objects.get_or_create(name='Western Digital')
-manufacturer_amd, created = Manufacturer.objects.get_or_create(name='AMD')
-
-# Add additional manufacturers
-manufacturer_corsair, created = Manufacturer.objects.get_or_create(name='Corsair')
-manufacturer_gskill, created = Manufacturer.objects.get_or_create(name='G.Skill')
-manufacturer_crucial, created = Manufacturer.objects.get_or_create(name='Crucial')
-manufacturer_seagate, created = Manufacturer.objects.get_or_create(name='Seagate')
+manufacturers = ['ASUS', 'Intel', 'Kingston', 'Samsung', 'Western Digital', 'AMD', 'Corsair', 'G.Skill', 'Crucial', 'Seagate']
+for manufacturer in manufacturers:
+    Manufacturer.objects.get_or_create(name=manufacturer)
 
 # Print Results
-print('Manufacturers:', manufacturer_asus, manufacturer_intel, manufacturer_kingston, manufacturer_samsung, manufacturer_wd, manufacturer_amd, manufacturer_corsair, manufacturer_gskill, manufacturer_crucial, manufacturer_seagate)
+print('Manufacturers:', ', '.join(manufacturers))
