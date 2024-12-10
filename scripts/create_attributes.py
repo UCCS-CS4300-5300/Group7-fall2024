@@ -2,6 +2,7 @@
 import os
 import sys
 import django
+from home.models import CPUSocketType, FormFactor, StorageType, StorageCapacity, Microarchitecture
 
 print("Starting create_attributes.py script...")
 
@@ -10,11 +11,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
 
-print("Django setup completed.")
-
-from home.models import CPUSocketType, FormFactor, StorageType, StorageCapacity, Microarchitecture
-
-print("Models imported successfully.")
 
 # Create CPU Socket Types
 cpu_sockets = ['LGA1151', 'AM4', 'AM5', 'LGA1700', 'LGA1200', 'LGA2066', 'TRX40', 'sTRX4', 'sWRX8']
@@ -37,7 +33,10 @@ for capacity in storage_capacities:
     StorageCapacity.objects.get_or_create(capacity=capacity)
 
 # Create Microarchitectures
-microarchitectures = ['Skylake', 'Zen 3', 'Kaby Lake', 'Zen 2', 'Comet Lake', 'Alder Lake', 'Rocket Lake', 'Zen', 'Coffee Lake', 'Ice Lake', 'Tiger Lake', 'Cascade Lake']
+microarchitectures = [
+    'Skylake', 'Zen 3', 'Kaby Lake', 'Zen 2', 'Comet Lake',
+    'Alder Lake', 'Rocket Lake', 'Zen', 'Coffee Lake', 'Ice Lake', 'Tiger Lake', 'Cascade Lake'
+    ]
 for microarchitecture in microarchitectures:
     Microarchitecture.objects.get_or_create(name=microarchitecture)
 

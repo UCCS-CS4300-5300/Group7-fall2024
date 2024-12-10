@@ -2,20 +2,17 @@
 import os
 import sys
 import django
+from django.contrib.auth.models import User
+from home.models import Profile
 
 print("Starting create_users_profiles.py script...")
+
 
 # Add the project root to the PYTHONPATH
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
 
-print("Django setup completed.")
-
-from django.contrib.auth.models import User
-from home.models import Profile
-
-print("Models imported successfully.")
 
 # Create users
 users = [

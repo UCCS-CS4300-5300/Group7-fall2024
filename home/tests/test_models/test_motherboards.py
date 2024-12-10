@@ -3,9 +3,14 @@ import django
 from django.test import TestCase
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.db import transaction
-from home.models import create_profile, Profile, Manufacturer, CPUSocketType, Microarchitecture, CPU, RAMType, RAMSpeed
-from home.models import RAMCapacity, RAMNumberOfModules, RAM, StorageType, StorageCapacity, Storage, Motherboard, FormFactor
+from home.models import (
+    create_profile, Profile, Manufacturer, CPUSocketType,
+    Microarchitecture, CPU, RAMType, RAMSpeed
+)
+from home.models import (
+    RAMCapacity, RAMNumberOfModules, RAM,
+    StorageType, StorageCapacity, Storage, Motherboard, FormFactor
+)
 
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')

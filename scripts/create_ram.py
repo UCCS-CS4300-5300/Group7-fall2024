@@ -2,6 +2,7 @@
 import os
 import sys
 import django
+from home.models import RAM, RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules, Manufacturer
 
 print("Starting create_ram.py script...")
 
@@ -9,12 +10,6 @@ print("Starting create_ram.py script...")
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
-
-print("Django setup completed.")
-
-from home.models import RAM, RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules, Manufacturer
-
-print("Models imported successfully.")
 
 # Verify Manufacturers
 manufacturers = ['Kingston', 'Corsair', 'G.Skill', 'Crucial', 'HyperX']
