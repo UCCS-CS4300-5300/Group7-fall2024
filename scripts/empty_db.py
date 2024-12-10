@@ -2,6 +2,13 @@
 import os
 import sys
 import django
+from django.contrib.auth.models import User
+from home.models import (
+    Manufacturer, Microarchitecture, CPUSocketType,
+    RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules,
+    FormFactor, StorageCapacity, StorageType, RAM, CPU, Motherboard, Build, BuildRAM, Storage,
+    BuildStorageConfiguration, Profile
+)
 
 print("Starting clear_database.py script...")
 
@@ -12,10 +19,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
 
-print("Django setup completed.")
-
-from django.contrib.auth.models import User
-from home.models import Manufacturer, Microarchitecture, CPUSocketType, RAMType, RAMSpeed, RAMCapacity, RAMNumberOfModules, FormFactor, StorageCapacity, StorageType, RAM, CPU, Motherboard, Build, BuildRAM, Storage, BuildStorageConfiguration, Profile
 
 def clear_database():
     # Delete all objects from the models
@@ -41,7 +44,9 @@ def clear_database():
 
     print("All specified objects have been deleted from the database.")
 
+
 if __name__ == "__main__":
     clear_database()
+
 
 print("Database has been emptied.")

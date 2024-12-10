@@ -43,10 +43,12 @@ class Build(models.Model):
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)  # Foreign key to the Profile model
     is_complete = models.BooleanField(default=False)  # Flag to indicate if the build is complete
     is_active = models.BooleanField(default=False)
-    motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE, null=True)  # Foreign key to Motherboard model
+    # Foreign key to Motherboard model
+    motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE, null=True)
     cpu = models.ForeignKey('CPU', on_delete=models.CASCADE, null=True)  # Foreign key to CPU model
     ram = models.ManyToManyField('RAM', through='BuildRAM', blank=True)  # Many-to-many relationship with RAM model
-    storages = models.ManyToManyField('Storage', through='BuildStorageConfiguration', related_name='build_storages')  # Many-to-many relationship with Storage model
+    # Many-to-many relationship with Storage model
+    storages = models.ManyToManyField('Storage', through='BuildStorageConfiguration', related_name='build_storages')
 
     def __str__(self):
         return self.name  # String representation of the Build model
@@ -68,9 +70,9 @@ class Build(models.Model):
     class Meta:
         constraints = [
             models.CheckConstraint(condition=models.Q(is_complete__in=[True, False]), name='is_complete_valid'),
-            models.CheckConstraint(condition=models.Q(is_active__in=[True, False]), name='is_active_valid'),  # NEW: Ensure is_active is valid
-
-        ]
+            # NEW: Ensure is_active is valid
+            models.CheckConstraint(condition=models.Q(is_active__in=[True, False]), name='is_active_valid'),
+            ]
         indexes = [
             models.Index(fields=['name']),  # Index the name field for faster queries
             models.Index(fields=['is_active']),  # NEW: Index is_active for faster queries
@@ -292,7 +294,8 @@ class RAM(models.Model):
     ram_type = models.ForeignKey('RAMType', on_delete=models.CASCADE)  # Foreign key to RAMType model
     ram_speed = models.ForeignKey('RAMSpeed', on_delete=models.CASCADE)  # Foreign key to RAMSpeed model
     ram_capacity = models.ForeignKey('RAMCapacity', on_delete=models.CASCADE)  # Foreign key to RAMCapacity model
-    ram_number_of_modules = models.ForeignKey('RAMNumberOfModules', on_delete=models.CASCADE)  # Foreign key to RAMNumberOfModules model
+    # Foreign key to RAMNumberOfModules model
+    ram_number_of_modules = models.ForeignKey('RAMNumberOfModules', on_delete=models.CASCADE)
     price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the RAM
     image = models.ImageField(upload_to='images/ram/', null=True, blank=True)  # Image of the RAM
     description = models.TextField(blank=True)  # Add description field here
@@ -303,7 +306,10 @@ class RAM(models.Model):
             raise ValidationError(f"RAM speed {self.ram_speed.speed} is out of the valid range.")
 
     def __str__(self):
-        return f"{self.name} {self.ram_type.type} {self.ram_speed.speed} MHz - {self.ram_number_of_modules.number_of_modules} x {self.ram_capacity.capacity}"  # Improved string representation
+        return (
+            f"{self.name} {self.ram_type.type} {self.ram_speed.speed} MHz - "
+            f"{self.ram_number_of_modules.number_of_modules} x {self.ram_capacity.capacity}"
+        )
 
     class Meta:
         indexes = [
@@ -343,9 +349,11 @@ class CPU(models.Model):
     cpu_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for CPU model
     name = models.CharField(max_length=100, unique=True)  # Ensure unique CPU name
     manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)  # Foreign key to Manufacturer model
-    microarchitecture = models.ForeignKey('Microarchitecture', on_delete=models.CASCADE)  # Foreign key to Microarchitecture model
+    # Foreign key to Microarchitecture model
+    microarchitecture = models.ForeignKey('Microarchitecture', on_delete=models.CASCADE)
     socket_type = models.ForeignKey('CPUSocketType', on_delete=models.CASCADE)  # Foreign key to CPUSocketType model
-    motherboards = models.ManyToManyField('Motherboard', through='CPUMotherboardCompatibility')  # Many-to-Many relationship with Motherboard
+    # Many-to-Many relationship with Motherboard
+    motherboards = models.ManyToManyField('Motherboard', through='CPUMotherboardCompatibility')
     price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the CPU
     image = models.ImageField(upload_to='images/cpu/', null=True, blank=True)  # Image of the CPU
     description = models.TextField(blank=True)  # Add description field here
@@ -392,18 +400,28 @@ class Storage(models.Model):
     """
     Model to define a storage component with its characteristics.
     """
-    storage_id = models.AutoField(primary_key=True)  # Auto-incrementing primary key for storage model
-    name = models.CharField(max_length=100)  # Name of the storage device
-    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)  # Foreign key to Manufacturer model
-    form_factor = models.ForeignKey('FormFactor', on_delete=models.CASCADE)  # Foreign key to FormFactor model
-    capacity = models.ForeignKey('StorageCapacity', on_delete=models.CASCADE)  # Foreign key to StorageCapacity model
-    type = models.ForeignKey('StorageType', on_delete=models.CASCADE)  # Foreign key to StorageType model
-    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Price of the Storage
-    image = models.ImageField(upload_to='images/storage/', null=True, blank=True)  # Image of the Storage
-    description = models.TextField(blank=True)  # Add description field here
+    # Auto-incrementing primary key for storage model
+    storage_id = models.AutoField(primary_key=True)
+    # Name of the storage device
+    name = models.CharField(max_length=100)
+    # Foreign key to Manufacturer model
+    manufacturer = models.ForeignKey('Manufacturer', on_delete=models.CASCADE)
+    # Foreign key to FormFactor model
+    form_factor = models.ForeignKey('FormFactor', on_delete=models.CASCADE)
+    # Foreign key to StorageCapacity model
+    capacity = models.ForeignKey('StorageCapacity', on_delete=models.CASCADE)
+    # Foreign key to StorageType model
+    type = models.ForeignKey('StorageType', on_delete=models.CASCADE)
+    # Price of the Storage
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    # Image of the Storage
+    image = models.ImageField(upload_to='images/storage/', null=True, blank=True)
+    # Add description field here
+    description = models.TextField(blank=True)
 
     def __str__(self):
-        return f"{self.name} - {self.form_factor.name} - {self.capacity.capacity}"  # String representation of the Storage model
+        # String representation of the Storage model
+        return f"{self.name} - {self.form_factor.name} - {self.capacity.capacity}"
 
     class Meta:
         indexes = [
@@ -440,12 +458,16 @@ class SupportedStorageConfiguration(models.Model):
     Intermediate model for the many-to-many relationship between Motherboard and StorageType.
     Stores the number of slots available for a specific storage type on a specific motherboard.
     """
-    motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE)  # Foreign key to Motherboard model
-    storage_type = models.ForeignKey('StorageType', on_delete=models.CASCADE)  # Foreign key to StorageType model
-    slots = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Integer field for the number of slots available
+    # Foreign key to Motherboard model
+    motherboard = models.ForeignKey('Motherboard', on_delete=models.CASCADE)
+    # Foreign key to StorageType model
+    storage_type = models.ForeignKey('StorageType', on_delete=models.CASCADE)
+    # Integer field for the number of slots available
+    slots = models.IntegerField(default=0, validators=[MinValueValidator(0)])
 
     def __str__(self):
-        return f"{self.motherboard.name} supports {self.storage_type.type} with {self.slots} slots"  # String representation of the model
+        # String representation of the model
+        return f"{self.motherboard.name} supports {self.storage_type.type} with {self.slots} slots"
 
     class Meta:
         unique_together = ('motherboard', 'storage_type')  # Ensure unique combinations of motherboard and storage type
@@ -511,9 +533,11 @@ class CartItem(models.Model):
     cart = models.ForeignKey(ShoppingCart, on_delete=models.CASCADE, related_name='cart_items')
     name = models.CharField(max_length=100)  # Name of the part or build
     price = models.FloatField()
-    category = models.CharField(max_length=50, blank=True)  # "RAM", "CPU", "Motherboard", etc. note: empty entry will be an empty string
+    # "RAM", "CPU", "Motherboard", etc. note: empty entry will be an empty string
+    category = models.CharField(max_length=50, blank=True)
     quantity = models.PositiveIntegerField(default=1)
-    is_build = models.BooleanField(default=False)  # True if the item is a full build, False if it’s an individual part
+    # True if the item is a full build, False if it’s an individual part
+    is_build = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.name} ({'Build' if self.is_build else self.category})"

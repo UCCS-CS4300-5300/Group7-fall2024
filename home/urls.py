@@ -1,15 +1,14 @@
-from django.urls import path, include
 from . import views
-from django.contrib.auth.views import LogoutView
-from .models import *
 from .views import login_or_register
-from .views_api import BuildViewSet, MotherboardViewSet, CPUViewSet, RAMViewSet, StorageViewSet, UserBuildViewSet
-from .views_render import call_motherboards_view, call_cpus_view, call_builds_view, call_user_builds_view, call_rams_view, call_storages_view
-from django.contrib.auth import views as auth_views
+from .views_render import (
+    call_motherboards_view, call_cpus_view, call_builds_view,
+    call_user_builds_view, call_rams_view, call_storages_view
+)
 from rest_framework.routers import DefaultRouter
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.urls import path  # Importing path function
+from .views_api import BuildViewSet  # Importing BuildViewSet
 
 # path function defines a url pattern
 # '' is empty to represent based path to app
@@ -25,7 +24,6 @@ urlpatterns = [
 
     path('', views.index, name='index'),
     path('builds/', views.build, name='build'),
-    path('pre_build/', views.pre_built, name='pre_build'),
     path('login/', login_or_register, name='login_or_register'),
     path('logout/', views.logout_user, name='logout'),
     path('search/', views.search_pc_parts, name='search_pc_parts'),

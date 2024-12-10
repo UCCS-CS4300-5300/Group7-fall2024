@@ -2,6 +2,7 @@
 import os
 import sys
 import django
+from home.models import Storage, Manufacturer, FormFactor, StorageType, StorageCapacity
 
 print("Starting create_storages.py script...")
 
@@ -10,11 +11,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
 
-print("Django setup completed.")
-
-from home.models import Storage, Manufacturer, FormFactor, StorageType, StorageCapacity
-
-print("Models imported successfully.")
 
 # Verify Manufacturers
 manufacturers = ['Samsung', 'Western Digital', 'Crucial', 'Seagate', 'Kingston', 'Intel', 'Toshiba']

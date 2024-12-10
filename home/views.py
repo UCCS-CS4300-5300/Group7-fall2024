@@ -2,20 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
-from django.contrib.messages import get_messages
 from django.urls import reverse
-from django.db import IntegrityError, transaction
-from .models import RAM, CPU, Motherboard, Storage, Build, Profile, ShoppingCart, CartItem
+from .models import RAM, CPU, Motherboard, Storage, Build, ShoppingCart, CartItem
 from .forms import BuildForm
 from .compatibility_service import CompatibilityService
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout as auth_logout
 from django.conf import settings
 from .services.paypal_service import create_payment
 from django.http import JsonResponse
 import paypalrestsdk
 from functools import wraps
+
 
 def custom_login_required(view_func):
     @wraps(view_func)
@@ -74,10 +72,13 @@ def build(request):
 
 
 def part_browser(request):
+    # Handle logic here if needed, e.g., fetching all parts or filtering by category
     category = request.GET.get('category', 'All Categories')
     query = request.GET.get('q', '')
     results = []
 
+    # You could add your filtering/search logic here based on the category and query if needed.
+    # Example:
     if category == 'CPU':
         results = CPU.objects.filter(name__icontains=query)
     elif category == 'RAM':
@@ -97,21 +98,7 @@ def part_browser(request):
                   list(Motherboard.objects.filter(name__icontains=query).prefetch_related('supported_ram_types', 'supported_ram_speeds')) + \
                   list(Storage.objects.filter(name__icontains=query))
 
-    # Log the results
-    print(f"Results found for category '{category}' with query '{query}': {results}")
-
     return render(request, 'part_browser.html', {'results': results, 'query': query, 'category': category})
-
-
-def pre_built(request):
-    """
-    Render the pre-built page where users can view pre-built PC configurations.
-    Args:
-        request (HttpRequest): The HTTP request object.
-    Returns:
-        HttpResponse: Renders the pre_built.html template.
-    """
-    return render(request, 'pre_built.html')
 
 @custom_login_required
 def account_page(request):
@@ -122,11 +109,11 @@ def account_page(request):
     Returns:
         HttpResponse: Renders the account_page.html template.
     """
-    profile = request.user.profile
-    saved_builds = Build.objects.filter(profile=profile, is_complete=True)
-    context = {
-        'saved_builds': saved_builds,
-    }
+    # profile = request.user.profile
+    # saved_builds = Build.objects.filter(profile=profile, is_complete=True)
+    # context = {
+    #    'saved_builds': saved_builds,
+    # }
 
     return render(request, 'account_page.html')
 
@@ -301,7 +288,7 @@ def remove_from_build(request, category):
 
 def view_profile(request):
     context = {
-        'user' : request.username
+        'user': request.username
     }
 
     return render(request, 'account_page.html', context)
@@ -339,19 +326,21 @@ def save_build(request):
     current_build.is_complete = True
     current_build.save()
 
-    # Clear existing messages before checking compatibility
-    storage = messages.get_messages(request)
-    for _ in storage:
-        pass  # Clear any existing messages
-
     # Check compatibility after saving
-    compatible, issues = CompatibilityService.check_build_compatibility(current_build)
-    if not compatible:
-        issue_messages = [issue for issue in issues]
-        request.session['build_messages'] = issue_messages  # Store plain strings in session
-        return redirect('build_error', build_id=current_build.build_id)
+    try:
+        # compatibility service returns a tuple with contents:(bool, list[])
+        # the first value in result will be false if the build is not valid. The second value is a list of all the error message
+        result = CompatibilityService.check_build_compatibility(current_build) 
+        if result[0] == False:
+            print('\n'.join(result[1])) 
+            raise ValueError('\n\n'.join(result[1])) # create the error message
+        messages.success(request, "Build saved and is compatible!")
 
-    messages.success(request, "Build saved and is compatible!")
+    except ValueError as e:
+        #self.client.cookies.pop('messages')
+        messages.warning(request, f"Build: {current_build.name} was saved but compatibility issues were detected:\n\n {e}")
+        # redirect to an error page for that  build.
+        return redirect('build_error', build_id=current_build.build_id)
 
     # Clear the builder page components
     Build.objects.create(profile=profile, is_active=True)  # Create a new active build
@@ -369,11 +358,22 @@ def delete_build(request, build_id):
 
 @login_required
 def edit_build(request, build_id):
+    """
+    Edit an existing build associated with the logged-in user.
+
+    Args:
+        request: The HTTP request object.
+        build_id: The ID of the build to edit.
+
+    Returns:
+        Rendered HTML template or a redirect.
+    """
     build = get_object_or_404(Build, build_id=build_id, profile__user=request.user)
 
     if request.method == "POST":
         form = BuildForm(request.POST, instance=build)
         if form.is_valid():
+            # Save the form to generate the build_id
             build = form.save(commit=False)
             build.save()  # Save to generate a primary key
 
@@ -385,21 +385,15 @@ def edit_build(request, build_id):
             storage_list = form.cleaned_data.get('storages')
             if storage_list:
                 build.storages.set(storage_list)
-
-            # Clear existing messages before checking compatibility
-            storage = messages.get_messages(request)
-            for _ in storage:
-                pass  # Clear any existing messages
-
             # Check compatibility after saving
             compatible, issues = CompatibilityService.check_build_compatibility(build)
 
             if not compatible:
                 issue_messages = [issue for issue in issues]
                 request.session['build_messages'] = issue_messages  # Store plain strings in session
+
                 return redirect('build_error', build_id=build_id)
 
-            messages.success(request, "Build saved and is compatible!")
             return redirect('account_page')
     else:
         form = BuildForm(instance=build)
@@ -518,14 +512,14 @@ def view_cart(request):
 def remove_from_cart(request, item_id):
     profile = request.user.profile
     cart = get_object_or_404(ShoppingCart, profile=profile)
-    
+
     # Check if the item exists in the cart
     try:
         cart_item = CartItem.objects.get(cart=cart, id=item_id)
     except CartItem.DoesNotExist:
         messages.error(request, "Item does not exist in your cart.")
         return redirect('view_cart')
-    
+
     # Update the total price
     cart.total_price -= cart_item.price * cart_item.quantity
     cart.total_price = max(cart.total_price, 0)  # Prevent negative total price
@@ -623,7 +617,11 @@ def purchase_confirmed(request):
     shopping_cart.save()
 
     # Render the confirmation page
-    return render(request, 'purchase_confirmed.html', {'message': "Your payment was successful, and your cart has been cleared!"})
+    return render(
+        request,
+        'purchase_confirmed.html',
+        {'message': "Your payment was successful, and your cart has been cleared!"}
+    )
 
 
 def build_error(request, build_id):
@@ -641,5 +639,6 @@ def build_error(request, build_id):
         'build_id': build_id,
         'user': request.user,
         'warning_list' : warning_list
+
     }
     return render(request, 'build_error.html', context)

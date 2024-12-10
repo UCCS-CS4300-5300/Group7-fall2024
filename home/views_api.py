@@ -5,9 +5,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from home.models import Build, Motherboard, CPU, RAM, Storage, StorageType, Manufacturer, FormFactor, StorageCapacity
+from home.models import Build, Motherboard, CPU, RAM, Storage, StorageCapacity
 from .serializers import BuildSerializer, MotherboardSerializer, CPUSerializer, RAMSerializer, StorageSerializer
-from .compatibility_service import CompatibilityService
 from django.shortcuts import get_object_or_404
 import logging
 
@@ -104,7 +103,10 @@ class BuildViewSet(viewsets.ModelViewSet):
             builds = filter_by_field(builds, 'profile__user__username', user_username, lookup='iexact')
         except Exception as e:
             logger.error(f"Error during search: {e}")
-            return Response({'error': 'An error occurred during the search.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': 'An error occurred during the search.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
         paginator = CustomPagination()
         paginated_results = paginator.paginate_queryset(builds, request)
@@ -159,7 +161,10 @@ class MotherboardViewSet(viewsets.ModelViewSet):
             motherboards = filter_by_field(motherboards, 'cpu_socket_type__name', socket_type, lookup='iexact')
         except Exception as e:
             logger.error(f"Error during search: {e}")
-            return Response({'error': 'An error occurred during the search.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': 'An error occurred during the search.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
         paginator = CustomPagination()
         paginated_results = paginator.paginate_queryset(motherboards, request)
@@ -220,13 +225,21 @@ class CPUViewSet(viewsets.ModelViewSet):
             cpus = filter_by_field(cpus, 'microarchitecture', microarchitecture, lookup='iexact')
         except Exception as e:
             logger.error(f"Error during search: {e}")
-            return Response({'error': 'An error occurred during the search.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': 'An error occurred during the search.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
         paginator = CustomPagination()
         paginated_results = paginator.paginate_queryset(cpus, request)
         serializer = CPUSerializer(paginated_results, many=True)
         cache.set(cache_key, serializer.data, timeout=300)  # Cache for 5 minutes
-        logger.info(f"Search results returned for socket_type: {socket_type}, manufacturer: {manufacturer}, microarchitecture: {microarchitecture}")
+        logger.info(
+            f"Search results returned for socket_type: {socket_type}, "
+            f"manufacturer: {manufacturer}, "
+            f"microarchitecture: {microarchitecture}"
+        )
+
         return paginator.get_paginated_response(serializer.data)
 
 
@@ -330,13 +343,21 @@ class StorageViewSet(viewsets.ModelViewSet):
             storages = filter_by_field(storages, 'type__type', storage_type, lookup='exact')
         except Exception as e:
             logger.error(f"Error during search: {e}")
-            return Response({'error': 'An error occurred during the search.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {'error': 'An error occurred during the search.'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
         paginator = CustomPagination()
         paginated_results = paginator.paginate_queryset(storages, request)
         serializer = StorageSerializer(paginated_results, many=True)
         cache.set(cache_key, serializer.data, timeout=300)  # Cache for 5 minutes
-        logger.info(f"Search results returned for manufacturer: {manufacturer}, form_factor: {form_factor}, capacity: {capacity}, storage_type: {storage_type}")
+        logger.info(
+            f"Search results returned for manufacturer: {manufacturer}, "
+            f"form_factor: {form_factor}, "
+            f"capacity: {capacity}, "
+            f"storage_type: {storage_type}"
+        )
         return paginator.get_paginated_response(serializer.data)
 
 
@@ -377,4 +398,8 @@ class UserBuildViewSet(viewsets.ViewSet):
             return paginator.get_paginated_response(serializer.data)  # Return the paginated response
         except Exception as e:
             logger.error(f"Error listing builds for user_id {user_id}: {e}")
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)  # Return error response if exception occurs
+            # Return error response if exception occurs
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

@@ -1,0 +1,206 @@
+./home/compatibility_service.py:43:121: E501 line too long (189 > 120 characters)
+./home/compatibility_service.py:49:5: E303 too many blank lines (2)
+./home/compatibility_service.py:94:121: E501 line too long (153 > 120 characters)
+./home/compatibility_service.py:95:121: E501 line too long (251 > 120 characters)
+./home/compatibility_service.py:99:121: E501 line too long (136 > 120 characters)
+./home/compatibility_service.py:101:121: E501 line too long (174 > 120 characters)
+./home/compatibility_service.py:105:121: E501 line too long (170 > 120 characters)
+./home/compatibility_service.py:109:121: E501 line too long (164 > 120 characters)
+./home/compatibility_service.py:119:5: E303 too many blank lines (2)
+./home/compatibility_service.py:139:121: E501 line too long (154 > 120 characters)
+./home/compatibility_service.py:143:121: E501 line too long (123 > 120 characters)
+./home/migrations/0001_initial.py:66:121: E501 line too long (121 > 120 characters)
+./home/migrations/0001_initial.py:67:121: E501 line too long (121 > 120 characters)
+./home/migrations/0001_initial.py:68:121: E501 line too long (131 > 120 characters)
+./home/migrations/0001_initial.py:76:121: E501 line too long (199 > 120 characters)
+./home/migrations/0001_initial.py:77:121: E501 line too long (132 > 120 characters)
+./home/migrations/0001_initial.py:81:121: E501 line too long (125 > 120 characters)
+./home/migrations/0001_initial.py:83:121: E501 line too long (121 > 120 characters)
+./home/migrations/0001_initial.py:107:121: E501 line too long (130 > 120 characters)
+./home/migrations/0001_initial.py:115:121: E501 line too long (173 > 120 characters)
+./home/migrations/0001_initial.py:116:121: E501 line too long (121 > 120 characters)
+./home/migrations/0001_initial.py:132:121: E501 line too long (121 > 120 characters)
+./home/migrations/0001_initial.py:235:121: E501 line too long (140 > 120 characters)
+./home/migrations/0001_initial.py:247:121: E501 line too long (121 > 120 characters)
+./home/migrations/0001_initial.py:262:121: E501 line too long (133 > 120 characters)
+./home/migrations/0001_initial.py:367:121: E501 line too long (125 > 120 characters)
+./home/migrations/0001_initial.py:383:121: E501 line too long (128 > 120 characters)
+./home/migrations/0001_initial.py:387:121: E501 line too long (124 > 120 characters)
+./home/migrations/0001_initial.py:451:121: E501 line too long (136 > 120 characters)
+./home/models.py:46:121: E501 line too long (123 > 120 characters)
+./home/models.py:49:121: E501 line too long (164 > 120 characters)
+./home/models.py:71:121: E501 line too long (142 > 120 characters)
+./home/models.py:295:121: E501 line too long (136 > 120 characters)
+./home/models.py:306:121: E501 line too long (191 > 120 characters)
+./home/models.py:346:121: E501 line too long (130 > 120 characters)
+./home/models.py:348:121: E501 line too long (141 > 120 characters)
+./home/models.py:406:121: E501 line too long (128 > 120 characters)
+./home/models.py:445:121: E501 line too long (128 > 120 characters)
+./home/models.py:448:121: E501 line too long (137 > 120 characters)
+./home/models.py:514:121: E501 line too long (137 > 120 characters)
+./home/urls.py:1:1: F401 'django.urls.include' imported but unused
+./home/urls.py:3:1: F401 'django.contrib.auth.views.LogoutView' imported but unused
+./home/urls.py:4:1: F403 'from .models import *' used; unable to detect undefined names
+./home/urls.py:4:1: F401 '.models.*' imported but unused
+./home/urls.py:6:1: F401 '.views_api.MotherboardViewSet' imported but unused
+./home/urls.py:6:1: F401 '.views_api.CPUViewSet' imported but unused
+./home/urls.py:6:1: F401 '.views_api.RAMViewSet' imported but unused
+./home/urls.py:6:1: F401 '.views_api.StorageViewSet' imported but unused
+./home/urls.py:6:1: F401 '.views_api.UserBuildViewSet' imported but unused
+./home/urls.py:7:121: E501 line too long (141 > 120 characters)
+./home/urls.py:8:1: F401 'django.contrib.auth.views as auth_views' imported but unused
+./home/views.py:5:1: F401 'django.contrib.messages.get_messages' imported but unused
+./home/views.py:7:1: F401 'django.db.IntegrityError' imported but unused
+./home/views.py:7:1: F401 'django.db.transaction' imported but unused
+./home/views.py:8:1: F401 '.models.Profile' imported but unused
+./home/views.py:13:1: F401 'django.contrib.auth.logout as auth_logout' imported but unused
+./home/views.py:20:1: E302 expected 2 blank lines, found 1
+./home/views.py:86:121: E501 line too long (131 > 120 characters)
+./home/views.py:90:121: E501 line too long (125 > 120 characters)
+./home/views.py:91:121: E501 line too long (135 > 120 characters)
+./home/views.py:97:121: E501 line too long (141 > 120 characters)
+./home/views.py:116:1: E302 expected 2 blank lines, found 1
+./home/views.py:127:5: F841 local variable 'context' is assigned to but never used
+./home/views.py:304:15: E203 whitespace before ':'
+./home/views.py:520:1: W293 blank line contains whitespace
+./home/views.py:527:1: W293 blank line contains whitespace
+./home/views.py:625:121: E501 line too long (130 > 120 characters)
+./home/views.py:629:5: F841 local variable 'build' is assigned to but never used
+./home/views_api.py:8:1: F401 'home.models.StorageType' imported but unused
+./home/views_api.py:8:1: F401 'home.models.Manufacturer' imported but unused
+./home/views_api.py:8:1: F401 'home.models.FormFactor' imported but unused
+./home/views_api.py:10:1: F401 '.compatibility_service.CompatibilityService' imported but unused
+./home/views_api.py:107:121: E501 line too long (124 > 120 characters)
+./home/views_api.py:162:121: E501 line too long (124 > 120 characters)
+./home/views_api.py:223:121: E501 line too long (124 > 120 characters)
+./home/views_api.py:229:121: E501 line too long (148 > 120 characters)
+./home/views_api.py:333:121: E501 line too long (124 > 120 characters)
+./home/views_api.py:339:121: E501 line too long (160 > 120 characters)
+./home/views_api.py:380:121: E501 line too long (137 > 120 characters)
+./home/tests/test_all_views/test_views.py:7:1: E302 expected 2 blank lines, found 1
+./home/tests/test_all_views/test_views.py:16:1: W293 blank line contains whitespace
+./home/tests/test_all_views/test_views.py:17:1: W293 blank line contains whitespace
+./home/tests/test_all_views/test_views.py:19:5: E303 too many blank lines (3)
+./home/tests/test_all_views/test_views.py:72:5: E303 too many blank lines (2)
+./home/tests/test_all_views/test_views.py:94:5: F811 redefinition of unused 'test_logout_view' from line 49
+./home/tests/test_all_views/test_views.py:157:9: F841 local variable 'build' is assigned to but never used
+./home/tests/test_all_views/test_views.py:158:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:159:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:171:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:172:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:173:1: W293 blank line contains whitespace
+./home/tests/test_all_views/test_views.py:181:5: E303 too many blank lines (2)
+./home/tests/test_all_views/test_views.py:198:5: E303 too many blank lines (2)
+./home/tests/test_all_views/test_views.py:210:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:211:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:220:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:221:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:222:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:227:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:228:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:231:5: E303 too many blank lines (2)
+./home/tests/test_all_views/test_views.py:237:5: E303 too many blank lines (2)
+./home/tests/test_all_views/test_views.py:239:9: F841 local variable 'build' is assigned to but never used
+./home/tests/test_all_views/test_views.py:240:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:241:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:242:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:243:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:247:9: F841 local variable 'build' is assigned to but never used
+./home/tests/test_all_views/test_views.py:248:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:249:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:250:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:251:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:255:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:256:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:260:9: F841 local variable 'build' is assigned to but never used
+./home/tests/test_all_views/test_views.py:261:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:262:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:263:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:283:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:284:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:293:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:294:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:295:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:298:5: E303 too many blank lines (2)
+./home/tests/test_all_views/test_views.py:301:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:302:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:306:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:307:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:308:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:310:5: F811 redefinition of unused 'test_build_page_redirect_unauthenticated' from line 298
+./home/tests/test_all_views/test_views.py:313:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:314:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:318:9: F841 local variable 'build' is assigned to but never used
+./home/tests/test_all_views/test_views.py:319:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:320:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:324:9: F841 local variable 'build' is assigned to but never used
+./home/tests/test_all_views/test_views.py:325:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:326:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:327:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:331:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:332:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:333:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:337:9: F841 local variable 'build' is assigned to but never used
+./home/tests/test_all_views/test_views.py:338:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:339:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:340:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:341:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:347:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:348:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:349:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:355:9: F841 local variable 'response' is assigned to but never used
+./home/tests/test_all_views/test_views.py:356:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:357:9: E265 block comment should start with '# '
+./home/tests/test_all_views/test_views.py:357:121: E501 line too long (128 > 120 characters)
+./home/tests/test_all_views/test_views.py:358:1: W391 blank line at end of file
+./home/tests/test_all_views/tests.py:5:1: F401 'home.models.CPU' imported but unused
+./home/tests/test_all_views/tests.py:5:1: F401 'home.models.CPUSocketType' imported but unused
+./home/tests/test_all_views/tests.py:5:1: F401 'home.models.Microarchitecture' imported but unused
+./home/tests/test_all_views/tests.py:6:121: E501 line too long (185 > 120 characters)
+./home/tests/test_all_views/tests.py:8:1: F401 'home.serializers.BuildSerializer' imported but unused
+./home/tests/test_all_views/tests.py:8:1: F401 'home.serializers.MotherboardSerializer' imported but unused
+./home/tests/test_all_views/tests.py:8:1: F401 'home.serializers.CPUSerializer' imported but unused
+./home/tests/test_all_views/tests.py:8:1: F401 'home.serializers.RAMSerializer' imported but unused
+./home/tests/test_all_views/tests.py:8:1: F401 'home.serializers.StorageSerializer' imported but unused
+./home/tests/test_all_views/tests.py:10:1: E302 expected 2 blank lines, found 1
+./home/tests/test_all_views/tests.py:39:1: E302 expected 2 blank lines, found 1
+./home/tests/test_all_views/tests.py:206:9: F841 local variable 'build_names' is assigned to but never used
+./home/tests/test_all_views/tests.py:211:1: W293 blank line contains whitespace
+./home/tests/test_models/test_ram.py:91:121: E501 line too long (200 > 120 characters)
+./home/serializers.py:2:121: E501 line too long (199 > 120 characters)
+./home/tests/conftest.py:3:1: F401 'django.conf.settings' imported but unused
+./home/tests/conftest.py:5:121: E501 line too long (124 > 120 characters)
+./home/tests/test_models/test_motherboards.py:6:1: F401 'django.db.transaction' imported but unused
+./home/tests/test_models/test_motherboards.py:8:121: E501 line too long (124 > 120 characters)
+./Optimal_Performance_Platform/settings.py:35:121: E501 line too long (128 > 120 characters)
+./Optimal_Performance_Platform/urls.py:5:1: F401 'home.views' imported but unused
+./home/forms.py:3:1: F401 '.compatibility_service.CompatibilityService' imported but unused
+./home/populate_fake_data.py:6:121: E501 line too long (203 > 120 characters)
+./home/populate_fake_data.py:38:121: E501 line too long (121 > 120 characters)
+./scripts/create_attributes.py:15:1: E402 module level import not at top of file
+./scripts/create_attributes.py:40:121: E501 line too long (170 > 120 characters)
+./scripts/create_builds.py:15:1: E402 module level import not at top of file
+./scripts/create_builds.py:16:1: E402 module level import not at top of file
+./scripts/create_builds.py:43:65: W291 trailing whitespace
+./scripts/create_builds.py:54:70: W291 trailing whitespace
+./scripts/create_builds.py:96:121: E501 line too long (124 > 120 characters)
+./scripts/create_builds.py:110:1: W293 blank line contains whitespace
+./scripts/create_builds.py:131:1: W293 blank line contains whitespace
+./scripts/create_cpus.py:15:1: E402 module level import not at top of file
+./scripts/create_manufacturers.py:13:1: E402 module level import not at top of file
+./scripts/create_manufacturers.py:16:121: E501 line too long (126 > 120 characters)
+./scripts/create_motherboards.py:15:1: E402 module level import not at top of file
+./scripts/create_motherboards.py:15:121: E501 line too long (122 > 120 characters)
+./scripts/create_motherboards.py:124:1: W293 blank line contains whitespace
+./scripts/create_motherboards.py:134:1: W293 blank line contains whitespace
+./scripts/create_ram.py:15:1: E402 module level import not at top of file
+./scripts/create_storages.py:15:1: E402 module level import not at top of file
+./scripts/create_users_profiles.py:15:1: E402 module level import not at top of file
+./scripts/create_users_profiles.py:16:1: E402 module level import not at top of file
+./scripts/empty_db.py:17:1: E402 module level import not at top of file
+./scripts/empty_db.py:18:1: E402 module level import not at top of file
+./scripts/empty_db.py:18:121: E501 line too long (249 > 120 characters)
+./scripts/empty_db.py:20:1: E302 expected 2 blank lines, found 1
+./scripts/empty_db.py:44:1: E305 expected 2 blank lines after class or function definition, found 1
+./scripts/run_create_scripts.py:9:1: E302 expected 2 blank lines, found 1
+./scripts/run_create_scripts.py:19:1: E305 expected 2 blank lines after class or function definition, found 1

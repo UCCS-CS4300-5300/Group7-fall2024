@@ -2,6 +2,10 @@
 import os
 import sys
 import django
+from home.models import (
+    Motherboard, CPUSocketType, FormFactor, Manufacturer,
+    RAMType, RAMSpeed, SupportedRAMConfiguration
+)
 
 print("Starting create_motherboards.py script...")
 
@@ -10,11 +14,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Optimal_Performance_Platform.settings')
 django.setup()
 
-print("Django setup completed.")
-
-from home.models import Motherboard, CPUSocketType, FormFactor, Manufacturer, RAMType, RAMSpeed, SupportedRAMConfiguration
-
-print("Models imported successfully.")
 
 # Verify Manufacturers
 manufacturers = ['ASUS', 'Gigabyte', 'MSI', 'ASRock', 'EVGA', 'Biostar']
@@ -121,7 +120,7 @@ for mb_data in motherboards:
         price=mb_data['price'],
         description=mb_data['description']
     )
-    
+
     if created:
         for ram_type in mb_data['supported_ram_types']:
             ram_type_obj = RAMType.objects.get(type=ram_type)
@@ -131,7 +130,7 @@ for mb_data in motherboards:
                 ram_type=ram_type_obj,
                 supported_speeds=supported_speeds  # Comma-separated values of supported speeds
             )
-        
+
         motherboard.save()
         print(f"Motherboard {mb_data['name']} created and RAM configurations associated.")
     else:
