@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg custom-navbar">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav me-auto">
+                <a class="button" aria-current="page" href="{% url 'index' %}">
+                    <i class="fa-solid fa-house"></i> Home</a>
+                <a class="button" href="{% url 'build' %}">
+                    <i class="fa-solid fa-desktop"></i> Create Your Build</a>
+                <a class="button" href="{% url 'pre_build' %}">
+                    <i class="fa-solid fa-laptop"></i> Pre-Build PC</a>
+            </div>
+            <div class="search-container">
+                <!-- Search form -->
+                <form method="get" action="{% url 'search_pc_parts' %}" class="d-flex">
+                    <input type="text" name="q" class="form-control me-2" placeholder="Search for parts..." value="{{ query|default:'' }}">
+                    <select name="category" class="form-select me-2">
+                        <option value="All Categories" {% if category == 'All Categories' %}selected{% endif %}>All Categories</option>
+                        <option value="RAM" {% if category == 'RAM' %}selected{% endif %}>RAM</option>
+                        <option value="CPU" {% if category == 'CPU' %}selected{% endif %}>CPU</option>
+                        <option value="Motherboard" {% if category == 'Motherboard' %}selected{% endif %}>Motherboard</option>
+                        <option value="Storage" {% if category == 'Storage' %}selected{% endif %}>Storage</option>
+                    </select>
+                    <button type="submit" class="button d-flex align-items-center">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search
+                    </button> 
+                </form>
+            </div>
+            <!-- Account and Logout buttons to the right -->
+            <div class="navbar-nav ms-auto account-container">
+                {% if user.is_authenticated %}
+                    <a class="button" href="{% url 'account_page' %}">
+                        <i class="fa-solid fa-user"></i> Account</a>
+                    <a class="button" href="{% url 'logout' %}">
+                        <i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+                {% else %}
+                    <a class="button" href="{% url 'login_or_register' %}">
+                        <i class="fa-solid fa-right-to-bracket"></i>Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
