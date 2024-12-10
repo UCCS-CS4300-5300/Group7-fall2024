@@ -25,7 +25,6 @@ urlpatterns = [
 
     path('', views.index, name='index'),
     path('builds/', views.build, name='build'),
-    path('pre_build/', views.pre_built, name='pre_build'),
     path('login/', login_or_register, name='login_or_register'),
     path('logout/', views.logout_user, name='logout'),
     path('search/', views.search_pc_parts, name='search_pc_parts'),
