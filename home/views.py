@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
 from django.contrib.messages import get_messages
+from django.urls import reverse
 from django.db import IntegrityError, transaction
 from .models import RAM, CPU, Motherboard, Storage, Build, Profile, ShoppingCart, CartItem
 from .forms import BuildForm
@@ -363,7 +364,7 @@ def delete_build(request, build_id):
     build = get_object_or_404(Build, build_id=build_id, profile__user=request.user)
     build.delete()
     messages.success(request, "Build deleted successfully.")
-    return redirect('account_page')
+    return redirect(f'{reverse("account_page")}?tab=Builds')  # Redirect with tab parameter
 
 
 @login_required
@@ -516,9 +517,14 @@ def view_cart(request):
 def remove_from_cart(request, item_id):
     profile = request.user.profile
     cart = get_object_or_404(ShoppingCart, profile=profile)
-
-    cart_item = get_object_or_404(CartItem, cart=cart, id=item_id)
-
+    
+    # Check if the item exists in the cart
+    try:
+        cart_item = CartItem.objects.get(cart=cart, id=item_id)
+    except CartItem.DoesNotExist:
+        messages.error(request, "Item does not exist in your cart.")
+        return redirect('view_cart')
+    
     # Update the total price
     cart.total_price -= cart_item.price * cart_item.quantity
     cart.total_price = max(cart.total_price, 0)  # Prevent negative total price
