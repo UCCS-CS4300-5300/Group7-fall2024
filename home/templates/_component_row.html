@@ -1,0 +1,30 @@
+<!-- _component_row.html -->
+<tr>
+    <td><strong>{{ component_name }}</strong></td>
+    <td>
+        {% if component %}
+            {{ component.name }}
+        {% else %}
+            None
+        {% endif %}
+    </td>
+    <td>
+        {% if component and component.image %}
+            <img src="{{ component.image.url }}" alt="{{ component.name }}" width="100">
+        {% endif %}
+    </td>
+    <td>
+        {% if component %}
+            ${{ component.price }}
+        {% else %}
+            N/A
+        {% endif %}
+    </td>
+    <td>
+        {% if component %}
+            {{ component.description }}
+        {% else %}
+            No description available.
+        {% endif %}
+    </td>
+</tr>
