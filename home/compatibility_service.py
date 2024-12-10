@@ -45,7 +45,7 @@ class CompatibilityService:
 
         return isValid, issues
 
-
+    @staticmethod
     def check_ram_compatibility(build):
         """
         Check the compatibility between RAM modules and the motherboard.
