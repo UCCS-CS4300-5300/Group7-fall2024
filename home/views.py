@@ -606,7 +606,7 @@ def test_paypal(request):
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)})
 
-
+@custom_login_required
 def purchase_confirmed(request):
     profile = request.user.profile
 
